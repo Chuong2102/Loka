@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loka", "Loka\Loka.csproj", "{6202F902-5AD2-4EE4-96EF-8D498D4DE74F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{3BF20F68-2B08-4DA2-A405-A4EE372C18E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A316BCB6-D927-4796-BD32-20D983DD9E85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{57068B76-74A3-4C9F-B976-7EADB7937969}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loka.Infrastructure", "Loka.Infrastrure\Loka.Infrastructure.csproj", "{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loka.Application", "Loka.Infrastructure\Loka.Application.csproj", "{E66C93F2-6A95-424A-A037-B4ABEF2D5600}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E66C93F2-6A95-424A-A037-B4ABEF2D5600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E66C93F2-6A95-424A-A037-B4ABEF2D5600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E66C93F2-6A95-424A-A037-B4ABEF2D5600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E66C93F2-6A95-424A-A037-B4ABEF2D5600}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F} = {3BF20F68-2B08-4DA2-A405-A4EE372C18E0}
+		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E} = {A316BCB6-D927-4796-BD32-20D983DD9E85}
+		{E66C93F2-6A95-424A-A037-B4ABEF2D5600} = {57068B76-74A3-4C9F-B976-7EADB7937969}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {93A638C3-7BBA-4BF0-903D-F243D322EC2A}
+	EndGlobalSection
+EndGlobal
