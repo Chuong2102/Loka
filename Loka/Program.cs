@@ -1,9 +1,11 @@
+using Loka.Infrastructure.Repositories;
 using Loka.Infrastrure.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.RegisterServices();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataLokaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStringName")));
