@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Loka.Infrastructure\Loka.Application.csproj" />
     <ProjectReference Include="..\Loka.Infrastrure\Loka.Infrastructure.csproj" />
   </ItemGroup>
 
