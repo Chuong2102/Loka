@@ -3,6 +3,8 @@ using Loka.Infrastrure.Entities;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
+using static Dapper.SqlMapper;
+using Loka.Infrastructure.Contracts;
 
 namespace Loka.Infrastructure.Repositories
 {
@@ -14,14 +16,17 @@ namespace Loka.Infrastructure.Repositories
             this.configuration = configuration;
         }
 
-        public Task<Post> CreateAsync(Post entity)
+        public async Task<int> CreateAsync(Post entity)
         {
-            throw new NotImplementedException();
-        }
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString("ConnectionStringName"));
+            connection.Open();
 
-        public Task<Post> DeleteAsync(Post entity)
-        {
-            throw new NotImplementedException();
+            var para = new DynamicParameters();
+
+            para.Add("@RoomID", entity.RoomID);
+            para.Add("@Title", entity.Title);
+
+            return await connection.ExecuteAsync(PostQuery.ProcAddPost, para, commandType: CommandType.StoredProcedure);
         }
 
         public async Task<List<Post>> GetAllAsync()
@@ -40,7 +45,12 @@ namespace Loka.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Post> UpdateAsync(Post entity)
+        Task<int> IRepositoryBase<Post>.DeleteAsync(Post entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> IRepositoryBase<Post>.UpdateAsync(Post entity)
         {
             throw new NotImplementedException();
         }

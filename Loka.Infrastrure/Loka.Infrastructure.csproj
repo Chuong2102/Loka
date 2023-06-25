@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Context\" />
+    <Folder Include="SQL\Room\" />
   </ItemGroup>
 
   <ItemGroup>
