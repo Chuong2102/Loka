@@ -1,10 +1,7 @@
 const routes = {
     home: '/',
-    favourite: '/favourite',
     profile: '/:nickname',
-    upload: '/upload',
-    search: '/search/:keyword',
-    detail: '/detail',
+    post: '/post',
 };
 
 export default routes;

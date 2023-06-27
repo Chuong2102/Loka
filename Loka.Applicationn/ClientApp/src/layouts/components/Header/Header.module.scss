@@ -4,9 +4,11 @@
     --search-top-spacer: 9px;
     --search-button-width: 54px;
 
-    position: fixed;
+    // position: fixed;
     top: 0;
-    left: 0;
+    // left: 0;
+    // right: 0;
+    position: sticky;
     z-index: 10;
     display: flex;
     justify-content: center;
@@ -18,16 +20,17 @@
 
 .inner {
     height: 100%;
-    width: var(--default-layout-width);
+    // width: var(--default-layout-width);
+    width: 100%;
     padding: 0 var(--default-layout-horizontal-spacer);
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.logo-link{
-    display: flex;
-}
+// .logo-link{
+//     display: flex;
+// }
 
 // Actions
 .actions {

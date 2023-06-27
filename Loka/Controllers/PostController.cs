@@ -1,12 +1,12 @@
 ﻿using Loka.Infrastructure.Repositories;
 using Loka.Infrastrure.Entities;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Loka.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase
     {
@@ -27,12 +27,15 @@ namespace Loka.Controllers
             public double Area { get; set; }
         }
 
+        [EnableCors("CaiNayDeFixLoiCors")]
+        [Route("api/GetAllPost")]
         [HttpGet]
         public async Task<List<Post>> GetPostsAsync()
         {
             return await dataContext.Posts.GetAllAsync();
         }
 
+        [Route("api/AddPost")]
         [HttpPost]
         public async Task<int> CreatePostAsync([FromBody] Data data)
         {

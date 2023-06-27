@@ -42,7 +42,7 @@ html *::-webkit-scrollbar {
 
 html *::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(22, 24, 35, 0.06);
+    background-color: rgb(190, 189, 189);
 }
 
 html *::-webkit-scrollbar-track {
@@ -51,7 +51,6 @@ html *::-webkit-scrollbar-track {
 }
 
 button,
-input,
 [tabindex] {
     outline: none;
     border: none;
