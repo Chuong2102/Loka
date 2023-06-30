@@ -1,8 +1,4 @@
 .wrapper {
-    --search-border-radius: 92px;
-    --search-height: 46px;
-    --search-top-spacer: 9px;
-    --search-button-width: 54px;
 
     // position: fixed;
     top: 0;
@@ -36,6 +32,7 @@
 .actions {
     display: flex;
     align-items: center;
+    margin-left: auto;
 }
 
 .more-btn {

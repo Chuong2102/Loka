@@ -150,7 +150,7 @@ function Post() {
                             id="postId"
                             type="text"
                             placeholder="Enter Post ID"
-                            autocomplete="off"
+                            autoComplete="off"
                             value={postId}
                             onChange={handlePostIdChange}
                         />
@@ -175,7 +175,7 @@ function Post() {
                             id="roomId"
                             type="text"
                             placeholder="Enter Room ID"
-                            autocomplete="off"
+                            autoComplete="off"
                             value={roomId}
                             onChange={handleRoomIdChange}
                         />
@@ -200,7 +200,7 @@ function Post() {
                             id="title"
                             type="text"
                             placeholder="Enter Title"
-                            autocomplete="off"
+                            autoComplete="off"
                             value={title}
                             onChange={handleTitleChange}
                         />
@@ -225,9 +225,34 @@ function Post() {
                             id="description"
                             type="text"
                             placeholder="Enter Description"
-                            autocomplete="off"
+                            autoComplete="off"
                             value={description}
                             onChange={handleDescriptionChange}
+                        />
+                    </div>
+                     <div className="mb-[20px]">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                            Room ID
+                        </label>
+                        <input
+                            className={cx(
+                                'input_post',
+                                'shadow',
+                                'appearance-none',
+                                'border',
+                                'rounded',
+                                'w-full',
+                                'py-3',
+                                'px-3',
+                                'text-gray-700',
+                                'leading-tight',
+                            )}
+                            id="roomId"
+                            type="text"
+                            placeholder="Enter Room ID"
+                            autoComplete="off"
+                            value={roomId}
+                            onChange={handleRoomIdChange}
                         />
                     </div>
 
