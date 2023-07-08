@@ -10,6 +10,7 @@ import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 import Button from '~/components/Button';
 import { CssSyntaxError } from 'postcss';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -23,23 +24,23 @@ const slides = [
 function Home() {
     const [isHovered, setIsHovered] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://localhost:7245/api/Post', {
-                    headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:3000',
-                    },
-                    mode: 'cors',
-                });
-                console.log(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('https://localhost:7245/api/Post', {
+    //                 headers: {
+    //                     'Access-Control-Allow-Origin': 'http://localhost:3000',
+    //                 },
+    //                 mode: 'cors',
+    //             });
+    //             console.log(response.data);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
     return (
         <div className={cx('wrapper', 'my-[100px]')}>
@@ -205,6 +206,7 @@ function Home() {
                     </div>
                 </Link>
             </div>
+            <FacebookMsg/>
         </div>
     );
 }

@@ -12,6 +12,7 @@ import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 
 import styles from './SearchResult.module.scss';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -200,6 +201,7 @@ function SearchResult() {
                     </div>
                 </Link>
             </div>
+            <FacebookMsg/>
             </div>
     );
 

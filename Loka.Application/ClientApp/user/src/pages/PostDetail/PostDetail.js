@@ -2,6 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PostDetail.module.scss';
 import Carousel from './Carousel';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,7 @@ function PostDetail() {
                     </div>
                 </div>
             </div>
+            <FacebookMsg/>
         </div>
     );
 }
