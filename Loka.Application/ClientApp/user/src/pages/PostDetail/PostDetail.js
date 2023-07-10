@@ -15,7 +15,7 @@ const slides = [
 
 function PostDetail() {
     return (
-        <div className={cx('wrapper', 'my-[60px]')}>
+        <div className={cx('wrapper')}>
             <div className="grid grid-cols-1">
                 <div className={cx('flex', 'items-center', 'justify-center')}>
                     <div className={cx('post__item', 'max-w-[700px]', 'flex', 'flex-col', 'rounded-xl')} >
