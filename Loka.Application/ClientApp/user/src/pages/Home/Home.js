@@ -43,8 +43,8 @@ function Home() {
     // }, []);
 
     return (
-        <div className={cx('wrapper', 'my-[100px]')}>
-            <div className="grid grid-cols-4 gap-x-14 gap-y-16">
+        <div className={cx('wrapper')}>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
                     <div
                         className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {

@@ -16,6 +16,21 @@
     background-color: var(--white);
 }
 
+@media (max-width: 739px){
+    .wrapper{
+        height: 140px;
+    }
+
+    .inner{
+        flex-direction: column;
+    }
+
+    .logo-link {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+}
+
 .inner {
     height: 100%;
     width: var(--default-layout-width);
