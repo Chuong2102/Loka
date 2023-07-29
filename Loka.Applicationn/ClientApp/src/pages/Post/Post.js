@@ -19,6 +19,9 @@ function Post() {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('https://localhost:7245/api/GetAllPost');
+                // fetch('https://localhost:7245/api/GetAllPost').then(res => res.json()).then(
+                //     e => console.log(e)
+                // );
                 const data = response.data.slice(0, 10);
                 setPosts(data);
             } catch (error) {

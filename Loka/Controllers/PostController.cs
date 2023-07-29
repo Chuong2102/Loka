@@ -1,4 +1,5 @@
 ﻿using Loka.Infrastructure.Repositories;
+using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +12,11 @@ namespace Loka.Controllers
     public class PostController : ControllerBase
     {
         IDataContext dataContext;
-        public PostController(IDataContext dataContext)
+        DataLokaContext dataLokaContext;
+        public PostController(IDataContext dataContext, DataLokaContext context)
         {
             this.dataContext = dataContext;
+            dataLokaContext = context;
         }
 
         public class Data
@@ -27,7 +30,6 @@ namespace Loka.Controllers
             public double Area { get; set; }
         }
 
-        [EnableCors("CaiNayDeFixLoiCors")]
         [Route("api/GetAllPost")]
         [HttpGet]
         public async Task<List<Post>> GetPostsAsync()
@@ -52,6 +54,33 @@ namespace Loka.Controllers
             {
                 RoomID = roomID,
                 Title = data.Title
+            });
+        }
+
+        [Route("api/DeletePostByID")]
+        [HttpPost]
+        public async Task<int> DeletePostByID([FromBody] int PostID)
+        {
+            return await dataContext.Posts.DeleteAsync(new Post
+            {
+                PostID = PostID
+
+            });
+        }
+
+        [Route("api/UpdatePost")]
+        [HttpPost]
+        public async Task<int> UpdatePost([FromBody] Data data)
+        {
+
+            var Post = await dataContext.Posts.UpdateAsync(new Post { PostID = (int)data.RoomID, Title = data.Title });
+            return await dataContext.Rooms.UpdateAsync(new Room
+            {
+                RoomID = (int)data.RoomID,
+                Name = data.Name,
+                Description = data.Description,
+                Price = data.Price,
+                Area = data.Area
             });
         }
     }

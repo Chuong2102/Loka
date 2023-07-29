@@ -8,14 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterServices();
 
 // Fix CORS
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-                      builder =>
-                      {
-                          builder.WithOrigins("https://localhost:3000");
-                      });
-});
+builder.Services.AddControllersWithViews();
+
+//var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//        policy =>
+//        {
+//            policy.WithOrigins("https://localhost:3000");
+//        });
+//});
+builder.Services.AddCors();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataLokaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStringName")));
@@ -36,8 +41,15 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// CORS CAI LOZ
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin 
+    .AllowCredentials());
+
 app.MapControllers();
 
-app.UseCors();
+
 
 app.Run();

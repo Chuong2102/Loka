@@ -10,6 +10,8 @@ namespace Loka.Infrastructure.Repositories
     public class RoomRepository : IRoomRepository
     {
         private readonly IConfiguration configuration;
+
+        readonly private string connectionString = "ConnectionStringName";
         public RoomRepository(IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -17,7 +19,7 @@ namespace Loka.Infrastructure.Repositories
 
         public async Task<int> CreateAsync(Room entity)
         {
-            using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString("ConnectionStringName")))
+            using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
             {
                 connection.Open();
                 
@@ -59,9 +61,23 @@ namespace Loka.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        Task<int> IRepositoryBase<Room>.UpdateAsync(Room entity)
+        async Task<int> IRepositoryBase<Room>.UpdateAsync(Room entity)
         {
-            throw new NotImplementedException();
+            using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
+            {
+                connection.Open();
+
+                var para = new DynamicParameters();
+
+                // Post
+                para.Add("@RoomID", entity.RoomID);
+                para.Add("@Name", entity.Name);
+                para.Add("@Description", entity.Description);
+                para.Add("@Price", entity.Price);
+                para.Add("@Area", entity.Area);
+
+                return await connection.ExecuteAsync(RoomQuery.Proc_UpdateRoom, para, commandType: CommandType.StoredProcedure);
+            }
         }
     }
 }
