@@ -9,6 +9,8 @@
 
             services.AddTransient<IRoomRepository, RoomRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddTransient<IAddressRepository, AddressRepository>();
 
         }
     }

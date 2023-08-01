@@ -5,18 +5,20 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 
-import * as searchServices from '~/services/searchService';
+import axios from 'axios';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import SearchItem from '~/components/SearchItem';
 import { SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks';
 import styles from './Search.module.scss';
 import { Link } from 'react-router-dom';
-import config from '~/config';
 
 const cx = classNames.bind(styles);
 
-function Search() {
+// const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
+const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
+
+function Search({ onSearchItemClick }) {
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
@@ -27,6 +29,24 @@ function Search() {
 
     const inputRef = useRef();
 
+    // useEffect(() => {
+    //     if (!debouncedValue.trim()) {
+    //         setSearchResult([]);
+    //         return;
+    //     }
+
+    //     const fetchApi = async () => {
+    //         setLoading(true);
+
+    //         const result = await searchServices.search(debouncedValue);
+
+    //         setSearchResult(result);
+    //         setLoading(false);
+    //     };
+
+    //     fetchApi();
+    // }, [debouncedValue]);
+
     useEffect(() => {
         if (!debouncedValue.trim()) {
             setSearchResult([]);
@@ -36,9 +56,22 @@ function Search() {
         const fetchApi = async () => {
             setLoading(true);
 
-            const result = await searchServices.search(debouncedValue);
+            try {
+                const response = await axios.get(`https://rsapi.goong.io/Place/AutoComplete`, {
+                    params: {
+                        api_key: goongApi_Rob,
+                        location: '16.4647, 107.5833',
+                        limit: 10,
+                        radius: 100,
+                        input: debouncedValue,
+                    },
+                });
 
-            setSearchResult(result);
+                setSearchResult(response.data.predictions);
+            } catch (error) {
+                console.error('Error fetching API:', error);
+                setSearchResult([]);
+            }
             setLoading(false);
         };
 
@@ -63,13 +96,13 @@ function Search() {
         }
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && debouncedValue) {
-          e.preventDefault();
-          handleHideResult();
-          navigate(`/search/${debouncedValue}`);
-        }
-      };
+    // const handleKeyPress = (e) => {
+    //     if (e.key === 'Enter' && debouncedValue) {
+    //         e.preventDefault();
+    //         handleHideResult();
+    //         navigate(`/search/${debouncedValue}`);
+    //     }
+    // };
 
     return (
         // Using a wrapper <div> or <span> tag around the reference element solves this
@@ -78,27 +111,35 @@ function Search() {
             <HeadlessTippy
                 interactive
                 visible={showResult && searchResult.length > 0}
+                placement="bottom"
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Gợi ý</h4>
-                            {searchResult.map((result) => (
-                                <SearchItem key={result.id} data={result} onClick={handleHideResult} />
+                            {searchResult.map((result, index) => (
+                                <SearchItem
+                                    key={index}
+                                    data={result}
+                                    onClick={() => {
+                                        handleHideResult();
+                                        onSearchItemClick(result);
+                                    }}
+                                />
                             ))}
                         </PopperWrapper>
                     </div>
                 )}
                 onClickOutside={handleHideResult}
             >
-                <div className={cx('search')}>
+                <div className={cx('search', 'mt-[40px]', 'mb-[300px]')}>
                     <input
                         ref={inputRef}
                         value={searchValue}
-                        placeholder="Tìm kiếm"
+                        placeholder="Nhập địa chỉ"
                         spellCheck={false}
                         onChange={handleChange}
                         onFocus={() => setShowReslut(true)}
-                        onKeyPress={handleKeyPress}
+                        // onKeyPress={handleKeyPress}
                     />
                     {!!searchValue && !loading && (
                         <button className={cx('clear')} onClick={handleClear}>
@@ -106,16 +147,17 @@ function Search() {
                         </button>
                     )}
                     {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-                        
-                    <Link  to={debouncedValue ? `/search/${debouncedValue}` : '#'}>
+
+                    {/* <Link to={debouncedValue ? `/search/${debouncedValue}` : '#'}> */}
                         <button
-                            className={cx('search-btn')}
+                            className={cx('search-btn', 'flex', 'items-center')}
                             onMouseDown={(e) => e.preventDefault()}
                             onClick={debouncedValue ? handleHideResult : undefined}
                         >
                             <SearchIcon />
+                            <div className={cx('text-[15px]', 'ml-[4px]')}>Tìm kiếm</div>
                         </button>
-                    </Link>
+                    {/* </Link> */}
                 </div>
             </HeadlessTippy>
         </div>

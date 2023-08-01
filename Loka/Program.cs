@@ -23,7 +23,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddCors();
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataLokaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStringName")));
+
+builder.Services.AddDbContext<DataLokaContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStringName"), 
+    opt => opt.UseNetTopologySuite()));
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

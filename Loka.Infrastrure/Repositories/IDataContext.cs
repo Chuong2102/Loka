@@ -4,5 +4,7 @@
     {
         IPostRepository Posts { get; }
         IRoomRepository Rooms{ get; }
+        IAddressRepository Addressses { get; }
+        ILocationRepository Locations { get; }
     }
 }
