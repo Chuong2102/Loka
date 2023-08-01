@@ -12,22 +12,37 @@ namespace Loka.Controllers
     public class PostController : ControllerBase
     {
         IDataContext dataContext;
-        DataLokaContext dataLokaContext;
+        DataLokaContext dataLokaDBContext;
         public PostController(IDataContext dataContext, DataLokaContext context)
         {
             this.dataContext = dataContext;
-            dataLokaContext = context;
+            dataLokaDBContext = context;
         }
 
         public class Data
         {
+            // Post
             public int? RoomID { get; set; }
             public int UserID { get; set; }
             public string? Title { get; set; }
+
+            // Room
             public string? Description { get; set; }
             public string? Name { get; set; }
             public double Price { get; set; }
             public double Area { get; set; }
+
+            // Location
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public string PlaceID { get; set; }
+
+            // Address
+            public string AddressLine1 { get; set; }
+            public string AddressLine2 { get; set; }
+            public string WardName { get; set; }
+
+
         }
 
         [Route("api/GetAllPost")]
@@ -43,17 +58,36 @@ namespace Loka.Controllers
         {
             var roomID = await dataContext.Rooms.CreateAsync(new Room
             {
-                User = new User { UserID = data.UserID},
-                Name = data.Name,
+                User = new User { UserID = 3 },
+                Name = "Trọ",
                 Description = data.Description,
                 Price = data.Price,
                 Area = data.Area
             });
 
-            return await dataContext.Posts.CreateAsync(new Post
+            await dataContext.Posts.CreateAsync(new Post
             {
                 RoomID = roomID,
                 Title = data.Title
+            });
+
+            await dataContext.Locations.CreateAsync(new Location
+            {
+                Longitude = data.Longitude,
+                Latitude = data.Latitude,
+                PlaceID = data.PlaceID,
+                Room = new Room { RoomID = roomID}
+            });
+
+            var ward = dataLokaDBContext.Wards.FirstOrDefault(w => w.WardName.Equals(data.WardName.Trim()));
+
+            return await dataContext.Addressses.CreateAsync(new Address
+            {
+                AddressLine1 = data.AddressLine1,
+                AddressLine2 = data.AddressLine2,
+                Ward = ward,
+                Room = new Room { RoomID = roomID }
+
             });
         }
 

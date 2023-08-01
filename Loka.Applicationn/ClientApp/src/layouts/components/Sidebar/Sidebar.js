@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import styles from './Sidebar.module.scss';
 import Menu, { MenuItem } from './Menu';
@@ -13,6 +13,8 @@ import images from '~/assests/images';
 const cx = classNames.bind(styles);
 
 function Sidebar() {
+    const location = useLocation();
+
     return (
         <aside className={cx('wrapper','fixed', 'h-screen')}>
             <Link to={config.routes.home} className={cx('logo-link')}>
@@ -25,9 +27,9 @@ function Sidebar() {
                     icon={<UserGroupIcon />}
                     activeIcon={<UserGroupActiveIcon />}
                 />
-                 <MenuItem
-                    title="G"
-                    to={config.routes.profile}
+                <MenuItem
+                    title="Room"
+                    to={config.routes.room}
                     icon={<UserGroupIcon />}
                     activeIcon={<UserGroupActiveIcon />}
                 />

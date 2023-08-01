@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NetTopologySuite.Geometries;
+using System.ComponentModel.DataAnnotations;
 
 namespace Loka.Infrastrure.Entities
 {
@@ -11,5 +12,6 @@ namespace Loka.Infrastrure.Entities
         public double Longitude { get; set; }
         public Room? Room { get; set; }
         public int RoomID { get; set; }
+        public Point LocationPoint { get; set; }
     }
 }
