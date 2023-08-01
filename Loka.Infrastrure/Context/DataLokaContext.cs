@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Loka.Infrastrure.Entities;
+using System.Reflection.Metadata;
 
 namespace Loka.Infrastrure.Context
 {
@@ -7,7 +8,6 @@ namespace Loka.Infrastrure.Context
     {
         public DataLokaContext(DbContextOptions<DataLokaContext> options) : base(options)
         {
-
         }
 
         public DbSet<Account> Accounts { get; set; }
@@ -26,7 +26,6 @@ namespace Loka.Infrastrure.Context
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Ward> Wards { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // User - Account one to one relation
@@ -37,12 +36,9 @@ namespace Loka.Infrastrure.Context
                 .IsRequired();
 
             // Room - Address
-            modelBuilder.Entity<Room>()
-                .HasOne(e => e.Address)
-                .WithOne(e => e.Room)
-                .HasForeignKey<Address>(e => e.RoomID)
-                .IsRequired();
-
+           
+            modelBuilder.Entity<Address>(entity => { entity.HasIndex(p => p.AddressId); });
+            modelBuilder.Entity<Room>().HasOne(c => c.Address).WithMany(t => t.Rooms).OnDelete(DeleteBehavior.Cascade);
             // Room - Location
             modelBuilder.Entity<Room>()
                 .HasOne(e => e.Location)
@@ -56,7 +52,6 @@ namespace Loka.Infrastrure.Context
                 .WithOne(e => e.User)
                 .HasForeignKey<Favorite>(e => e.UserID)
                 .IsRequired();
-            
         }
     }
 }

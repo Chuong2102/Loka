@@ -4,6 +4,7 @@ using Loka.Infrastrure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Loka.Infrastructure.Migrations
 {
     [DbContext(typeof(DataLokaContext))]
-    partial class DataLokaContextModelSnapshot : ModelSnapshot
+    [Migration("20230627104904_edit-addressID-field")]
+    partial class editaddressIDfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,11 +66,11 @@ namespace Loka.Infrastructure.Migrations
 
             modelBuilder.Entity("Loka.Infrastrure.Entities.Address", b =>
                 {
-                    b.Property<int>("AddressId")
+                    b.Property<int>("AddressID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"), 1L, 1);
 
                     b.Property<string>("AddressLine1")
                         .HasColumnType("nvarchar(max)");
@@ -84,9 +86,7 @@ namespace Loka.Infrastructure.Migrations
                     b.Property<int?>("WardID")
                         .HasColumnType("int");
 
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("AddressId");
+                    b.HasKey("AddressID");
 
                     b.HasIndex("WardID");
 
@@ -300,12 +300,9 @@ namespace Loka.Infrastructure.Migrations
             modelBuilder.Entity("Loka.Infrastrure.Entities.Room", b =>
                 {
                     b.Property<int>("RoomID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoomID"), 1L, 1);
-
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressID")
                         .HasColumnType("int");
 
                     b.Property<double>("Area")
@@ -326,8 +323,6 @@ namespace Loka.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("RoomID");
-
-                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserID");
 
@@ -511,8 +506,9 @@ namespace Loka.Infrastructure.Migrations
                 {
                     b.HasOne("Loka.Infrastrure.Entities.Address", "Address")
                         .WithMany("Rooms")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoomID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Loka.Infrastrure.Entities.User", "User")
                         .WithMany()
