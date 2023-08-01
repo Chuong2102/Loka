@@ -1,8 +1,10 @@
 const routes = {
     home: '/',
+    favourite: '/favourite',
     profile: '/:nickname',
-    post: '/post',
-    room: '/room',
+    upload: '/upload',
+    search: '/search/:keyword',
+    detail: '/detail',
 };
 
 export default routes;

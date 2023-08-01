@@ -1,12 +1,6 @@
 .search,
 .search-result {
-    --search-border-radius: 92px;
-    --search-height: 46px;
-    --search-top-spacer: 9px;
-    --search-button-width: 54px;
-    
-    width: 540px;
-
+    width: 361px;
 }
 
 .search {
@@ -60,7 +54,7 @@
 .clear,
 .loading {
     position: absolute;
-    right: calc(var(--search-button-width) - -80px);
+    right: calc(var(--search-button-width) - 5px);
     top: 50%;
     transform: translateY(-50%);
     color: rgba(22, 24, 35, 0.34);
@@ -85,7 +79,7 @@
     justify-content: center;
     // width: var(--search-button-width);
     // height: 100%;
-    width: 120px;
+    width: 33px;
     height: 33px;
     // margin: 0;
     margin-top: 5px;
