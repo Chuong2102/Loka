@@ -2,6 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PostDetail.module.scss';
 import Carousel from './Carousel';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ const slides = [
 
 function PostDetail() {
     return (
-        <div className={cx('wrapper', 'my-[60px]')}>
+        <div className={cx('wrapper')}>
             <div className="grid grid-cols-1">
                 <div className={cx('flex', 'items-center', 'justify-center')}>
                     <div className={cx('post__item', 'max-w-[700px]', 'flex', 'flex-col', 'rounded-xl')} >
@@ -35,6 +36,7 @@ function PostDetail() {
                     </div>
                 </div>
             </div>
+            <FacebookMsg/>
         </div>
     );
 }

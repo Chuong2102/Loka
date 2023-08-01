@@ -19,7 +19,7 @@ function Post() {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-                const data = response.data.slice(0, 10);
+                const data = response.data;
                 setPosts(data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -32,10 +32,10 @@ function Post() {
     const handleAdd = async (e) => {
         e.preventDefault();
         const newPost = {
-            id: postId,
-            userId: roomId,
+            postId: postId,
+            roomId: roomId,
             title: title,
-            body: description,
+            description: description,
         };
 
         try {
@@ -51,21 +51,23 @@ function Post() {
     const handleUpdate = async (e) => {
         e.preventDefault();
         const updatedPost = {
-            id: postId,
-            userId: roomId,
+            postId: postId,
+            roomId: roomId,
             title: title,
-            body: description,
+            description: description,
         };
 
         try {
             const response = await axios.put(`https://jsonplaceholder.typicode.com/posts/${postId}`, updatedPost);
             const updatedPostData = response.data;
+
             const updatedPosts = posts.map((post) => {
                 if (post.id === postId) {
                     return updatedPostData;
                 }
                 return post;
             });
+
             setPosts(updatedPosts);
             resetForm();
         } catch (error) {
@@ -117,6 +119,7 @@ function Post() {
             left: 0,
             behavior: 'smooth',
         });
+
         setPostId(post.id);
         setRoomId(post.userId);
         setTitle(post.title);
@@ -230,7 +233,7 @@ function Post() {
                             onChange={handleDescriptionChange}
                         />
                     </div>
-                     <div className="mb-[20px]">
+                    <div className="mb-[20px]">
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
                             Room ID
                         </label>
@@ -266,7 +269,10 @@ function Post() {
                         >
                             Update
                         </Button>
-                        <Button className={cx('bg-red-500', 'hover:opacity-80', 'text-white')} onClick={(e) => handleDelete(e, postId)}>
+                        <Button
+                            className={cx('bg-red-500', 'hover:opacity-80', 'text-white')}
+                            onClick={(e) => handleDelete(e, postId)}
+                        >
                             Delete
                         </Button>
                     </div>
@@ -284,11 +290,11 @@ function Post() {
                 </thead>
                 <tbody>
                     {posts.map((post) => (
-                        <tr key={post.id}>
-                            <td>{post.id}</td>
-                            <td>{post.userId}</td>
+                        <tr key={post.postId}>
+                            <td>{post.postId}</td>
+                            <td>{post.roomId}</td>
                             <td>{post.title}</td>
-                            <td>{post.body}</td>
+                            <td>{post.description}</td>
                             <td>
                                 <div className="flex">
                                     <Button
@@ -299,7 +305,7 @@ function Post() {
                                     </Button>
                                     <Button
                                         className={cx('bg-red-500', 'hover:opacity-80', 'text-white')}
-                                        onClick={(e) => handleDelete(e, post.id)}
+                                        onClick={(e) => handleDelete(e, post.postId)}
                                     >
                                         Delete
                                     </Button>

@@ -12,6 +12,7 @@ import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 
 import styles from './SearchResult.module.scss';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -36,9 +37,9 @@ function SearchResult() {
     }, []);
 
     return (
-            <div className={cx('wrapper', 'my-[30px]')}>
+            <div className={cx('wrapper', 'mt-[80px]', 'md:my-[30px]')}>
                 <h2 className={cx('mb-[30px]', 'text-[20px]', 'font-medium')}>Kết quả tìm kiếm: {keyword}</h2>
-                <div className="grid grid-cols-4 gap-x-14 gap-y-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
                     <div
                         className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
@@ -200,6 +201,7 @@ function SearchResult() {
                     </div>
                 </Link>
             </div>
+            <FacebookMsg/>
             </div>
     );
 

@@ -10,6 +10,7 @@ import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 import Button from '~/components/Button';
 import { CssSyntaxError } from 'postcss';
+import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -23,27 +24,27 @@ const slides = [
 function Home() {
     const [isHovered, setIsHovered] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://localhost:7245/api/Post', {
-                    headers: {
-                        'Access-Control-Allow-Origin': 'http://localhost:3000',
-                    },
-                    mode: 'cors',
-                });
-                console.log(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('https://localhost:7245/api/Post', {
+    //                 headers: {
+    //                     'Access-Control-Allow-Origin': 'http://localhost:3000',
+    //                 },
+    //                 mode: 'cors',
+    //             });
+    //             console.log(response.data);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
     return (
         <div className={cx('wrapper', 'my-[100px]')}>
-            <div className="grid grid-cols-4 gap-x-14 gap-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
                     <div
                         className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
@@ -205,6 +206,7 @@ function Home() {
                     </div>
                 </Link>
             </div>
+            <FacebookMsg/>
         </div>
     );
 }
