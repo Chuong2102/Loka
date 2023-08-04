@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 import Button from '~/components/Button';
-import { CssSyntaxError } from 'postcss';
 import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
@@ -43,7 +42,10 @@ function Home() {
     // }, []);
 
     return (
-        <div className={cx('wrapper', 'my-[100px]')}>
+        <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
+            <h2 className={cx('mb-[30px]', 'text-[24px]', 'font-medium')}>
+                <span className={cx('border-b-2', 'suggest', 'pb-1')} >Đề xuất</span>
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
                     <div
@@ -206,7 +208,7 @@ function Home() {
                     </div>
                 </Link>
             </div>
-            <FacebookMsg/>
+            <FacebookMsg />
         </div>
     );
 }
