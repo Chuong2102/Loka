@@ -10,7 +10,7 @@
     --font-family: 'Roboto', sans-serif;
 
     // Default layout
-    --default-layout-header-height: 80px;
+    --default-layout-header-height: 124px;
     --default-layout-width: 1500px;
     --default-layout-horizontal-spacer: 40px;
 }
@@ -32,6 +32,8 @@ body {
     text-rendering: optimizeSpeed;
     color: var(--text-color);
     overflow-y: overlay;
+    padding-right: 0 !important;
+    overflow: visible !important;
 }
 
 // Scrollbar CSS
@@ -54,6 +56,7 @@ html *::-webkit-scrollbar-track {
 
 button,
 input,
+select,
 [tabindex] {
     outline: none;
     border: none;
