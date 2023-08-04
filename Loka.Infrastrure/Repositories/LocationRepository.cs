@@ -3,12 +3,10 @@ using Loka.Infrastrure.Entities;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Dapper;
-using static Dapper.SqlMapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Location = Loka.Infrastrure.Entities.Location;
-using System.Data.Entity.Spatial;
 
 namespace Loka.Infrastructure.Repositories
 {
@@ -37,10 +35,10 @@ namespace Loka.Infrastructure.Repositories
             para.Add("@@Latitude", entity.Latitude);
             para.Add("@Longtitude", entity.Longitude);
 
-            Dapper.SqlMapper.ResetTypeHandlers();
+            //string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
+            //DbGeography point = DbGeography.FromText(wkt, 4326);
 
-            string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
-            DbGeography point = DbGeography.FromText(wkt, 4326);
+            Point point = new Point(entity.Latitude, entity.Longitude) { SRID = 4326};
 
             para.Add("@LocationPoint", point);
 
