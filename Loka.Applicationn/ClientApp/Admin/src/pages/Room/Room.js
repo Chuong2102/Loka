@@ -5,6 +5,7 @@ import axios from 'axios';
 import styles from './Room.module.scss';
 import Button from '~/components/Button';
 import Search from '~/layouts/components/Search';
+import UploadImage from '~/components/UploadImage';
 
 const cx = classNames.bind(styles);
 
@@ -25,6 +26,7 @@ function Room() {
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
     const [price, setPrice] = useState('');
+    const [images, setImages] = useState([]);
     const [title, setTitle] = useState('');
 
     // Xử lý placeId để lấy latitude, longtitude
@@ -110,6 +112,11 @@ function Room() {
         setPrice(e.target.value);
     };
 
+    const handleImagesChange = (imageFiles) => {
+        const base64Images = imageFiles.map((file) => file.preview);
+        setImages(base64Images);
+    };
+
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
     };
@@ -117,6 +124,7 @@ function Room() {
     // Trả về BE
     const handleSave = (e) => {
         e.preventDefault();
+
         const payload = {
             addressLine1: addressLine1,
             addressLine2: addressLine2,
@@ -126,22 +134,23 @@ function Room() {
             placeId: placeId,
             latitude: latitude,
             longtitude: longtitude,
-            description: description, 
+            description: description,
             area: area,
-            price: price, 
-            title: title,      
+            price: price,
+            images: images,
+            title: title,
         };
 
         console.log(payload);
 
-        axios
-            .post('api/AddPost', payload)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        // axios
+        //     .post('api/AddPost', payload)
+        //     .then((response) => {
+        //         console.log(response.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
     };
 
     return (
@@ -421,6 +430,12 @@ function Room() {
                             onChange={handlePriceChange}
                         />
                     </div>
+                    <div className="mb-[20px]">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                            Images
+                        </label>
+                        <UploadImage onImagesChange={handleImagesChange} />
+                    </div>
                     <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-rose-600', 'text-[26px]')}>
                         Post
                     </h3>
@@ -449,10 +464,7 @@ function Room() {
                         />
                     </div>
                     <div className="flex justify-center mt-[16px]">
-                        <Button
-                            className={cx('bg-blue-500', 'hover:opacity-80', 'text-white')}
-                            onClick={handleSave}
-                        >
+                        <Button className={cx('bg-blue-500', 'hover:opacity-80', 'text-white')} onClick={handleSave}>
                             Save
                         </Button>
                     </div>
