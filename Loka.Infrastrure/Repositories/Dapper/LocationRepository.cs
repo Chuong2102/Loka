@@ -8,7 +8,7 @@ using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Location = Loka.Infrastrure.Entities.Location;
 
-namespace Loka.Infrastructure.Repositories
+namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class LocationRepository : ILocationRepository
     {
@@ -38,7 +38,7 @@ namespace Loka.Infrastructure.Repositories
             //string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
             //DbGeography point = DbGeography.FromText(wkt, 4326);
 
-            Point point = new Point(entity.Latitude, entity.Longitude) { SRID = 4326};
+            Point point = new Point(entity.Latitude, entity.Longitude) { SRID = 4326 };
 
             para.Add("@LocationPoint", point);
 

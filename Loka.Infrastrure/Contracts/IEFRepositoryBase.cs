@@ -1,6 +1,6 @@
 ﻿namespace Loka.Infrastructure.Contracts
 {
-    public interface IEntityRepositoryBase<T> where T : class
+    public interface IEFRepositoryBase<T> where T : class
     {
         void CreateAsync(T entity);
         Task<List<T>> GetAllAsync();

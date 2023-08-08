@@ -1,4 +1,5 @@
-﻿using Loka.Infrastructure.Repositories;
+﻿using Loka.Infrastructure.Repositories.Dapper;
+using Loka.Infrastructure.Repositories.EFCore;
 using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
 using Microsoft.AspNetCore.Cors;
@@ -12,11 +13,11 @@ namespace Loka.Controllers
     public class PostController : ControllerBase
     {
         IDataContext dataContext;
-        DataLokaContext dataLokaDBContext;
-        public PostController(IDataContext dataContext, DataLokaContext context)
+        IEFDataContext efDataContext;
+        public PostController(IDataContext dataContext, IEFDataContext context)
         {
             this.dataContext = dataContext;
-            dataLokaDBContext = context;
+            efDataContext = context;
         }
 
         public class Data
@@ -71,15 +72,16 @@ namespace Loka.Controllers
                 Title = data.Title
             });
 
-            await dataContext.Locations.CreateAsync(new Location
+            efDataContext.Locations.CreateAsync(new Location
             {
                 Longitude = data.Longitude,
                 Latitude = data.Latitude,
                 PlaceID = data.PlaceID,
-                Room = new Room { RoomID = roomID}
+                Room = new Room { RoomID = roomID},
+                LocationPoint = new NetTopologySuite.Geometries.Point(data.Latitude, data.Longitude) { SRID = 4326 },
             });
 
-            var ward = dataLokaDBContext.Wards.FirstOrDefault(w => w.WardName.Equals(data.WardName.Trim()));
+            var ward = efDataContext.Wards.GetByName(data.WardName);
 
             return await dataContext.Addressses.CreateAsync(new Address
             {

@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Loka.Infrastructure.Contracts
 {
-    public class EntityRepositoryBase<T> : IEntityRepositoryBase<T> where T : class
+    public class EFRepositoryBase<T> : IEFRepositoryBase<T> where T : class
     {
         readonly DataLokaContext dataContext;
-        public EntityRepositoryBase(DataLokaContext dataLoka)
+        public EFRepositoryBase(DataLokaContext dataLoka)
         {
             this.dataContext = dataLoka;
         }
 
-        public void CreateAsync(T entity)
+        public async void CreateAsync(T entity)
         {
-            dataContext.Add<T>(entity);
+            await dataContext.AddAsync<T>(entity);
         }
 
         public void DeleteAsync(T entity)
