@@ -10,7 +10,6 @@ import classNames from 'classnames/bind';
 
 import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
-
 import styles from './SearchResult.module.scss';
 import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
@@ -204,23 +203,6 @@ function SearchResult() {
             <FacebookMsg />
         </div>
     );
-
-    // const [cookies, setCookie] = useCookies(['iconType']);
-    // const [isSolid, setIsSolid] = useState(cookies.iconType === 'solid');
-
-    // const handleIconToggle = () => {
-    //   const newIconType = isSolid ? 'regular' : 'solid';
-    //   setCookie('iconType', newIconType);
-    //   setIsSolid(!isSolid);
-    // };
-
-    // return (
-    //   <div>
-    //     <button onClick={handleIconToggle}>
-    //       <FontAwesomeIcon icon={isSolid ? faSolidHeart : faRegularHeart} />
-    //     </button>
-    //   </div>
-    // );
 }
 
 export default SearchResult;
