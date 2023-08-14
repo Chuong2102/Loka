@@ -9,7 +9,7 @@ namespace Loka.Infrastructure.Repositories
         {
 
             services.AddTransient<IDataContext, DataContext>();
-            services.AddTransient<IEFDataContext, IEFDataContext>();
+            services.AddTransient<IEFDataContext, EFDataContext>();
 
             services.AddTransient<IRoomRepository, RoomRepository>();
 

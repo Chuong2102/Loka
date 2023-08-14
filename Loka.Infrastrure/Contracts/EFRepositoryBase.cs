@@ -14,11 +14,15 @@ namespace Loka.Infrastructure.Contracts
         public async void CreateAsync(T entity)
         {
             await dataContext.AddAsync<T>(entity);
+
+            dataContext.SaveChanges();
         }
 
         public void DeleteAsync(T entity)
         {
             dataContext.Remove<T>(entity);
+
+            dataContext.SaveChanges();
         }
 
         public async Task<List<T>> GetAllAsync()

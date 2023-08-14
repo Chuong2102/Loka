@@ -12,8 +12,8 @@ namespace Loka.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        IDataContext dataContext;
-        IEFDataContext efDataContext;
+        readonly IDataContext dataContext;
+        readonly IEFDataContext efDataContext;
         public PostController(IDataContext dataContext, IEFDataContext context)
         {
             this.dataContext = dataContext;
@@ -78,6 +78,7 @@ namespace Loka.Controllers
                 Latitude = data.Latitude,
                 PlaceID = data.PlaceID,
                 Room = new Room { RoomID = roomID},
+                RoomID = roomID,
                 LocationPoint = new NetTopologySuite.Geometries.Point(data.Latitude, data.Longitude) { SRID = 4326 },
             });
 
@@ -88,7 +89,8 @@ namespace Loka.Controllers
                 AddressLine1 = data.AddressLine1,
                 AddressLine2 = data.AddressLine2,
                 Ward = ward,
-                Room = new Room { RoomID = roomID }
+                Room = new Room { RoomID = roomID },
+                RoomID= roomID
 
             });
         }
