@@ -4,12 +4,14 @@ import App from '~/App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
+import FacebookMsg from './components/FacebookMsg';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <GlobalStyles>
             <App />
+            <FacebookMsg/>
         </GlobalStyles>
     </React.StrictMode>,
 );

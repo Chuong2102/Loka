@@ -208,7 +208,7 @@ function Home() {
                     </div>
                 </Link>
             </div>
-            <FacebookMsg />
+            {/* <FacebookMsg /> */}
         </div>
     );
 }

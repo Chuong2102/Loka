@@ -200,7 +200,7 @@ function SearchResult() {
                     </div>
                 </Link>
             </div>
-            <FacebookMsg />
+            {/* <FacebookMsg /> */}
         </div>
     );
 }

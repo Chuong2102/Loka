@@ -48,7 +48,7 @@ function PostDetail() {
             <div className="m-auto mt-[80px] w-[222px] md:w-[690px] lg:w-[900px] pb-[20px]">
                 <SuggestedPost />
             </div>
-            <FacebookMsg />
+            {/* <FacebookMsg /> */}
         </div>
     );
 }
