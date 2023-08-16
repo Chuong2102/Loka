@@ -5,7 +5,7 @@ using Loka.Infrastrure.Entities;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Loka.Infrastructure.Repositories
+namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class RoomRepository : IRoomRepository
     {
@@ -22,7 +22,7 @@ namespace Loka.Infrastructure.Repositories
             using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
             {
                 connection.Open();
-                
+
                 // Add Room
                 //
                 var para = new DynamicParameters();

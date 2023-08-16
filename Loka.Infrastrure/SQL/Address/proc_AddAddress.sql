@@ -11,7 +11,7 @@ create proc proc_AddAddress
 as
 begin
 	-- check 
-	if(not exists(select * from Addresses as p where p.RoomID = @RoomID))
+	if(exists(select * from Addresses as p where p.RoomID = @RoomID))
 	begin
 		return;
 	end;
@@ -19,3 +19,4 @@ begin
 	insert into Addresses(RoomID, AddressLine1, AddressLine2, WardID) values (@RoomID, @AddressLine1, @AddressLine2, @WardID)
 end
 go
+
