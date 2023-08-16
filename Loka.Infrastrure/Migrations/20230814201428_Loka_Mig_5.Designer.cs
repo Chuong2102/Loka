@@ -4,6 +4,7 @@ using Loka.Infrastrure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace Loka.Infrastructure.Migrations
 {
     [DbContext(typeof(DataLokaContext))]
-    partial class DataLokaContextModelSnapshot : ModelSnapshot
+    [Migration("20230814201428_Loka_Mig_5")]
+    partial class Loka_Mig_5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

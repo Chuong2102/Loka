@@ -11,7 +11,8 @@ namespace Loka.Infrastructure.Repositories
             services.AddTransient<IDataContext, DataContext>();
             services.AddTransient<IEFDataContext, EFDataContext>();
 
-            services.AddTransient<IRoomRepository, RoomRepository>();
+            services.AddTransient<Dapper.IRoomRepository, Dapper.RoomRepository>();
+            services.AddTransient<EFCore.IRoomRepository, EFCore.RoomRepository>();
 
             services.AddTransient<IPostRepository, PostRepository>();
 

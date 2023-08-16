@@ -57,6 +57,9 @@ namespace Loka.Controllers
         [HttpPost]
         public async Task<int> CreatePostAsync([FromBody] Data data)
         {
+
+            var ward = efDataContext.Wards.GetByName(data.WardName);
+
             var roomID = await dataContext.Rooms.CreateAsync(new Room
             {
                 User = new User { UserID = 3 },
@@ -72,24 +75,31 @@ namespace Loka.Controllers
                 Title = data.Title
             });
 
+            // Create Location
+            // Create Point
+            var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+            var point = gf.CreatePoint(new NetTopologySuite.Geometries.Coordinate(data.Longitude, data.Latitude));
+
+            //
+            var room = efDataContext.Rooms.GetByID(roomID).Result;
+            //
             efDataContext.Locations.CreateAsync(new Location
             {
-                Longitude = data.Longitude,
+                Longtitude = data.Longitude,
                 Latitude = data.Latitude,
                 PlaceID = data.PlaceID,
-                Room = new Room { RoomID = roomID},
+                Room = room,
                 RoomID = roomID,
-                LocationPoint = new NetTopologySuite.Geometries.Point(data.Latitude, data.Longitude) { SRID = 4326 },
+                LocationPoint = point,
             });
 
-            var ward = efDataContext.Wards.GetByName(data.WardName);
 
             return await dataContext.Addressses.CreateAsync(new Address
             {
                 AddressLine1 = data.AddressLine1,
                 AddressLine2 = data.AddressLine2,
                 Ward = ward,
-                Room = new Room { RoomID = roomID },
+                Room = room,
                 RoomID= roomID
 
             });
