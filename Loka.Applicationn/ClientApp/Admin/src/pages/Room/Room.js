@@ -128,12 +128,12 @@ function Room() {
         const payload = {
             addressLine1: addressLine1,
             addressLine2: addressLine2,
-            ward: ward,
+            wardName: ward,
             city: city,
             province: province,
-            placeId: placeId,
+            placeID: placeId,
             latitude: latitude,
-            longtitude: longtitude,
+            longitude: longtitude,
             description: description,
             area: area,
             price: price,
@@ -143,14 +143,14 @@ function Room() {
 
         console.log(payload);
 
-        // axios
-        //     .post('api/AddPost', payload)
-        //     .then((response) => {
-        //         console.log(response.data);
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
+        axios
+            .post('https://localhost:7245/api/AddPost', payload)
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     return (

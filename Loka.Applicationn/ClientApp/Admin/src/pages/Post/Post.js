@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
+import ReactPaginate from 'react-paginate';
 
 import styles from './Post.module.scss';
 import Button from '~/components/Button';
@@ -8,6 +9,9 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function Post() {
+    const [currentPage, setCurrentPage] = useState(0);
+    const postsPerPage = 10;
+
     const [postId, setPostId] = useState('');
     const [roomId, setRoomId] = useState('');
     const [title, setTitle] = useState('');
@@ -90,6 +94,10 @@ function Post() {
         }
     };
 
+    const handlePageChange = ({ selected }) => {
+        setCurrentPage(selected);
+    };
+
     const resetForm = () => {
         setPostId('');
         setRoomId('');
@@ -120,10 +128,10 @@ function Post() {
             behavior: 'smooth',
         });
 
-        setPostId(post.id);
-        setRoomId(post.userId);
+        setPostId(post.postId);
+        setRoomId(post.roomId);
         setTitle(post.title);
-        setDescription(post.body);
+        setDescription(post.description);
     };
 
     return (
@@ -156,31 +164,6 @@ function Post() {
                             autoComplete="off"
                             value={postId}
                             onChange={handlePostIdChange}
-                        />
-                    </div>
-                    <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
-                            Room ID
-                        </label>
-                        <input
-                            className={cx(
-                                'input_post',
-                                'shadow',
-                                'appearance-none',
-                                'border',
-                                'rounded',
-                                'w-full',
-                                'py-3',
-                                'px-3',
-                                'text-gray-700',
-                                'leading-tight',
-                            )}
-                            id="roomId"
-                            type="text"
-                            placeholder="Enter Room ID"
-                            autoComplete="off"
-                            value={roomId}
-                            onChange={handleRoomIdChange}
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -289,7 +272,7 @@ function Post() {
                     </tr>
                 </thead>
                 <tbody>
-                    {posts.map((post) => (
+                    {posts.slice(currentPage * postsPerPage, (currentPage + 1) * postsPerPage).map((post) => (
                         <tr key={post.postId}>
                             <td>{post.postId}</td>
                             <td>{post.roomId}</td>
@@ -315,6 +298,25 @@ function Post() {
                     ))}
                 </tbody>
             </table>
+            <div className="flex justify-center mt-6">
+                <ReactPaginate
+                    containerClassName={'pagination flex'}
+                    previousLabel={'< previous'}
+                    nextLabel={'next >'}
+                    breakLabel={'...'}
+                    pageCount={Math.ceil(posts.length / postsPerPage)}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    onPageChange={handlePageChange}
+                    renderOnZeroPageCount={null}
+                    previousClassName={'border pt-[6px] px-3 rounded-md mr-2 bg-white hover:bg-blue-100 hover:cursor-pointer'}
+                    nextClassName={'border pt-[6px] px-3 rounded-md ml-2 bg-white hover:bg-blue-100 hover:cursor-pointer'}
+                    breakClassName={'mx-2'}
+                    pageClassName={'min-w-[4rem] bg-white text-center rounded-md flex mx-1 hover:bg-blue-100 hover:cursor-pointer'}
+                    pageLinkClassName={'w-full px-5 py-3'}   
+                    activeLinkClassName={'bg-blue-500 rounded-md text-white cursor-pointer hover:bg-blue-300 hover:cursor-pointer'}
+                />
+            </div>
         </div>
     );
 }

@@ -7,7 +7,7 @@ using static Dapper.SqlMapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 
-namespace Loka.Infrastructure.Repositories
+namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class AddressRepository : IAddressRepository
     {

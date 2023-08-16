@@ -1,4 +1,4 @@
-﻿namespace Loka.Infrastructure.Repositories
+﻿namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class DataContext : IDataContext
     {
@@ -7,7 +7,7 @@
 
         public IAddressRepository Addressses { get; set; }
 
-        public ILocationRepository Locations { get;set; }
+        public ILocationRepository Locations { get; set; }
 
         public DataContext(IPostRepository postRepository, IRoomRepository roomRepository,
             IAddressRepository addressRepository, ILocationRepository locationRepository)
