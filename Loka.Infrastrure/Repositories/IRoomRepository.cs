@@ -5,6 +5,6 @@ namespace Loka.Infrastructure.Repositories
 {
     public interface IRoomRepository : IRepositoryBase<Room>
     {
-
+        
     }
 }

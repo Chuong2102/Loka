@@ -1,4 +1,6 @@
-﻿namespace Loka.Infrastructure.Repositories
+﻿using Loka.Infrastructure.Services;
+
+namespace Loka.Infrastructure.Repositories
 {
     public static class ServiceCollectionExtension
     {
@@ -11,6 +13,7 @@
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<ILocationRepository, LocationRepository>();
             services.AddTransient<IAddressRepository, AddressRepository>();
+            services.AddTransient<IRoomServices, RoomServices>();
 
         }
     }

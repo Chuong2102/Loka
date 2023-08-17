@@ -1,20 +1,25 @@
 ﻿using Dapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastructure.DapperQueries;
+using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq.Expressions;
 
 namespace Loka.Infrastructure.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
         private readonly IConfiguration configuration;
+        private DataLokaContext _dbContext;
 
         readonly private string connectionString = "ConnectionStringName";
-        public RoomRepository(IConfiguration configuration)
+        public RoomRepository(IConfiguration configuration, DataLokaContext dbContext)
         {
             this.configuration = configuration;
+            _dbContext = dbContext;
         }
 
         public async Task<int> CreateAsync(Room entity)
@@ -44,6 +49,20 @@ namespace Loka.Infrastructure.Repositories
 
             }
 
+        }
+
+        public async Task<List<Room>> GetAllAsync(params Expression<Func<Room, object>>[] includeProperties)
+        {
+            var query =  _dbContext.Rooms.AsQueryable();
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return await query.ToListAsync();
         }
 
         public Task<List<Room>> GetAllAsync()

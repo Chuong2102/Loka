@@ -7,6 +7,7 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Location = Loka.Infrastrure.Entities.Location;
+using System.Linq.Expressions;
 
 namespace Loka.Infrastructure.Repositories
 {
@@ -68,6 +69,11 @@ namespace Loka.Infrastructure.Repositories
         public virtual void GetDistance(Location entity)
         {
 
+        }
+
+        public Task<List<Location>> GetAllAsync(params Expression<Func<Location, object>>[] includeProperties)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,6 +6,7 @@ using Dapper;
 using static Dapper.SqlMapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
+using System.Linq.Expressions;
 
 namespace Loka.Infrastructure.Repositories
 {
@@ -53,6 +54,11 @@ namespace Loka.Infrastructure.Repositories
         }
 
         public Task<int> UpdateAsync(Address entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Address>> GetAllAsync(params Expression<Func<Address, object>>[] includeProperties)
         {
             throw new NotImplementedException();
         }
