@@ -81,7 +81,7 @@ function Post() {
 
     const handleDelete = async (e, postId) => {
         e.preventDefault();
-        const confirmation = window.confirm('Có chắc là muốn xóa khum?');
+        const confirmation = window.confirm('Bạn có chắc chắn muốn xóa?');
         if (confirmation) {
             try {
                 await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);

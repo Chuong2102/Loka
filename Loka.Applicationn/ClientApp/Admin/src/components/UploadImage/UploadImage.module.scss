@@ -24,11 +24,12 @@
     border-radius: 2px;
     border: 1px solid #eaeaea;
     margin-bottom: 8px;
-    margin-right: 8px;
+    margin-right: 16px;
     width: 100px;
     height: 100px;
     padding: 4px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .thumb__inner {
@@ -41,4 +42,23 @@
     display: block;
     width: auto;
     height: 100%;
+}
+
+.delete__btn {
+    position: absolute;
+    right: -6px;
+    top: -8px;
+    width: 18px;
+    height: 18px;
+    background-color: #c6c6c6;
+    color: #777474;
+    border-radius: 50%;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+input[type="file"] {
+    color: transparent;
 }

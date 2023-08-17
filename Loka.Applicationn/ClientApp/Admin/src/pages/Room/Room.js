@@ -22,14 +22,14 @@ function Room() {
     const [province, setProvince] = useState('');
     const [placeId, setPlaceId] = useState('');
     const [latitude, setLatitude] = useState('');
-    const [longtitude, setLongtitude] = useState('');
+    const [longitude, setLongitude] = useState('');
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
     const [price, setPrice] = useState('');
     const [images, setImages] = useState([]);
     const [title, setTitle] = useState('');
 
-    // Xử lý placeId để lấy latitude, longtitude
+    // Xử lý placeId để lấy latitude, longitude
     useEffect(() => {
         if (!placeId.trim()) {
             return;
@@ -45,7 +45,7 @@ function Room() {
                 });
 
                 setLatitude(response.data.result.geometry.location.lat);
-                setLongtitude(response.data.result.geometry.location.lng);
+                setLongitude(response.data.result.geometry.location.lng);
             } catch (error) {
                 console.error(error);
             }
@@ -96,8 +96,8 @@ function Room() {
         setLatitude(e.target.value);
     };
 
-    const handleLongtitudeChange = (e) => {
-        setLongtitude(e.target.value);
+    const handleLongitudeChange = (e) => {
+        setLongitude(e.target.value);
     };
 
     const handleDescriptionChange = (e) => {
@@ -133,7 +133,7 @@ function Room() {
             province: province,
             placeID: placeId,
             latitude: latitude,
-            longitude: longtitude,
+            longitude: longitude,
             description: description,
             area: area,
             price: price,
@@ -164,7 +164,7 @@ function Room() {
                 </h3>
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="name">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="addressLine1">
                             AddressLine1
                         </label>
                         <input
@@ -188,7 +188,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="addressLine2">
                             AddressLine2
                         </label>
                         <input
@@ -236,7 +236,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="city">
                             City / District
                         </label>
                         <input
@@ -260,7 +260,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="province">
                             Province
                         </label>
                         <input
@@ -284,7 +284,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="placeId">
                             Place ID
                         </label>
                         <input
@@ -308,7 +308,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="latitude">
                             Latitude
                         </label>
                         <input
@@ -332,8 +332,8 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
-                            Longtitude
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="longitude">
+                            Longitude
                         </label>
                         <input
                             className={cx(
@@ -347,19 +347,19 @@ function Room() {
                                 'text-gray-700',
                                 'leading-tight',
                             )}
-                            id="longtitude"
+                            id="longitude"
                             type="text"
-                            placeholder="Enter Longtitude"
+                            placeholder="Enter Longitude"
                             autoComplete="off"
-                            value={longtitude}
-                            onChange={handleLongtitudeChange}
+                            value={longitude}
+                            onChange={handleLongitudeChange}
                         />
                     </div>
                     <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-rose-600', 'text-[26px]')}>
                         Room
                     </h3>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="description">
                             Description
                         </label>
                         <input
@@ -383,7 +383,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="area">
                             Area
                         </label>
                         <input
@@ -407,7 +407,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="price">
                             Price
                         </label>
                         <input
@@ -431,7 +431,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="images">
                             Images
                         </label>
                         <UploadImage onImagesChange={handleImagesChange} />
@@ -440,7 +440,7 @@ function Room() {
                         Post
                     </h3>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="title">
                             Title
                         </label>
                         <input
