@@ -9,7 +9,7 @@ using NetTopologySuite.Geometries;
 using Location = Loka.Infrastrure.Entities.Location;
 using System.Linq.Expressions;
 
-namespace Loka.Infrastructure.Repositories
+namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class LocationRepository : ILocationRepository
     {
@@ -34,12 +34,12 @@ namespace Loka.Infrastructure.Repositories
             para.Add("@RoomID", entity.Room.RoomID);
             para.Add("@PlaceID", entity.PlaceID);
             para.Add("@@Latitude", entity.Latitude);
-            para.Add("@Longtitude", entity.Longitude);
+            para.Add("@Longtitude", entity.Longtitude);
 
             //string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
             //DbGeography point = DbGeography.FromText(wkt, 4326);
 
-            Point point = new Point(entity.Latitude, entity.Longitude) { SRID = 4326};
+            Point point = new Point(entity.Longtitude, entity.Latitude) { SRID = 4326 };
 
             para.Add("@LocationPoint", point);
 

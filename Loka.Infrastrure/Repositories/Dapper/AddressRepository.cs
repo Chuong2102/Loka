@@ -8,7 +8,7 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 using System.Linq.Expressions;
 
-namespace Loka.Infrastructure.Repositories
+namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class AddressRepository : IAddressRepository
     {
