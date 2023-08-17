@@ -1,6 +1,7 @@
+
+﻿using Loka.Infrastructure.Services;
 ﻿using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
-
 namespace Loka.Infrastructure.Repositories
 {
     public static class ServiceCollectionExtension
@@ -20,6 +21,7 @@ namespace Loka.Infrastructure.Repositories
             services.AddTransient<EFCore.ILocationRepository, EFCore.LocationRepository>();
 
             services.AddTransient<IAddressRepository, AddressRepository>();
+            services.AddTransient<IRoomServices, RoomServices>();
 
         }
     }

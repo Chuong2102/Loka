@@ -6,6 +6,7 @@ using Dapper;
 using static Dapper.SqlMapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
+using System.Linq.Expressions;
 
 namespace Loka.Infrastructure.Repositories.Dapper
 {
@@ -79,6 +80,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
 
                 return await connection.ExecuteAsync(PostQuery.Proc_UpdatePost, para, commandType: CommandType.StoredProcedure);
             }
+        }
+
+        public Task<List<Post>> GetAllAsync(params Expression<Func<Post, object>>[] includeProperties)
+        {
+            throw new NotImplementedException();
         }
     }
 }
