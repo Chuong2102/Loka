@@ -1,4 +1,5 @@
 ﻿using Loka.Infrastructure.Repositories;
+using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Services;
 using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
@@ -22,13 +23,6 @@ namespace Loka.Controllers
             this._roomServices = roomServices;
         }
 
-        [Route("api/searchRoom/{lng}&{lat}")]
-        [HttpGet]
-        public async Task<IActionResult> SearchRoom(double lng, double lat)
-        {
-            var point = new Point(lng, lat);
-            var response =  await _roomServices.GetAllByCoordinates(point, 5);
-            return Ok(response);
-        }
+        
     }
 }

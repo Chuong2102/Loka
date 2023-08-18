@@ -34,12 +34,12 @@ namespace Loka.Infrastructure.Repositories.Dapper
             para.Add("@RoomID", entity.Room.RoomID);
             para.Add("@PlaceID", entity.PlaceID);
             para.Add("@@Latitude", entity.Latitude);
-            para.Add("@Longtitude", entity.Longtitude);
+            para.Add("@Longitude", entity.Longitude);
 
             //string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
             //DbGeography point = DbGeography.FromText(wkt, 4326);
 
-            Point point = new Point(entity.Longtitude, entity.Latitude) { SRID = 4326 };
+            Point point = new Point(entity.Longitude, entity.Latitude) { SRID = 4326 };
 
             para.Add("@LocationPoint", point);
 
