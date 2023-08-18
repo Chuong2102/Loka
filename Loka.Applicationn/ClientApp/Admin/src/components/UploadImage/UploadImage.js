@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useState, useRef, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -9,10 +10,23 @@ import styles from './UploadImage.module.scss';
 
 const cx = classNames.bind(styles);
 
-function UploadImage({ onImagesChange }) {
+function UploadImage({ onImagesChange, showDropzone = true, images = []}) {
     const [files, setFiles] = useState([]);
-
     const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (images.length > 0) {     
+            const imageFiles = images.map((base64Image, index) => {
+                return {
+                    name: `image-${index + 1}`,
+                    preview: base64Image,
+                };
+            });
+        
+            setFiles(imageFiles);
+        }
+    }, [images]);
+
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -40,11 +54,9 @@ function UploadImage({ onImagesChange }) {
             reader.readAsDataURL(file);
         });
 
-   
-
     const handleAddImages = async (selectedFiles) => {
         const newImages = await Promise.all(
-            Array.from(selectedFiles).map(async (file) => {
+            Array.from(selectedFiles).map(async (file) => {   
                 const base64 = await convertToBase64(file);
                 return Object.assign(file, {
                     preview: base64,
@@ -68,6 +80,7 @@ function UploadImage({ onImagesChange }) {
         inputElement.click();
     };
 
+
     const thumbs = files.map((file, index) => (
         <div className={cx('thumb')} key={file.name}>
             <div className={cx('thumb__inner')}>
@@ -81,14 +94,16 @@ function UploadImage({ onImagesChange }) {
 
     return (
         <section className={cx('container')}>
-            <div className={cx('dropzone')} {...getRootProps()}>
-                <input id="images" {...getInputProps()} />
-                <p>Drag 'n' drop some files here, or click to select files</p>
-            </div>
+            {showDropzone && (
+                <div className={cx('dropzone')} {...getRootProps()}>
+                    <input id="images" {...getInputProps()} />
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+            )}
             <aside className="flex flex-row flex-wrap mt-10">{thumbs}</aside>
             <div className={cx('add-image', 'mt-[8px]')}>
                 <label htmlFor="add-images">
-                    <Button className={cx('bg-orange-400', 'hover:opacity-80', 'text-white')} onClick={handleButtonClick}>
+                    <Button className={cx('bg-gray-400', 'hover:opacity-80', 'text-white')} onClick={handleButtonClick}>
                         Thêm ảnh
                     </Button>
 
@@ -106,5 +121,11 @@ function UploadImage({ onImagesChange }) {
         </section>
     );
 }
+
+UploadImage.propTypes = {
+    showDropzone: PropTypes.bool,
+    onImagesChange: PropTypes.func,
+    images: PropTypes.array,
+};
 
 export default UploadImage;

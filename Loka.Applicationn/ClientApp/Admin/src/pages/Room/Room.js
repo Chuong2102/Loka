@@ -141,7 +141,7 @@ function Room() {
             title: title,
         };
 
-        console.log(payload);
+        // console.log(payload);
 
         axios
             .post('https://localhost:7245/api/AddPost', payload)
@@ -212,7 +212,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="email">
+                        <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="ward">
                             Ward
                         </label>
                         <input
