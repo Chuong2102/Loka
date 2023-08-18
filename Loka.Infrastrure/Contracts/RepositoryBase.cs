@@ -30,26 +30,6 @@ namespace Loka.Infrastructure.Contracts
             throw new NotImplementedException();
         }
 
-        public IQueryable<T> GetAll()
-        {
-            return _table.AsQueryable();
-        }
-
-        public async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
-            var query = GetAll();
-
-            if (includeProperties != null)
-            {
-                foreach (var includeProperty in includeProperties)
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-
-            return await query.ToListAsync();
-        }
-
         public Task<T> GetByID(int id)
         {
             throw new NotImplementedException();

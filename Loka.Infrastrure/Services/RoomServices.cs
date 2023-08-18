@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Operation.Distance;
 using Loka.Infrastructure.Dtos.Rooms;
 using AutoMapper;
+using Loka.Infrastructure.Repositories.Dapper;
 
 namespace Loka.Infrastructure.Services
 {
@@ -31,22 +32,6 @@ namespace Loka.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<RoomDto>> GetAllByCoordinates(Point targetLocation, double maxDistance)
-        {
-            var rooms = await _roomRepository.GetAllAsync(x => x.Location);
-            var result = new List<RoomDto>();
-            foreach (var room in rooms)
-            {
-                var point = new Point(room.Location.Longitude, room.Location.Latitude);
-                var distanceOp = new DistanceOp(point, targetLocation);
-                var distance = distanceOp.Distance();
-
-                if (distance <= maxDistance)
-                {
-                    result.Add(_mapper.Map<RoomDto>(room));
-                }
-            }
-            return result;
-        }
+       
     }
 }

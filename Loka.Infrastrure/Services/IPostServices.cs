@@ -8,12 +8,13 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Loka.Infrastructure.Dtos.Rooms;
+using Loka.Infrastructure.Dtos.Posts;
 
 namespace Loka.Infrastructure.Services
 {
-    public interface IRoomServices
+    public interface IPostServices
     {
-        //Task<IEnumerable<RoomDto>> GetAllByCoordinates(Point targetLocation, double maxDistance);
+        Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance);
 
     }
 }

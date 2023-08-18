@@ -15,7 +15,7 @@ namespace Loka.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "Longitude",
                 table: "Locations",
-                newName: "Longtitude");
+                newName: "Longitude");
 
             migrationBuilder.AlterColumn<int>(
                 name: "RoleID",
@@ -92,7 +92,7 @@ namespace Loka.Infrastructure.Migrations
                 table: "Users");
 
             migrationBuilder.RenameColumn(
-                name: "Longtitude",
+                name: "Longitude",
                 table: "Locations",
                 newName: "Longitude");
 

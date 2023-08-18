@@ -1,4 +1,5 @@
-﻿using Loka.Infrastrure.Entities;
+﻿using Loka.Infrastructure.Dtos.Locations;
+using Loka.Infrastrure.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,8 +15,7 @@ namespace Loka.Infrastructure.Dtos.Rooms
         public int Id { get; set; }
         public User? User { get; set; }
         public Address? Address { get; set; }
-        public Location? Location { get; set; }
-        public Post? Post { get; set; }
+        public LocationDto? Location { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }

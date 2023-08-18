@@ -1,11 +1,14 @@
 ﻿using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Services;
 using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using NetTopologySuite.Geometries;
+using Location = Loka.Infrastrure.Entities.Location;
 
 namespace Loka.Controllers
 {
@@ -14,10 +17,12 @@ namespace Loka.Controllers
     {
         readonly IDataContext dataContext;
         readonly IEFDataContext efDataContext;
-        public PostController(IDataContext dataContext, IEFDataContext context)
+        private IPostServices _postServices;
+        public PostController(IDataContext dataContext, IEFDataContext context, IPostServices postServices)
         {
             this.dataContext = dataContext;
             efDataContext = context;
+            _postServices = postServices;
         }
 
         public class Data
@@ -85,7 +90,7 @@ namespace Loka.Controllers
             //
             efDataContext.Locations.CreateAsync(new Location
             {
-                Longtitude = data.Longitude,
+                Longitude = data.Longitude,
                 Latitude = data.Latitude,
                 PlaceID = data.PlaceID,
                 Room = room,
@@ -100,7 +105,7 @@ namespace Loka.Controllers
                 AddressLine2 = data.AddressLine2,
                 Ward = ward,
                 Room = room,
-                RoomID= roomID
+                RoomID = roomID
 
             });
         }
@@ -130,6 +135,21 @@ namespace Loka.Controllers
                 Price = data.Price,
                 Area = data.Area
             });
+        }
+        [Route("api/SearchRoom/{lng}&{lat}")]
+        [HttpGet]
+        public async Task<IActionResult> SearchRoom(double lng, double lat)
+        {
+            try
+            {
+                var point = new Point(lng, lat);
+                var response = await _postServices.GetAllByCoordinates(point, 5);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Loka.Infrastructure.Contracts
     {
         Task<int> CreateAsync(T entity);
         Task<List<T>> GetAllAsync();
-        Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
         Task<T> GetByID(int id);
         Task<int> UpdateAsync(T entity);
         Task<int> DeleteAsync(T entity);
