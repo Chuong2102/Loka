@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import mapboxgl from '@goongmaps/goong-js';
+import '@goongmaps/goong-js/dist/goong-js.css';
 
 import styles from './Room.module.scss';
 import Button from '~/components/Button';
@@ -11,6 +13,7 @@ const cx = classNames.bind(styles);
 
 // const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
 const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
+mapboxgl.accessToken = 'wnicbAmnNkoMHNYUKWnlFHezV189FjmMwkNJ7hKW';
 
 function Room() {
     const confirmationRef = useRef(null);
@@ -21,13 +24,53 @@ function Room() {
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
     const [placeId, setPlaceId] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
+    const [latitude, setLatitude] = useState(16.452572108000027);
+    const [longitude, setLongitude] = useState(107.58710986500006);
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
     const [price, setPrice] = useState('');
     const [images, setImages] = useState([]);
     const [title, setTitle] = useState('');
+
+    // Map (begin)
+    const mapContainerRef = useRef(null);
+    const mapRef = useRef(null);
+    const markerRef = useRef(null);
+
+    useEffect(() => {
+        mapRef.current = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'https://tiles.goong.io/assets/goong_map_web.json',
+            center: [longitude, latitude],
+            zoom: 18,
+        });
+
+        markerRef.current = new mapboxgl.Marker({
+            draggable: true,
+        })
+            .setLngLat([longitude, latitude])
+            .addTo(mapRef.current);
+
+        markerRef.current.on('dragend', onDragEnd);
+
+        return () => {
+            mapRef.current.remove();
+        };
+    }, []);
+
+    function onDragEnd() {
+        const lngLat = markerRef.current.getLngLat();
+        setLatitude(lngLat.lat);
+        setLongitude(lngLat.lng);
+    }
+
+    useEffect(() => {
+        if (markerRef.current) {
+            markerRef.current.setLngLat([longitude, latitude]);
+            mapRef.current.flyTo({ center: [longitude, latitude] });
+        }
+    }, [latitude, longitude]);
+    // Map (end)
 
     // Xử lý placeId để lấy latitude, longitude
     useEffect(() => {
@@ -62,10 +105,10 @@ function Room() {
         setProvince(result.compound.province);
         setPlaceId(result.place_id);
 
-        window.scrollTo({
-            top: confirmationRef.current.offsetTop - 100,
-            behavior: 'smooth',
-        });
+        // window.scrollTo({
+        //     top: confirmationRef.current.offsetTop - 100,
+        //     behavior: 'smooth',
+        // });
     };
 
     const handleAddressLine1Change = (e) => {
@@ -155,10 +198,15 @@ function Room() {
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('ml-[20px]', 'flex', 'justify-center')}>
+            <div className={cx('flex', 'justify-center')}>
                 <Search onSearchItemClick={handleSearchItemClick} />
             </div>
-            <div ref={confirmationRef} className={cx('w-[700px]', 'm-auto')}>
+
+            {/* Map ---*/}
+            <div ref={mapContainerRef} className={cx('map__container', 'shadow-md')} />
+            {/* --- */}
+
+            <div ref={confirmationRef} className={cx('w-[700px]', 'm-auto', 'mt-[40px]')}>
                 <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-black', 'text-[30px]')}>
                     Xác nhận địa chỉ
                 </h3>
