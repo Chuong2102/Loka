@@ -21,11 +21,13 @@ export default function Carousel({ children: slides, autoSlide = false, autoSlid
         next();
     };
 
-    useEffect(() => {
-        if (!autoSlide) return;
-        const slideInterval = setInterval(next, autoSlideInterval);
-        return () => clearInterval(slideInterval);
-    }, []);
+
+    // --- Auto slide ---
+    // useEffect(() => {
+    //     if (!autoSlide) return;
+    //     const slideInterval = setInterval(next, autoSlideInterval);
+    //     return () => clearInterval(slideInterval);
+    // }, []);
 
     return (
         <div className="overflow-hidden relative rounded-t-xl">
@@ -38,13 +40,15 @@ export default function Carousel({ children: slides, autoSlide = false, autoSlid
             <div className="absolute inset-0 flex items-center justify-between p-4">
                 <button
                     onClick={handlePrevClick}
-                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 hidden group-hover:block"
+                    // onClick={prev}
+                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 block lg:hidden lg:group-hover:block"
                 >
                     <ChevronLeft size={20} />
                 </button>
                 <button
                     onClick={handleNextClick}
-                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 hidden group-hover:block"
+                    // onClick={next} 
+                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 block lg:hidden lg:group-hover:block"
                 >
                     <ChevronRight size={20} />
                 </button>
@@ -54,7 +58,7 @@ export default function Carousel({ children: slides, autoSlide = false, autoSlid
                     {slides.map((_, i) => (
                         <div
                             key={i}
-                            className={` transition-all w-3 h-3 bg-white rounded-full
+                            className={` transition-all w-3 h-3 mx-[1px] bg-white rounded-full
                             ${curr === i ? 'p-2' : 'bg-opacity-50'}`}
                         />
                     ))}

@@ -3,8 +3,17 @@
 }
 
 .suggest{
-    border-color: var(--primary);
+    // border-color: var(--primary);
+    border-color: #fc8241;
 }
+
+@media (max-width: 739px){
+    .post__item {
+        // width: 296px !important;
+        height: 313px !important;
+    }
+}
+
 
 .post__item {
     background-color: var(--white);

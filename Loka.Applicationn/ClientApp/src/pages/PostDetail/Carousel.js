@@ -1,5 +1,9 @@
 import { useState } from 'react';
+import classNames from 'classnames/bind';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+
+import styles from './PostDetail.module.scss';
+const cx = classNames.bind(styles);
 
 export default function Carousel({ children: slides }) {
     const [curr, setCurr] = useState(0);
@@ -12,8 +16,8 @@ export default function Carousel({ children: slides }) {
     };
 
     return (
-        <div className="flex items-center justify-center">
-            <div className="overflow-hidden relative rounded-xl">
+        <div className="flex items-center justify-center  rounded-xl shadow-lg">
+            <div className={cx('overflow-hidden', 'relative', 'rounded-xl')}>
                 <div
                     className="flex transition-transform ease-out duration-500"
                     style={{ transform: `translateX(-${curr * 100}%)` }}
@@ -21,10 +25,16 @@ export default function Carousel({ children: slides }) {
                     {slides}
                 </div>
                 <div className="absolute inset-0 flex items-center justify-between p-4">
-                    <button onClick={prev} className="md:p-1 p-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white">
+                    <button
+                        onClick={prev}
+                        className="md:p-1 p-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white"
+                    >
                         <ChevronLeft size={34} />
                     </button>
-                    <button onClick={next} className="md:p-1 p-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white">
+                    <button
+                        onClick={next}
+                        className="md:p-1 p-0 rounded-full shadow bg-white/80 text-gray-800 hover:bg-white"
+                    >
                         <ChevronRight size={34} />
                     </button>
                 </div>
@@ -32,7 +42,8 @@ export default function Carousel({ children: slides }) {
                     <div className="flex items-center justify-center gap-2">
                         {slides.map((_, i) => (
                             <div
-                                className={` transition-all w-3 h-3 bg-white rounded-full
+                                key={i}
+                                className={` transition-all w-3 h-3 mx-[1px] bg-white rounded-full
                             ${curr === i ? 'p-2' : 'bg-opacity-50'}`}
                             />
                         ))}

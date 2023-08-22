@@ -44,7 +44,7 @@ function Home() {
     return (
         <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
             <h2 className={cx('mb-[30px]', 'text-[24px]', 'font-medium')}>
-                <span className={cx('border-b-2', 'suggest', 'pb-1')} >Mới nhất</span>
+                <span className={cx('suggest', 'border-b-2', 'pb-1')} >Mới nhất</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
@@ -157,7 +157,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className="rounded-t-xl object-cover" src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>

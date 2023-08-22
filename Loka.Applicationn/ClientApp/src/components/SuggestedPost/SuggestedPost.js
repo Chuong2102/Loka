@@ -80,7 +80,7 @@ function SuggestedPost({ data, ...passProps }) {
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 740,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 1,
@@ -94,6 +94,9 @@ function SuggestedPost({ data, ...passProps }) {
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
+                    infinite: true,
+                    nextArrow: <SampleNextArrow />,
+                    prevArrow: <SamplePrevArrow />,
                 },
             },
         ],
@@ -119,11 +122,11 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className="rounded-t-xl object-cover" src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
+                            <p className="w-full text-[13px] font-medium">Đường Nguyễn Huệ</p>
                             <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
                             <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
                         </div>

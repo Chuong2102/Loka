@@ -1,5 +1,14 @@
+@media (max-width: 739px){
+    .post__item {
+        margin-top: 20px;
+        // width: 210px !important;
+        height: 219px !important;
+    }
+}
+
 .suggest{
-    border-color: var(--primary);
+    // border-color: var(--primary);
+    border-color: #fc8241;
 }
 
 .post__item {
