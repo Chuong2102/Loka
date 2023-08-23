@@ -57,7 +57,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -77,7 +77,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -97,7 +97,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -117,7 +117,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -137,7 +137,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -157,7 +157,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl object-cover" src={slide} alt="slide" />
+                               <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -177,7 +177,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -197,7 +197,7 @@ function Home() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>

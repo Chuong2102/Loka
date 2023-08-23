@@ -122,7 +122,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl object-cover" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -147,7 +147,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -172,7 +172,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -197,7 +197,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -222,7 +222,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
