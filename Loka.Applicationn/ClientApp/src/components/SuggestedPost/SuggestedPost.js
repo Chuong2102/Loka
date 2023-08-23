@@ -34,6 +34,7 @@ function SuggestedPost({ data, ...passProps }) {
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     transform: 'scale(1.2)',
                     marginLeft: '10px',
+                    marginTop: '-20px',
                 }}
                 onClick={onClick}
             />
@@ -55,6 +56,7 @@ function SuggestedPost({ data, ...passProps }) {
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     transform: 'scale(1.2)',
                     marginRight: '20px',
+                    marginTop: '-20px',
                 }}
                 onClick={onClick}
             />
