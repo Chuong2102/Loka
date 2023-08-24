@@ -38,6 +38,13 @@ namespace Loka.Infrastructure.Services
                     result.Add(_mapper.Map<PostDto>(post));
                 }
             }
+            result.Sort((PostDto p1, PostDto p2) =>
+            {
+                if (p1.PostedDate == null && p2.PostedDate == null) return 0;
+                else if (p1.PostedDate == null) return -1;
+                else if (p2.PostedDate == null) return 1;
+                else return p2.PostedDate.CompareTo(p1.PostedDate);
+            });
             return result;
         }
 

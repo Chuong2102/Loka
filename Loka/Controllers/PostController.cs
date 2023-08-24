@@ -151,5 +151,21 @@ namespace Loka.Controllers
                 throw e;
             }
         }
+        [Route("api/SuggestRoom/{lng}&{lat}")]
+        [HttpGet]
+        public async Task<IActionResult> SuggestRoom(double lng, double lat)
+        {
+            try
+            {
+                var point = new Point(lng, lat);
+                var response = await _postServices.GetAllByCoordinates(point, 5);
+                response = response.Take(5).ToList();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
