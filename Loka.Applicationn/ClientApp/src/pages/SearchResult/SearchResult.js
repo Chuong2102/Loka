@@ -4,14 +4,13 @@
 // import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 // import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 import styles from './SearchResult.module.scss';
-import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 
 const cx = classNames.bind(styles);
 
@@ -23,8 +22,17 @@ const slides = [
 ];
 
 function SearchResult() {
-    const { keyword } = useParams();
     const [isHovered, setIsHovered] = useState(false);
+
+    const { keyword } = useParams();
+    // const location = useLocation();
+    // const queryParams = new URLSearchParams(location.search);
+
+    // const price = queryParams.get('price');
+    // const uni = queryParams.get('uni');
+    // const ward = queryParams.get('ward');
+
+    // console.log(price, uni, ward);
 
     useEffect(() => {
         window.scrollTo({
@@ -37,7 +45,7 @@ function SearchResult() {
 
     return (
         <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
-            <h2 className={cx('mb-[30px]', 'text-[24px]', 'font-medium')}>Kết quả tìm kiếm: {keyword}</h2>
+            <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>Kết quả tìm kiếm: {keyword}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 <Link to={config.routes.detail}>
                     <div
@@ -49,7 +57,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -69,7 +77,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -89,7 +97,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -109,7 +117,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -129,7 +137,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -149,7 +157,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -169,7 +177,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -189,7 +197,7 @@ function SearchResult() {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -200,7 +208,7 @@ function SearchResult() {
                     </div>
                 </Link>
             </div>
-            <FacebookMsg />
+            {/* <FacebookMsg /> */}
         </div>
     );
 }
