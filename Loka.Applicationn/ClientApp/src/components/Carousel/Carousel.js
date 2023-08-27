@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'react-feather';
+import classNames from 'classnames/bind';
+
+import styles from './Carousel.module.scss';
+const cx = classNames.bind(styles);
 
 export default function Carousel({ children: slides, autoSlide = false, autoSlideInterval = 3000 }) {
     const [curr, setCurr] = useState(0);
@@ -21,41 +25,65 @@ export default function Carousel({ children: slides, autoSlide = false, autoSlid
         next();
     };
 
-    useEffect(() => {
-        if (!autoSlide) return;
-        const slideInterval = setInterval(next, autoSlideInterval);
-        return () => clearInterval(slideInterval);
-    }, []);
+    // --- Auto slide ---
+    // useEffect(() => {
+    //     if (!autoSlide) return;
+    //     const slideInterval = setInterval(next, autoSlideInterval);
+    //     return () => clearInterval(slideInterval);
+    // }, []);
 
     return (
-        <div className="overflow-hidden relative rounded-t-xl">
+        <div className={cx('overflow-hidden', 'relative', 'rounded-t-xl')}>
             <div
-                className="flex transition-transform ease-out duration-500"
+                className={cx('flex', 'transition-transform', 'ease-out', 'duration-500')}
                 style={{ transform: `translateX(-${curr * 100}%)` }}
             >
                 {slides}
             </div>
-            <div className="absolute inset-0 flex items-center justify-between p-4">
+
+            <div className={cx('absolute', 'inset-0', 'flex', 'items-center', 'justify-between', 'p-4')}>
                 <button
                     onClick={handlePrevClick}
-                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 hidden group-hover:block"
+                    // onClick={prev}
+                    className={cx(
+                        'p-1',
+                        'rounded-full',
+                        'shadow',
+                        'bg-white/80',
+                        'text-gray-800',
+                        'block',
+                        'xl:hidden',
+                        'xl:group-hover:block',
+                    )}
                 >
                     <ChevronLeft size={20} />
                 </button>
                 <button
                     onClick={handleNextClick}
-                    className="p-1 rounded-full shadow bg-white/80 text-gray-800 hidden group-hover:block"
+                    // onClick={next}
+                    className={cx(
+                        'p-1',
+                        'rounded-full',
+                        'shadow',
+                        'bg-white/80',
+                        'text-gray-800',
+                        'block',
+                        'xl:hidden',
+                        'xl:group-hover:block',
+                    )}
                 >
                     <ChevronRight size={20} />
                 </button>
             </div>
-            <div className="absolute bottom-4 right-0 left-0">
-                <div className="flex items-center justify-center gap-2">
+            <div className={cx('absolute', 'bottom-4', 'right-0', 'left-0')}>
+                <div className={cx('flex', 'items-center', 'justify-center', 'gap-2')}>
                     {slides.map((_, i) => (
                         <div
                             key={i}
-                            className={` transition-all w-3 h-3 bg-white rounded-full
-                            ${curr === i ? 'p-2' : 'bg-opacity-50'}`}
+                            className={cx('transition-all', 'w-3', 'h-3', 'mx-[1px]', 'bg-white', 'rounded-full', {
+                                'p-2': curr === i,
+                                'bg-opacity-50': curr !== i,
+                            })}
                         />
                     ))}
                 </div>

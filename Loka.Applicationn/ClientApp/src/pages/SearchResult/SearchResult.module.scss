@@ -2,6 +2,13 @@
     // width: var(--default-layout-width);
 }
 
+@media (max-width: 739px){
+    .post__item {
+        width: 296px !important;
+        height: 313px !important;
+    }
+}
+
 .post__item {
     background-color: var(--white);
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);

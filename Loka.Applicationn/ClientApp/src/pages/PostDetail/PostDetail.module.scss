@@ -5,6 +5,14 @@
 
 @media (max-width: 739px) {
     .wrapper {
-        margin-top: 100px;
+        margin-top: 60px;
     }
+
+    .map__container {
+        height: 220px !important;
+    }
+}
+
+.map__container {
+    height: 400px;
 }

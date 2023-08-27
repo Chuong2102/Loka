@@ -1,12 +1,14 @@
 import classNames from 'classnames/bind';
 import { Link, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faPenToSquare, faLocationDot} from '@fortawesome/free-solid-svg-icons';
 
 import styles from './Sidebar.module.scss';
 import Menu, { MenuItem } from './Menu';
-import {
-    UserGroupIcon,
-    UserGroupActiveIcon,
-} from '~/components/Icons';
+// import {
+//     UserGroupIcon,
+//     UserGroupActiveIcon,
+// } from '~/components/Icons';
 import config from '~/config';
 import images from '~/assests/images';
 
@@ -18,20 +20,20 @@ function Sidebar() {
     return (
         <aside className={cx('wrapper','fixed', 'h-screen')}>
             <Link to={config.routes.home} className={cx('logo-link')}>
-                <img src={images.logo} alt="tiktok" />
+                <img className={cx('logo-img')} src={images.logo_loka} alt="logo_loka" />
             </Link>
             <Menu>
                 <MenuItem
                     title="Post"
                     to={config.routes.post}
-                    icon={<UserGroupIcon />}
-                    activeIcon={<UserGroupActiveIcon />}
+                    icon={<FontAwesomeIcon icon={faPenToSquare}/>}
+                    activeIcon={<FontAwesomeIcon icon={faPenToSquare}/>}
                 />
                 <MenuItem
                     title="Room"
                     to={config.routes.room}
-                    icon={<UserGroupIcon />}
-                    activeIcon={<UserGroupActiveIcon />}
+                    icon={<FontAwesomeIcon icon={faLocationDot}/>}
+                    activeIcon={<FontAwesomeIcon icon={faLocationDot}/>}
                 />
             </Menu>
         </aside>

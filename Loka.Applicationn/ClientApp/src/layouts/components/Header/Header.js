@@ -10,6 +10,7 @@ import classNames from 'classnames/bind';
 //     faUser,
 //     faSignOut,
 // } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { Link } from 'react-router-dom';
@@ -56,10 +57,14 @@ const cx = classNames.bind(styles);
 
 function Header() {
     const currentUser = false;
+    const [shouldResetSearch, setShouldResetSearch] = useState(false);
 
+    const handleLogoClick = () => {
+        setShouldResetSearch(true);
+    };
     // Handle logic
     // const handleMenuChange = (menuItem) => {
-        // console.log(menuItem);
+    // console.log(menuItem);
     // };
 
     // const userMenu = [
@@ -87,14 +92,20 @@ function Header() {
     //     },
     // ];
 
+    // src={images.logo}
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
-                <Link to={config.routes.home} className={cx('logo-link')}>
-                    <img src={images.logo} alt="tiktok" />
+                <Link to={config.routes.home} className={cx('logo-link')} onClick={handleLogoClick}>
+                    <img
+                        src={images.logo2}
+                        alt="loka_logo"
+                        width="140"
+                        // height="50"
+                    />
                 </Link>
 
-                <Search />
+                <Search shouldReset={shouldResetSearch} resetComplete={() => setShouldResetSearch(false)} />
 
                 <div className={cx('actions')}>
                     {currentUser ? (
@@ -108,7 +119,9 @@ function Header() {
                     ) : (
                         <>
                             {/* <Button text>Upload</Button> */}
-                            <Button primary disabled>Log in</Button>
+                            <Button primary disabled>
+                                Log in
+                            </Button>
                         </>
                     )}
 
