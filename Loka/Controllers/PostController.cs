@@ -67,7 +67,8 @@ namespace Loka.Controllers
             // Photos
             Photo.environment = env;
 
-            var photos = Photo.Base64ToImage(data.Images, data.AddressLine1);
+            //var photos = Photo.Base64ToImage(data.Images, data.AddressLine1);
+            Photo.Save(data.Images, data.AddressLine1);
 
             //
             var ward = efDataContext.Wards.GetByName(data.WardName);
