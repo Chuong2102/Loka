@@ -1,4 +1,5 @@
-﻿using Loka.Infrastructure.Repositories.Dapper;
+﻿using Loka.Infrastructure.Repositories;
+using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
 using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Photo = Loka.Infrastructure.Repositories.Photo;
 
 namespace Loka.Controllers
 {
@@ -14,10 +16,12 @@ namespace Loka.Controllers
     {
         readonly IDataContext dataContext;
         readonly IEFDataContext efDataContext;
-        public PostController(IDataContext dataContext, IEFDataContext context)
+        IWebHostEnvironment env;
+        public PostController(IDataContext dataContext, IEFDataContext context, IWebHostEnvironment environment)
         {
             this.dataContext = dataContext;
             efDataContext = context;
+            env = environment;
         }
 
         public class Data
@@ -36,12 +40,15 @@ namespace Loka.Controllers
             // Location
             public double Latitude { get; set; }
             public double Longitude { get; set; }
-            public string PlaceID { get; set; }
+            public string? PlaceID { get; set; }
 
             // Address
             public string AddressLine1 { get; set; }
             public string AddressLine2 { get; set; }
             public string WardName { get; set; }
+
+            // Images
+            public List<string>? Images { get; set; }
 
 
         }
@@ -57,9 +64,15 @@ namespace Loka.Controllers
         [HttpPost]
         public async Task<int> CreatePostAsync([FromBody] Data data)
         {
+            // Photos
+            Photo.environment = env;
 
+            var photos = Photo.Base64ToImage(data.Images, data.AddressLine1);
+
+            //
             var ward = efDataContext.Wards.GetByName(data.WardName);
 
+            //
             var roomID = await dataContext.Rooms.CreateAsync(new Room
             {
                 User = new User { UserID = 3 },
@@ -81,7 +94,7 @@ namespace Loka.Controllers
             var point = gf.CreatePoint(new NetTopologySuite.Geometries.Coordinate(data.Longitude, data.Latitude));
 
             //
-            var room = efDataContext.Rooms.GetByID(roomID).Result;
+            var room = efDataContext.Rooms.GetByID(roomID).Result; 
             //
             efDataContext.Locations.CreateAsync(new Location
             {
