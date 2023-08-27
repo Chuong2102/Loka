@@ -1,13 +1,19 @@
 ﻿using Loka.Infrastructure.Repositories;
 using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Services;
 using Loka.Infrastrure.Context;
 using Loka.Infrastrure.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+
 using Photo = Loka.Infrastructure.Repositories.Photo;
+
+using NetTopologySuite.Geometries;
+using Location = Loka.Infrastrure.Entities.Location;
+
 
 namespace Loka.Controllers
 {
@@ -16,12 +22,14 @@ namespace Loka.Controllers
     {
         readonly IDataContext dataContext;
         readonly IEFDataContext efDataContext;
-        IWebHostEnvironment env;
-        public PostController(IDataContext dataContext, IEFDataContext context, IWebHostEnvironment environment)
+
+        private IPostServices _postServices;
+        public PostController(IDataContext dataContext, IEFDataContext context, IPostServices postServices)
         {
             this.dataContext = dataContext;
             efDataContext = context;
-            env = environment;
+            _postServices = postServices;
+
         }
 
         public class Data
@@ -99,7 +107,7 @@ namespace Loka.Controllers
             //
             efDataContext.Locations.CreateAsync(new Location
             {
-                Longtitude = data.Longitude,
+                Longitude = data.Longitude,
                 Latitude = data.Latitude,
                 PlaceID = data.PlaceID,
                 Room = room,
@@ -114,7 +122,7 @@ namespace Loka.Controllers
                 AddressLine2 = data.AddressLine2,
                 Ward = ward,
                 Room = room,
-                RoomID= roomID
+                RoomID = roomID
 
             });
         }
@@ -144,6 +152,37 @@ namespace Loka.Controllers
                 Price = data.Price,
                 Area = data.Area
             });
+        }
+        [Route("api/SearchRoom/{lng}&{lat}")]
+        [HttpGet]
+        public async Task<IActionResult> SearchRoom(double lng, double lat)
+        {
+            try
+            {
+                var point = new Point(lng, lat);
+                var response = await _postServices.GetAllByCoordinates(point, 5);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        [Route("api/SuggestRoom/{lng}&{lat}")]
+        [HttpGet]
+        public async Task<IActionResult> SuggestRoom(double lng, double lat)
+        {
+            try
+            {
+                var point = new Point(lng, lat);
+                var response = await _postServices.GetAllByCoordinates(point, 5);
+                response = response.Take(5).ToList();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

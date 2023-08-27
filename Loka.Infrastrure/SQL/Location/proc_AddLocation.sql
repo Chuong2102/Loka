@@ -7,7 +7,7 @@ create proc proc_AddLocation
 	@RoomID int,
 	@PlaceID nvarchar(max),
 	@Latitude float,
-	@Longtitude float,
+	@Longitude float,
 	@LocationPoint geography
 as
 begin
@@ -17,6 +17,6 @@ begin
 		return;
 	end;
 
-	insert into Locations(RoomID, PlaceID, Latitude, Longitude, LocationPoint) values (@RoomID, @PlaceID, @Latitude, @Longtitude, @LocationPoint)
+	insert into Locations(RoomID, PlaceID, Latitude, Longitude, LocationPoint) values (@RoomID, @PlaceID, @Latitude, @Longitude, @LocationPoint)
 end
 go

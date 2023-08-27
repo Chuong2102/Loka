@@ -7,6 +7,7 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Location = Loka.Infrastrure.Entities.Location;
+using System.Linq.Expressions;
 
 namespace Loka.Infrastructure.Repositories.Dapper
 {
@@ -33,12 +34,12 @@ namespace Loka.Infrastructure.Repositories.Dapper
             para.Add("@RoomID", entity.Room.RoomID);
             para.Add("@PlaceID", entity.PlaceID);
             para.Add("@@Latitude", entity.Latitude);
-            para.Add("@Longtitude", entity.Longtitude);
+            para.Add("@Longitude", entity.Longitude);
 
             //string wkt = String.Format("POINT({0} {1})", entity.Longitude, entity.Latitude);
             //DbGeography point = DbGeography.FromText(wkt, 4326);
 
-            Point point = new Point(entity.Longtitude, entity.Latitude) { SRID = 4326 };
+            Point point = new Point(entity.Longitude, entity.Latitude) { SRID = 4326 };
 
             para.Add("@LocationPoint", point);
 
@@ -68,6 +69,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
         public virtual void GetDistance(Location entity)
         {
 
+        }
+
+        public Task<List<Location>> GetAllAsync(params Expression<Func<Location, object>>[] includeProperties)
+        {
+            throw new NotImplementedException();
         }
     }
 }
