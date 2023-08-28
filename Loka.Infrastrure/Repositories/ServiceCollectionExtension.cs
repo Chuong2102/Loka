@@ -1,5 +1,9 @@
+
+﻿using Loka.Infrastructure.Services;
 ﻿using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Contracts;
+using Loka.Infrastrure.Entities;
 
 namespace Loka.Infrastructure.Repositories
 {
@@ -10,6 +14,7 @@ namespace Loka.Infrastructure.Repositories
 
             services.AddTransient<IDataContext, DataContext>();
             services.AddTransient<IEFDataContext, EFDataContext>();
+            services.AddTransient(typeof(IEFRepositoryBase<>), typeof(EFRepositoryBase<>)); ;
 
             services.AddTransient<Dapper.IRoomRepository, Dapper.RoomRepository>();
             services.AddTransient<EFCore.IRoomRepository, EFCore.RoomRepository>();
@@ -20,6 +25,10 @@ namespace Loka.Infrastructure.Repositories
             services.AddTransient<EFCore.ILocationRepository, EFCore.LocationRepository>();
 
             services.AddTransient<IAddressRepository, AddressRepository>();
+            services.AddTransient<IRoomServices, RoomServices>();
+            services.AddScoped<EFRepositoryBase<Post>>();
+            services.AddTransient<IPostServices, PostServices>();
+            services.AddScoped<EFRepositoryBase<Room>>();
 
         }
     }

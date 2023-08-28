@@ -6,20 +6,22 @@ using Dapper;
 using static Dapper.SqlMapper;
 using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Context;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Loka.Infrastructure.Repositories.Dapper
 {
     public class PostRepository : IPostRepository
     {
         private readonly IConfiguration configuration;
-        private DataLokaContext dbContext;
+        private DataLokaContext _dbContext;
 
         private readonly string connectionString = "ConnectionStringName";
 
         public PostRepository(IConfiguration configuration, DataLokaContext context)
         {
             this.configuration = configuration;
-            dbContext = context;
+            _dbContext = context;
         }
 
         public async Task<int> CreateAsync(Post entity)
@@ -80,5 +82,7 @@ namespace Loka.Infrastructure.Repositories.Dapper
                 return await connection.ExecuteAsync(PostQuery.Proc_UpdatePost, para, commandType: CommandType.StoredProcedure);
             }
         }
+
+        
     }
 }

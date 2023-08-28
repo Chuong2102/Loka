@@ -4,6 +4,7 @@ using Loka.Infrastrure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace Loka.Infrastructure.Migrations
 {
     [DbContext(typeof(DataLokaContext))]
-    partial class DataLokaContextModelSnapshot : ModelSnapshot
+    [Migration("20230812094801_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,14 +49,12 @@ namespace Loka.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountID"), 1L, 1);
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountID");
@@ -77,9 +77,11 @@ namespace Loka.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AddressLine2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCare")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoomID")
@@ -198,6 +200,7 @@ namespace Loka.Infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("PlaceID")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoomID")
@@ -368,6 +371,7 @@ namespace Loka.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"), 1L, 1);
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
@@ -379,7 +383,7 @@ namespace Loka.Infrastructure.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("RoleID")
+                    b.Property<int>("RoleID")
                         .HasColumnType("int");
 
                     b.HasKey("UserID");
@@ -541,7 +545,9 @@ namespace Loka.Infrastructure.Migrations
                 {
                     b.HasOne("Loka.Infrastrure.Entities.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleID");
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });
@@ -567,9 +573,11 @@ namespace Loka.Infrastructure.Migrations
 
             modelBuilder.Entity("Loka.Infrastrure.Entities.User", b =>
                 {
-                    b.Navigation("Account");
+                    b.Navigation("Account")
+                        .IsRequired();
 
-                    b.Navigation("Favorite");
+                    b.Navigation("Favorite")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

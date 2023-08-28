@@ -5,6 +5,6 @@ namespace Loka.Infrastructure.Repositories.Dapper
 {
     public interface IRoomRepository : IRepositoryBase<Room>
     {
-
+        
     }
 }

@@ -24,13 +24,16 @@ function Room() {
     const [city, setCity] = useState('');
     const [province, setProvince] = useState('');
     const [placeId, setPlaceId] = useState('');
-    const [latitude, setLatitude] = useState(16.452572108000027);
-    const [longitude, setLongitude] = useState(107.58710986500006);
+
+    const [latitude, setLatitude] = useState('');
+    const [Longitude, setLongitude] = useState('');
+
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
     const [price, setPrice] = useState('');
     const [images, setImages] = useState([]);
     const [title, setTitle] = useState('');
+
 
     // Map (begin)
     const mapContainerRef = useRef(null);
@@ -73,6 +76,7 @@ function Room() {
     // Map (end)
 
     // Xử lý placeId để lấy latitude, longitude
+
     useEffect(() => {
         if (!placeId.trim()) {
             return;
@@ -404,7 +408,9 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
+
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="longitude">
+
                             Longitude
                         </label>
                         <input
@@ -419,11 +425,13 @@ function Room() {
                                 'text-gray-700',
                                 'leading-tight',
                             )}
+
                             id="longitude"
                             type="text"
                             placeholder="Enter Longitude"
                             autoComplete="off"
                             value={longitude}
+
                             onChange={handleLongitudeChange}
                             required
                             readOnly
