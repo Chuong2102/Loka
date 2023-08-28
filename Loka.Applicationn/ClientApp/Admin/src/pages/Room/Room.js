@@ -148,11 +148,21 @@ function Room() {
     };
 
     const handleAreaChange = (e) => {
-        setArea(e.target.value);
+        if (!/^\d+$/.test(e.key)) {
+            e.preventDefault();
+        } else {
+            const newArea = e.target.value + e.key;
+            setArea(newArea);
+        }
     };
 
     const handlePriceChange = (e) => {
-        setPrice(e.target.value);
+        if (!/^\d+$/.test(e.key)) {
+            e.preventDefault();
+        } else {
+            const newPrice = e.target.value + e.key;
+            setPrice(newPrice);
+        }
     };
 
     const handleImagesChange = (imageFiles) => {
@@ -167,6 +177,11 @@ function Room() {
     // Trả về BE
     const handleSave = (e) => {
         e.preventDefault();
+
+        if (images.length === 0) {
+            alert('Cần thêm ảnh');
+            return;
+        }
 
         const payload = {
             addressLine1: addressLine1,
@@ -210,7 +225,7 @@ function Room() {
                 <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-black', 'text-[30px]')}>
                     Xác nhận địa chỉ
                 </h3>
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form onSubmit={handleSave} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <div className="mb-[20px]">
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="addressLine1">
                             AddressLine1
@@ -233,6 +248,7 @@ function Room() {
                             autoComplete="off"
                             value={addressLine1}
                             onChange={handleAddressLine1Change}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -257,6 +273,7 @@ function Room() {
                             autoComplete="off"
                             value={addressLine2}
                             onChange={handleAddressLine2Change}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -281,6 +298,7 @@ function Room() {
                             autoComplete="off"
                             value={ward}
                             onChange={handleWardChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -305,6 +323,7 @@ function Room() {
                             autoComplete="off"
                             value={city}
                             onChange={handleCityChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -329,6 +348,7 @@ function Room() {
                             autoComplete="off"
                             value={province}
                             onChange={handleProvinceChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -352,7 +372,9 @@ function Room() {
                             placeholder="Enter PlaceId"
                             autoComplete="off"
                             value={placeId}
-                            onChange={handlePlaceIdChange}
+                            // onChange={handlePlaceIdChange}
+                            required
+                            readOnly
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -377,6 +399,8 @@ function Room() {
                             autoComplete="off"
                             value={latitude}
                             onChange={handleLatitudeChange}
+                            required
+                            readOnly
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -401,6 +425,8 @@ function Room() {
                             autoComplete="off"
                             value={longitude}
                             onChange={handleLongitudeChange}
+                            required
+                            readOnly
                         />
                     </div>
                     <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-rose-600', 'text-[26px]')}>
@@ -428,6 +454,7 @@ function Room() {
                             autoComplete="off"
                             value={description}
                             onChange={handleDescriptionChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -451,7 +478,8 @@ function Room() {
                             placeholder="Enter Area"
                             autoComplete="off"
                             value={area}
-                            onChange={handleAreaChange}
+                            onKeyPress={handleAreaChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -475,7 +503,8 @@ function Room() {
                             placeholder="Enter Price"
                             autoComplete="off"
                             value={price}
-                            onChange={handlePriceChange}
+                            onKeyPress={handlePriceChange}
+                            required
                         />
                     </div>
                     <div className="mb-[20px]">
@@ -509,10 +538,11 @@ function Room() {
                             autoComplete="off"
                             value={title}
                             onChange={handleTitleChange}
+                            required
                         />
                     </div>
                     <div className="flex justify-center mt-[16px]">
-                        <Button className={cx('bg-blue-500', 'hover:opacity-80', 'text-white')} onClick={handleSave}>
+                        <Button className={cx('bg-blue-500', 'hover:opacity-80', 'text-white')} type="submit">
                             Save
                         </Button>
                     </div>
