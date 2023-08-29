@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import styles from './Post.module.scss';
 import Button from '~/components/Button';
 import UploadImage from '~/components/UploadImage';
+import ToastMessage from '~/components/ToastMessage';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +23,14 @@ function Post() {
     const [images, setImages] = useState([]);
 
     const [posts, setPosts] = useState([]);
+
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+    const handleSnackbarMessage = (message, severity) => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -41,7 +50,7 @@ function Post() {
         e.preventDefault();
 
         if (images.length === 0) {
-            alert('Cần thêm ảnh');
+            handleSnackbarMessage('Cần thêm ảnh!', 'warning');
             return;
         }
 
@@ -56,7 +65,10 @@ function Post() {
             const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
             const addedPost = response.data;
             setPosts([...posts, addedPost]);
+
             resetForm();
+            setImages([]);
+            handleSnackbarMessage('Thêm thành công!', 'success');
         } catch (error) {
             console.error('Error adding post:', error);
         }
@@ -66,7 +78,7 @@ function Post() {
         e.preventDefault();
 
         if (images.length === 0) {
-            alert('Cần thêm ảnh');
+            handleSnackbarMessage('Cần thêm ảnh!', 'warning');
             return;
         }
 
@@ -92,7 +104,10 @@ function Post() {
             });
 
             setPosts(updatedPosts);
+          
             resetForm();
+            setImages([]);
+            handleSnackbarMessage('Sửa thành công!', 'success');
         } catch (error) {
             console.error('Error updating post:', error);
         }
@@ -107,7 +122,10 @@ function Post() {
                 await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
                 const updatedPosts = posts.filter((post) => post.id !== postId);
                 setPosts(updatedPosts);
+
                 resetForm();
+                setImages([]);
+                handleSnackbarMessage('Xóa thành công!', 'success');
             } catch (error) {
                 console.error('Error deleting post:', error);
             }
@@ -116,6 +134,7 @@ function Post() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (buttonState === 1) {
             await handleAdd(e);
         }
@@ -309,6 +328,7 @@ function Post() {
                         >
                             Add
                         </Button>
+
                         <Button
                             className={cx('bg-orange-500', 'hover:opacity-80', 'text-white', 'mr-[18px]')}
                             type="submit"
@@ -323,9 +343,12 @@ function Post() {
                         >
                             Delete
                         </Button>
+
+                        <ToastMessage snackbarMessage={snackbarMessage} snackbarSeverity={snackbarSeverity}/>
                     </div>
                 </form>
             </div>
+
             <table className={cx('post_table', 'w-11/12')}>
                 <thead>
                     <tr>

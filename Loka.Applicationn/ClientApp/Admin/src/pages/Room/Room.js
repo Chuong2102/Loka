@@ -8,6 +8,7 @@ import styles from './Room.module.scss';
 import Button from '~/components/Button';
 import Search from '~/layouts/components/Search';
 import UploadImage from '~/components/UploadImage';
+import ToastMessage from '~/components/ToastMessage';
 
 const cx = classNames.bind(styles);
 
@@ -26,7 +27,7 @@ function Room() {
     const [placeId, setPlaceId] = useState('');
 
     const [latitude, setLatitude] = useState('');
-    const [Longitude, setLongitude] = useState('');
+    const [longitude, setLongitude] = useState('');
 
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
@@ -34,6 +35,13 @@ function Room() {
     const [images, setImages] = useState([]);
     const [title, setTitle] = useState('');
 
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+    const handleSnackbarMessage = (message, severity) => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+    };
 
     // Map (begin)
     const mapContainerRef = useRef(null);
@@ -76,7 +84,6 @@ function Room() {
     // Map (end)
 
     // Xử lý placeId để lấy latitude, longitude
-
     useEffect(() => {
         if (!placeId.trim()) {
             return;
@@ -178,12 +185,27 @@ function Room() {
         setTitle(e.target.value);
     };
 
+    const resetForm = () => {
+        setAddressLine1('');
+        setAddressLine2('');
+        setWard('');
+        setCity('');
+        setProvince('');
+        setPlaceId('');
+        setLatitude('');
+        setLongitude('');
+        setDescription('');
+        setArea('');
+        setPrice('');
+        setTitle('');
+    };
+
     // Trả về BE
     const handleSave = (e) => {
         e.preventDefault();
 
         if (images.length === 0) {
-            alert('Cần thêm ảnh');
+            handleSnackbarMessage('Cần thêm ảnh!', 'warning');
             return;
         }
 
@@ -203,16 +225,19 @@ function Room() {
             title: title,
         };
 
-        // console.log(payload);
+        console.log(payload);
 
-        axios
-            .post('https://localhost:7245/api/AddPost', payload)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        // axios
+        //     .post('https://localhost:7245/api/AddPost', payload)
+        //     .then((response) => {
+        //         console.log(response.data);
+        //         resetForm();
+        //         setImages([]);
+        //         handleSnackbarMessage('Thêm thành công!', 'success');
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
     };
 
     return (
@@ -408,9 +433,7 @@ function Room() {
                         />
                     </div>
                     <div className="mb-[20px]">
-
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="longitude">
-
                             Longitude
                         </label>
                         <input
@@ -425,13 +448,11 @@ function Room() {
                                 'text-gray-700',
                                 'leading-tight',
                             )}
-
                             id="longitude"
                             type="text"
                             placeholder="Enter Longitude"
                             autoComplete="off"
                             value={longitude}
-
                             onChange={handleLongitudeChange}
                             required
                             readOnly
@@ -519,7 +540,7 @@ function Room() {
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="images">
                             Images
                         </label>
-                        <UploadImage onImagesChange={handleImagesChange} />
+                        <UploadImage onImagesChange={handleImagesChange} images={images} />
                     </div>
                     <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-rose-600', 'text-[26px]')}>
                         Post
@@ -553,6 +574,7 @@ function Room() {
                         <Button className={cx('bg-blue-500', 'hover:opacity-80', 'text-white')} type="submit">
                             Save
                         </Button>
+                        <ToastMessage snackbarMessage={snackbarMessage} snackbarSeverity={snackbarSeverity} />
                     </div>
                 </form>
             </div>
