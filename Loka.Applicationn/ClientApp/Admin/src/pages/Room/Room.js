@@ -26,8 +26,8 @@ function Room() {
     const [province, setProvince] = useState('');
     const [placeId, setPlaceId] = useState('');
 
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
+    const [latitude, setLatitude] = useState(16.462325713021514);
+    const [longitude, setLongitude] = useState(107.61745585099027);
 
     const [description, setDescription] = useState('');
     const [area, setArea] = useState('');
