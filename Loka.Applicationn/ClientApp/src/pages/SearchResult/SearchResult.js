@@ -3,6 +3,8 @@
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 // import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -23,6 +25,9 @@ const slides = [
 
 function SearchResult() {
     const [isHovered, setIsHovered] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true); // Track if there are more posts to load
 
     const { keyword } = useParams();
     // const location = useLocation();
@@ -33,6 +38,30 @@ function SearchResult() {
     // const ward = queryParams.get('ward');
 
     // console.log(price, uni, ward);
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=${page}`);
+                const data = response.data;
+
+                // Update posts state with new data
+                setPosts((prevPosts) => [...prevPosts, ...data]);
+
+                // Check if there are more posts to load
+                if (data.length === 0) {
+                    setHasMore(false);
+                }
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, [page]);
+
+    const loadMorePosts = () => {
+        setPage((prevPage) => prevPage + 1);
+    };
 
     useEffect(() => {
         window.scrollTo({
@@ -46,169 +75,51 @@ function SearchResult() {
     return (
         <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
             <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>Kết quả tìm kiếm: {keyword}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
-                            group: isHovered,
-                        })}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-cover', 'w-full')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[16px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[16px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            {/* <FacebookMsg /> */}
+            <InfiniteScroll
+                dataLength={posts.length} // Indicate the number of items
+                next={loadMorePosts} // Load more items when scrolling
+                hasMore={hasMore} // If there are more items to load
+                loader={<h4 classNames={cx('text-center')}>Loading...</h4>} // Loader component
+            >
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
+                    {posts.map((post, index) => (
+                        <Link to={`/detail/${post.id}`} key={index}>
+                            <div
+                                className={cx(
+                                    'post__item',
+                                    'w-auto',
+                                    'flex',
+                                    'flex-col',
+                                    'justify-between',
+                                    'rounded-xl',
+                                    {
+                                        group: isHovered,
+                                    },
+                                )}
+                                onMouseEnter={() => setIsHovered(true)}
+                                onMouseLeave={() => setIsHovered(false)}
+                            >
+                                <Carousel autoSlide={true}>
+                                    {slides.map((slide, index) => (
+                                        <img
+                                            key={index}
+                                            className={cx('rounded-t-xl', 'object-cover', 'w-full')}
+                                            src={slide}
+                                            alt="slide"
+                                        />
+                                    ))}
+                                </Carousel>
+                                <div className={cx('m-[10px]')}>
+                                    <p className="w-full text-[16px] font-medium ">Đường {post.id}</p>
+                                    <p className="w-full text-[16px]">Phường {post.userId}</p>
+                                    <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </InfiniteScroll>
+            
         </div>
     );
 }
