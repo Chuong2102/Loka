@@ -52,14 +52,14 @@ function Room() {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: 'https://tiles.goong.io/assets/goong_map_web.json',
-            center: [Longitude, latitude],
+            center: [longitude, latitude],
             zoom: 18,
         });
 
         markerRef.current = new mapboxgl.Marker({
             draggable: true,
         })
-            .setLngLat([Longitude, latitude])
+            .setLngLat([longitude, latitude])
             .addTo(mapRef.current);
 
         markerRef.current.on('dragend', onDragEnd);
@@ -77,10 +77,10 @@ function Room() {
 
     useEffect(() => {
         if (markerRef.current) {
-            markerRef.current.setLngLat([Longitude, latitude]);
-            mapRef.current.flyTo({ center: [Longitude, latitude] });
+            markerRef.current.setLngLat([longitude, latitude]);
+            mapRef.current.flyTo({ center: [longitude, latitude] });
         }
-    }, [latitude, Longitude]);
+    }, [latitude, longitude]);
     // Map (end)
 
     // Xử lý placeId để lấy latitude, longitude
@@ -217,7 +217,7 @@ function Room() {
             province: province,
             placeID: placeId,
             latitude: latitude,
-            longitude: Longitude,
+            longitude: longitude,
             description: description,
             area: area,
             price: price,
@@ -434,7 +434,7 @@ function Room() {
                     </div>
                     <div className="mb-[20px]">
                         <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="longitude">
-                            Longitude
+                            longitude
                         </label>
                         <input
                             className={cx(
@@ -450,7 +450,7 @@ function Room() {
                             )}
                             id="longitude"
                             type="text"
-                            placeholder="Enter Longitude"
+                            placeholder="Enter longitude"
                             autoComplete="off"
                             value={longitude}
                             onChange={handleLongitudeChange}
