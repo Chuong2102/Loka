@@ -44,14 +44,14 @@ function Room() {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: 'https://tiles.goong.io/assets/goong_map_web.json',
-            center: [longitude, latitude],
+            center: [Longitude, latitude],
             zoom: 18,
         });
 
         markerRef.current = new mapboxgl.Marker({
             draggable: true,
         })
-            .setLngLat([longitude, latitude])
+            .setLngLat([Longitude, latitude])
             .addTo(mapRef.current);
 
         markerRef.current.on('dragend', onDragEnd);
@@ -69,10 +69,10 @@ function Room() {
 
     useEffect(() => {
         if (markerRef.current) {
-            markerRef.current.setLngLat([longitude, latitude]);
-            mapRef.current.flyTo({ center: [longitude, latitude] });
+            markerRef.current.setLngLat([Longitude, latitude]);
+            mapRef.current.flyTo({ center: [Longitude, latitude] });
         }
-    }, [latitude, longitude]);
+    }, [latitude, Longitude]);
     // Map (end)
 
     // Xử lý placeId để lấy latitude, longitude
@@ -180,7 +180,7 @@ function Room() {
             province: province,
             placeID: placeId,
             latitude: latitude,
-            longitude: longitude,
+            longitude: Longitude,
             description: description,
             area: area,
             price: price,
@@ -406,7 +406,7 @@ function Room() {
                             type="text"
                             placeholder="Enter Longitude"
                             autoComplete="off"
-                            value={longitude}
+                            value={Longitude}
 
                             onChange={handleLongitudeChange}
                         />

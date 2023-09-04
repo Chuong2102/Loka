@@ -72,9 +72,6 @@ namespace Loka.Controllers
         [HttpPost]
         public async Task<int> CreatePostAsync([FromBody] Data data)
         {
-            // Photos
-            Photo.environment = env;
-
             //var photos = Photo.Base64ToImage(data.Images, data.AddressLine1);
             Photo.Save(data.Images, data.AddressLine1);
 
