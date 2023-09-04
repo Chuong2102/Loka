@@ -6,10 +6,13 @@ import ReactPaginate from 'react-paginate';
 import styles from './Post.module.scss';
 import Button from '~/components/Button';
 import UploadImage from '~/components/UploadImage';
+import ToastMessage from '~/components/ToastMessage';
 
 const cx = classNames.bind(styles);
 
 function Post() {
+    const [buttonState, setButtonState] = useState(1);
+
     const [currentPage, setCurrentPage] = useState(0);
     const postsPerPage = 10;
 
@@ -20,6 +23,14 @@ function Post() {
     const [images, setImages] = useState([]);
 
     const [posts, setPosts] = useState([]);
+
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+    const handleSnackbarMessage = (message, severity) => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -37,21 +48,27 @@ function Post() {
 
     const handleAdd = async (e) => {
         e.preventDefault();
+
+        if (images.length === 0) {
+            handleSnackbarMessage('Cần thêm ảnh!', 'warning');
+            return;
+        }
+
         const newPost = {
-            postId: postId,
-            roomId: roomId,
             title: title,
             description: description,
             images: images,
         };
-
         // console.log(newPost);
 
         try {
             const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
             const addedPost = response.data;
             setPosts([...posts, addedPost]);
+
             resetForm();
+            setImages([]);
+            handleSnackbarMessage('Thêm thành công!', 'success');
         } catch (error) {
             console.error('Error adding post:', error);
         }
@@ -59,6 +76,12 @@ function Post() {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+
+        if (images.length === 0) {
+            handleSnackbarMessage('Cần thêm ảnh!', 'warning');
+            return;
+        }
+
         const updatedPost = {
             postId: postId,
             roomId: roomId,
@@ -81,7 +104,10 @@ function Post() {
             });
 
             setPosts(updatedPosts);
+          
             resetForm();
+            setImages([]);
+            handleSnackbarMessage('Sửa thành công!', 'success');
         } catch (error) {
             console.error('Error updating post:', error);
         }
@@ -91,14 +117,32 @@ function Post() {
         e.preventDefault();
         const confirmation = window.confirm('Bạn có chắc chắn muốn xóa?');
         if (confirmation) {
+            // console.log(postId);
             try {
                 await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
                 const updatedPosts = posts.filter((post) => post.id !== postId);
                 setPosts(updatedPosts);
+
                 resetForm();
+                setImages([]);
+                handleSnackbarMessage('Xóa thành công!', 'success');
             } catch (error) {
                 console.error('Error deleting post:', error);
             }
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (buttonState === 1) {
+            await handleAdd(e);
+        }
+        if (buttonState === 2) {
+            await handleUpdate(e);
+        }
+        if (buttonState === 3) {
+            await handleDelete(e, postId);
         }
     };
 
@@ -159,7 +203,7 @@ function Post() {
                 <h3 className={cx('pt-[20px]', 'pb-[10px]', 'font-semibold', 'text-black', 'text-[24px]')}>
                     Post Form
                 </h3>
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <div className={cx('grid', 'grid-cols-2')}>
                         <div className="mb-[20px]">
                             <label className="block text-gray-700 text-[18px] font-bold mb-2" htmlFor="postId">
@@ -184,6 +228,8 @@ function Post() {
                                 autoComplete="off"
                                 value={postId}
                                 onChange={handlePostIdChange}
+                                required
+                                readOnly
                             />
                         </div>
                         <div className="mb-[20px]">
@@ -209,6 +255,7 @@ function Post() {
                                 autoComplete="off"
                                 value={title}
                                 onChange={handleTitleChange}
+                                required
                             />
                         </div>
                         <div className="mb-[20px]">
@@ -234,6 +281,7 @@ function Post() {
                                 autoComplete="off"
                                 value={description}
                                 onChange={handleDescriptionChange}
+                                required
                             />
                         </div>
                         <div className="mb-[20px]">
@@ -259,6 +307,8 @@ function Post() {
                                 autoComplete="off"
                                 value={roomId}
                                 onChange={handleRoomIdChange}
+                                required
+                                readOnly
                             />
                         </div>
                     </div>
@@ -273,25 +323,32 @@ function Post() {
                     <div className="mt-[16px]">
                         <Button
                             className={cx('bg-blue-500', 'hover:opacity-80', 'text-white', 'mr-[18px]')}
-                            onClick={handleAdd}
+                            type="submit"
+                            onClick={() => setButtonState(1)}
                         >
                             Add
                         </Button>
+
                         <Button
                             className={cx('bg-orange-500', 'hover:opacity-80', 'text-white', 'mr-[18px]')}
-                            onClick={handleUpdate}
+                            type="submit"
+                            onClick={() => setButtonState(2)}
                         >
                             Update
                         </Button>
                         <Button
                             className={cx('bg-red-500', 'hover:opacity-80', 'text-white')}
-                            onClick={(e) => handleDelete(e, postId)}
+                            type="submit"
+                            onClick={() => setButtonState(3)}
                         >
                             Delete
                         </Button>
+
+                        <ToastMessage snackbarMessage={snackbarMessage} snackbarSeverity={snackbarSeverity}/>
                     </div>
                 </form>
             </div>
+
             <table className={cx('post_table', 'w-11/12')}>
                 <thead>
                     <tr>

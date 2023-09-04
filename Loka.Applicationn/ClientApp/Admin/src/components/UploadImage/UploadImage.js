@@ -10,23 +10,24 @@ import styles from './UploadImage.module.scss';
 
 const cx = classNames.bind(styles);
 
-function UploadImage({ onImagesChange, showDropzone = true, images = []}) {
+function UploadImage({ onImagesChange, showDropzone = true, images = [] }) {
     const [files, setFiles] = useState([]);
     const inputRef = useRef(null);
 
     useEffect(() => {
-        if (images.length > 0) {     
+        if (images.length > 0) {
             const imageFiles = images.map((base64Image, index) => {
                 return {
                     name: `image-${index + 1}`,
                     preview: base64Image,
                 };
             });
-        
+
             setFiles(imageFiles);
+        } else if (images.length === 0) {
+            setFiles([]);
         }
     }, [images]);
-
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -56,7 +57,7 @@ function UploadImage({ onImagesChange, showDropzone = true, images = []}) {
 
     const handleAddImages = async (selectedFiles) => {
         const newImages = await Promise.all(
-            Array.from(selectedFiles).map(async (file) => {   
+            Array.from(selectedFiles).map(async (file) => {
                 const base64 = await convertToBase64(file);
                 return Object.assign(file, {
                     preview: base64,
@@ -79,7 +80,6 @@ function UploadImage({ onImagesChange, showDropzone = true, images = []}) {
         const inputElement = inputRef.current;
         inputElement.click();
     };
-
 
     const thumbs = files.map((file, index) => (
         <div className={cx('thumb')} key={file.name}>

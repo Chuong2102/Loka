@@ -50,6 +50,13 @@ function PostDetail() {
     }, []);
     // Map (end)
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+        });
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('grid', 'grid-cols-1')}>
