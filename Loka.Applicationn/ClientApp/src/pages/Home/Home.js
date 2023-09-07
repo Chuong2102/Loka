@@ -30,7 +30,7 @@ function Home() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=${page}`);
+                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=16&_page=${page}`);
                 const data = response.data;
 
                 // Update posts state with new data
