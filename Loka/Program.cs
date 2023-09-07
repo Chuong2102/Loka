@@ -1,11 +1,13 @@
 using Loka.Infrastructure.Repositories;
 using Loka.Infrastrure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.RegisterServices();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Fix CORS
 builder.Services.AddControllersWithViews();
@@ -22,7 +24,9 @@ builder.Services.AddControllersWithViews();
 //});
 builder.Services.AddCors();
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddDbContext<DataLokaContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStringName"), 

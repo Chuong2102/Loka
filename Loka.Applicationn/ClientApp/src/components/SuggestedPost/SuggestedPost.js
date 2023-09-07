@@ -34,6 +34,7 @@ function SuggestedPost({ data, ...passProps }) {
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     transform: 'scale(1.2)',
                     marginLeft: '10px',
+                    marginTop: '-20px',
                 }}
                 onClick={onClick}
             />
@@ -55,6 +56,7 @@ function SuggestedPost({ data, ...passProps }) {
                     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                     transform: 'scale(1.2)',
                     marginRight: '20px',
+                    marginTop: '-20px',
                 }}
                 onClick={onClick}
             />
@@ -80,7 +82,7 @@ function SuggestedPost({ data, ...passProps }) {
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 740,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 1,
@@ -94,6 +96,9 @@ function SuggestedPost({ data, ...passProps }) {
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
+                    infinite: true,
+                    nextArrow: <SampleNextArrow />,
+                    prevArrow: <SamplePrevArrow />,
                 },
             },
         ],
@@ -119,7 +124,32 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
+                            ))}
+                        </Carousel>
+                        <div className={cx('m-[10px]')}>
+                            <p className="w-full text-[13px] font-medium">Đường Nguyễn Huệ</p>
+                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
+                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
+                        </div>
+                    </div>
+                </Link>
+                <Link to={config.routes.detail}>
+                    <div
+                        className={cx(
+                            'post__item',
+                            'w-[210px]',
+                            'flex',
+                            'flex-col',
+                            'justify-between',
+                            'rounded-xl',
+                            'ml-[7px]',
+                            {},
+                        )}
+                    >
+                        <Carousel autoSlide={true}>
+                            {slides.map((slide, index) => (
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -144,7 +174,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -169,7 +199,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>
@@ -194,32 +224,7 @@ function SuggestedPost({ data, ...passProps }) {
                     >
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className="rounded-t-xl" src={slide} alt="slide" />
+                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
                             ))}
                         </Carousel>
                         <div className={cx('m-[10px]')}>

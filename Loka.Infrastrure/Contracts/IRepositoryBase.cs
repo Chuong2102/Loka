@@ -1,4 +1,6 @@
-﻿namespace Loka.Infrastructure.Contracts
+﻿using System.Linq.Expressions;
+
+namespace Loka.Infrastructure.Contracts
 {
     public interface IRepositoryBase<T> where T : class
     {

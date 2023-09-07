@@ -194,7 +194,7 @@ namespace Loka.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("geography");
 
-                    b.Property<double>("Longtitude")
+                    b.Property<double>("Longitude")
                         .HasColumnType("float");
 
                     b.Property<string>("PlaceID")

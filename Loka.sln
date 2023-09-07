@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loka.Infrastructure", "Loka.Infrastrure\Loka.Infrastructure.csproj", "{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loka.Applicationn", "Loka.Applicationn\Loka.Applicationn.csproj", "{8814A674-F697-4B87-8266-C390D7B3C6EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loka.Applicationn", "Loka.Applicationn\Loka.Applicationn.csproj", "{8814A674-F697-4B87-8266-C390D7B3C6EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loka.Application.Admin", "Loka.Application.Admin\Loka.Application.Admin.csproj", "{89EA372B-6547-49F0-9C7B-10FF759B3791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8814A674-F697-4B87-8266-C390D7B3C6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8814A674-F697-4B87-8266-C390D7B3C6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8814A674-F697-4B87-8266-C390D7B3C6EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89EA372B-6547-49F0-9C7B-10FF759B3791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89EA372B-6547-49F0-9C7B-10FF759B3791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89EA372B-6547-49F0-9C7B-10FF759B3791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89EA372B-6547-49F0-9C7B-10FF759B3791}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{6202F902-5AD2-4EE4-96EF-8D498D4DE74F} = {3BF20F68-2B08-4DA2-A405-A4EE372C18E0}
 		{E0B6BB0D-9192-44D7-A72E-B7032E99AD6E} = {A316BCB6-D927-4796-BD32-20D983DD9E85}
 		{8814A674-F697-4B87-8266-C390D7B3C6EC} = {57068B76-74A3-4C9F-B976-7EADB7937969}
+		{89EA372B-6547-49F0-9C7B-10FF759B3791} = {57068B76-74A3-4C9F-B976-7EADB7937969}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93A638C3-7BBA-4BF0-903D-F243D322EC2A}

@@ -9,10 +9,10 @@ const cx = classNames.bind(styles);
 
 function SearchItem({ data, ...passProps }) {
     return (
-        <Link to={`/search/${data.nickname}`} className={cx('wrapper')} {...passProps}>
+        <Link to={`/search/${data.description}`} className={cx('wrapper')} {...passProps}>
             <SearchIcon className={cx('search-icon')}/>
             <div className={cx('info')}>
-                <span className={cx('username')}>{data.nickname}</span>
+                <span className={cx('username')}>{data.description}</span>
             </div>
         </Link>
     );
