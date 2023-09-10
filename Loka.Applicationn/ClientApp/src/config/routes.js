@@ -3,7 +3,7 @@ const routes = {
     // favourite: '/favourite',
     // profile: '/:nickname',
     // upload: '/upload',
-    search: '/search/:keyword',
+    search: '/search/:keyword/:price/:wardID/:schoolID',
     detail: '/detail/:id',
 };
 
