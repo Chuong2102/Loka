@@ -6,5 +6,6 @@
         IRoomRepository Rooms { get; }
         IAddressRepository Addressses { get; }
         ILocationRepository Locations { get; }
+        IPhotoRepository Photos { get; }
     }
 }

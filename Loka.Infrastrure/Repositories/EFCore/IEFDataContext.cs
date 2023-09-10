@@ -5,5 +5,6 @@
         ILocationRepository Locations { get; }
         IWardRepository Wards { get; }
         IRoomRepository Rooms { get; }
+        IAddressRepository Addresss { get; }
     }
 }

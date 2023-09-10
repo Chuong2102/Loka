@@ -14,14 +14,12 @@ namespace Loka.Infrastructure.Repositories.Dapper
     public class LocationRepository : ILocationRepository
     {
         private readonly IConfiguration configuration;
-        private DataLokaContext dbContext;
 
         private readonly string connectionString = "ConnectionStringName";
 
-        public LocationRepository(IConfiguration configuration, DataLokaContext dbContext)
+        public LocationRepository(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.dbContext = dbContext;
         }
 
         public async Task<int> CreateAsync(Location entity)

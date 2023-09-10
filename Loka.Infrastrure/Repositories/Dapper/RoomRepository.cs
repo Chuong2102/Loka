@@ -33,10 +33,10 @@ namespace Loka.Infrastructure.Repositories.Dapper
                 var para = new DynamicParameters();
                 // Input para
                 para.Add("@UserID", 3);
-                para.Add("@Name", entity.Name);
+                //para.Add("@Name", entity.Name);
                 para.Add("@Description", entity.Description);
-                para.Add("@Price", entity.Price);
-                para.Add("@Area", entity.Area);
+                //para.Add("@Price", entity.Price);
+                //para.Add("@Area", entity.Area);
                 // Output para
                 para.Add("@RoomID", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -65,14 +65,26 @@ namespace Loka.Infrastructure.Repositories.Dapper
             return await query.ToListAsync();
         }
 
-        public Task<List<Room>> GetAllAsync()
+        public async Task<List<Room>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            var result = await connection.QueryAsync<Room>(RoomQuery.AllRooms);
+            
+            return result.ToList();
         }
 
-        public Task<Room> GetByID(int id)
+        public async Task<Room> GetByID(int id)
         {
-            throw new NotImplementedException();
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Rooms where RoomID = " + id.ToString();
+
+            var room = await connection.QuerySingleAsync<Room>(sql);
+
+            return room;
         }
 
         Task<int> IRepositoryBase<Room>.DeleteAsync(Room entity)
@@ -90,10 +102,10 @@ namespace Loka.Infrastructure.Repositories.Dapper
 
                 // Post
                 para.Add("@RoomID", entity.RoomID);
-                para.Add("@Name", entity.Name);
+               // para.Add("@Name", entity.Name);
                 para.Add("@Description", entity.Description);
-                para.Add("@Price", entity.Price);
-                para.Add("@Area", entity.Area);
+                //para.Add("@Price", entity.Price);
+                //para.Add("@Area", entity.Area);
 
                 return await connection.ExecuteAsync(RoomQuery.Proc_UpdateRoom, para, commandType: CommandType.StoredProcedure);
             }
