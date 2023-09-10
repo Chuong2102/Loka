@@ -33,6 +33,7 @@ namespace Loka.Infrastructure.Repositories.Dapper
             para.Add("@RoomID", entity.Room.RoomID);
             para.Add("@AddressLine1", entity.AddressLine1);
             para.Add("@AddressLine2", entity.AddressLine2);
+            // Ward
             para.Add("@WardID", entity.Ward.WardID);
 
             return await connection.ExecuteAsync(AddressQueries.Proc_AddAddress, para, commandType: CommandType.StoredProcedure);
@@ -61,6 +62,22 @@ namespace Loka.Infrastructure.Repositories.Dapper
         public Task<List<Address>> GetAllAsync(params Expression<Func<Address, object>>[] includeProperties)
         {
             throw new NotImplementedException();
+        }
+
+        public Address GetByRoomID(int roomID)
+        {
+            if (roomID == null)
+                return null;
+
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Addresses where RoomID = " + roomID.ToString();
+
+            var address = connection.QuerySingle<Address>(sql);
+
+            return address;
+
         }
     }
 }

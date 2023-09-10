@@ -36,4 +36,8 @@
     <ProjectReference Include="..\Loka.Infrastrure\Loka.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
 </Project>

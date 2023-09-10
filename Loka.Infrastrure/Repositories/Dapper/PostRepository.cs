@@ -83,6 +83,28 @@ namespace Loka.Infrastructure.Repositories.Dapper
             }
         }
 
-        
+        public string GetTitleByRoomID(int roomID)
+        {
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Posts where RoomID = " + roomID.ToString();
+
+            var post = connection.QuerySingle<Post>(sql);
+
+            return post.Title;
+        }
+
+        public Post GetByRoomID(int roomID)
+        {
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Posts where RoomID = " + roomID.ToString();
+
+            var post = connection.QuerySingle<Post>(sql);
+
+            return post;
+        }
     }
 }

@@ -227,17 +227,17 @@ function Room() {
 
         console.log(payload);
 
-        // axios
-        //     .post('https://localhost:7245/api/AddPost', payload)
-        //     .then((response) => {
-        //         console.log(response.data);
-        //         resetForm();
-        //         setImages([]);
-        //         handleSnackbarMessage('Thêm thành công!', 'success');
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
+        axios
+            .post('https://localhost:7245/api/AddPost', payload)
+            .then((response) => {
+                console.log(response.data);
+                resetForm();
+                setImages([]);
+                handleSnackbarMessage('Thêm thành công!', 'success');
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     return (

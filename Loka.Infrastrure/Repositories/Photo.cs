@@ -2,12 +2,26 @@
 using System.IO;
 using System.Web;
 using System.Drawing;
+using System.ComponentModel;
+using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Repositories.Dapper;
+using Loka.Infrastrure.Entities;
+using System.Net.Mime;
 
 namespace Loka.Infrastructure.Repositories
 {
     public class Photo
     {
         public static IWebHostEnvironment? environment;
+        IEFDataContext _efContext;
+        IDataContext _dapperContext;
+        
+        public Photo(IDataContext dataContext, IEFDataContext eFData)
+        {
+            this._efContext = eFData;
+            this._dapperContext = dataContext;
+        }
+
         public static string GetBase64String(string path)
         {
             var encode = path.Split(",")[1];
@@ -49,7 +63,53 @@ namespace Loka.Infrastructure.Repositories
             return extension;
         }
 
-        public static List<IFormFile> Base64ToImage(List<string> listBase64String, string nameFolder)
+        public string SetExtensionToBase64(string extension)
+        {
+            string result = "";
+
+            switch (extension)
+            {
+                case "jpeg":
+                    result = "data:image/jpeg;base64";
+                    break;
+                case "png":
+                    result = "data:image/png;base64";
+                    break;
+                default://should write cases for more images types
+                    result = "data:image/jpg;base64";
+                    break;
+            }
+
+            return result;
+        }
+
+        public string GetExtesionFromFilePath(string filePath)
+        {
+            var name = filePath.Split('.');
+
+            string fileExt = name[1];
+
+            return fileExt;
+        }
+
+        public List<string> ImageToBase64(List<string> paths)
+        {
+            List<string> result = new List<string>();
+
+            foreach(var path in paths)
+            {
+                byte[] imageArray = System.IO.File.ReadAllBytes(path);
+                // decode Base64
+                string base64ImageRepresentation = SetExtensionToBase64(GetExtesionFromFilePath(path)) + "," + Convert.ToBase64String(imageArray);
+
+                result.Add(base64ImageRepresentation);
+            }
+
+            return result;
+
+        }
+
+        public List<IFormFile> Base64ToImage(List<string> listBase64String, string nameFolder)
         {
             DirectoryInfo directoryInfo;
             List<IFormFile> images = new List<IFormFile>();
@@ -97,25 +157,35 @@ namespace Loka.Infrastructure.Repositories
 
         }
 
-        public async static void Save(List<IFormFile> photos)
+        public async Task<List<string>> Save(List<string> listBase64String, string folderName, Room room)
         {
-            foreach(var file in photos)
-            {
-                FileStream fileStream = System.IO.File.Create(environment.WebRootPath + "\\Images\\" + file.FileName);
-                await file.CopyToAsync(fileStream);
-                fileStream.Flush();
-            }
-        }
-        public static void Save(List<string> listBase64String, string folderName)
-        {
+            List<string> listPath = new List<string>();
+
             //string example = "data:image/png;base64,abcdefghijklmnopqrstuvwxyz0123456789";
             int i = 0;
             foreach (string s in listBase64String)
             {
+                // Create new Folder, name folder is AddressLine1
                 string filePath = CreateFolder(folderName) + i.ToString() + "." + GetExtensionFromBase64(s);
-                File.WriteAllBytes(filePath, Convert.FromBase64String(GetBase64String(s)));
+                // Write file photo to Folder
+                await File.WriteAllBytesAsync(filePath, Convert.FromBase64String(GetBase64String(s)));
+                // Save path into database
+                await 
+                _dapperContext.Photos.CreateAsync(new Infrastrure.Entities.Photo
+                {
+                    Path = filePath,
+                    Title = folderName,
+                    Description = folderName,
+                    Room = room
+                });
+
                 i++;
+
+                //
+                listPath.Add(filePath);
             }
+
+            return listPath;
         }
     }
 }

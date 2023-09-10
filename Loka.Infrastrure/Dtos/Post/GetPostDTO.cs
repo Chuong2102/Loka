@@ -3,8 +3,12 @@
     public class GetPostDTO
     {
         public int PostID { get; set; }
-        public string? PostTitle { get; set; }
+        public int RoomID { get; set; }
+        public string? Title { get; set; }
         public string? AddressLine1 { get; set; }
+        public string? Description { get; set; }
+        public List<string>? Images {  get; set; }
+
 
     }
 }

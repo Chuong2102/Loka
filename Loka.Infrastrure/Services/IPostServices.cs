@@ -9,12 +9,16 @@ using Loka.Infrastrure.Context;
 using NetTopologySuite.Geometries;
 using Loka.Infrastructure.Dtos.Rooms;
 using Loka.Infrastructure.Dtos.Posts;
+using Loka.Infrastructure.Dtos.Post;
 
 namespace Loka.Infrastructure.Services
 {
     public interface IPostServices
     {
         Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance);
-
+        Task<List<GetPostDTO>> GetAll();
+        Task<int> Add(AddPostDTO post);
+        Task<int> Delete(int id);
+        Task<GetPostDTO> Update(GetPostDTO postID);
     }
 }

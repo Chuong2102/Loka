@@ -1,5 +1,6 @@
 ﻿using Loka.Infrastructure.Dtos.Favorite;
 using Loka.Infrastructure.Dtos.Rooms;
+using Loka.Infrastrure.Entities;
 
 namespace Loka.Infrastructure.Dtos.Posts
 {

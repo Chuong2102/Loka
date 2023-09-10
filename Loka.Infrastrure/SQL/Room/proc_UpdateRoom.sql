@@ -3,10 +3,7 @@ drop proc proc_UpdateRoom
 go
 create proc proc_UpdateRoom 
 	@RoomID int,
-	@Name nvarchar(max),
-	@Description nvarchar(max),
-	@Price float,
-	@Area float
+	@Description nvarchar(max)
 
 as
 begin
@@ -23,15 +20,13 @@ begin
 
 	-- Check null
 	-- Check Room
-	if(@Name is null or @Description is null or @Price is null or @Area is null)
+	if(@Description is null)
 		return;
 
 	-- Update Room
 	update Rooms
-	set Name = @Name,
-	Description = @Description,
-	Price = @Price,
-	Area = @Area
+	set
+	Description = @Description
 	where RoomID = @RoomID
 
 end
@@ -39,3 +34,4 @@ go
 ----
 select * from Posts
 select * from Rooms
+select * from Photos
