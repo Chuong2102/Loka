@@ -14,6 +14,11 @@ function UploadImage({ onImagesChange, showDropzone = true, images = [] }) {
     const [files, setFiles] = useState([]);
     const inputRef = useRef(null);
 
+    const handleChangeImages = (value) => {
+        setFiles(value);
+    };
+
+
     useEffect(() => {
         if (images.length > 0) {
             const imageFiles = images.map((base64Image, index) => {
@@ -23,9 +28,9 @@ function UploadImage({ onImagesChange, showDropzone = true, images = [] }) {
                 };
             });
 
-            setFiles(imageFiles);
+            handleChangeImages(imageFiles);
         } else if (images.length === 0) {
-            setFiles([]);
+            handleChangeImages([]);
         }
     }, [images]);
 
@@ -43,6 +48,7 @@ function UploadImage({ onImagesChange, showDropzone = true, images = [] }) {
                 }),
             );
             setFiles(fileArray);
+            // setFiles((prevFiles) => [...prevFiles, ...fileArray]);
             onImagesChange(fileArray);
         },
     });
@@ -129,3 +135,5 @@ UploadImage.propTypes = {
 };
 
 export default UploadImage;
+
+
