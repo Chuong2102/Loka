@@ -9,13 +9,16 @@
 
         public ILocationRepository Locations { get; set; }
 
+        public IPhotoRepository Photos { get; set; }
+
         public DataContext(IPostRepository postRepository, IRoomRepository roomRepository,
-            IAddressRepository addressRepository, ILocationRepository locationRepository)
+            IAddressRepository addressRepository, ILocationRepository locationRepository, IPhotoRepository photos)
         {
             Posts = postRepository;
             Rooms = roomRepository;
             Addressses = addressRepository;
             Locations = locationRepository;
+            Photos = photos;
         }
     }
 }

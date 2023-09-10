@@ -7,11 +7,11 @@ namespace Loka.Infrastructure.Dtos.Posts
     {
         public PostMapProfile()
         {
-            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Loka.Infrastrure.Entities.Post, PostDto>().ReverseMap();
             CreateMap<PostDto, EditPostDto>();
-            CreateMap<CreatePostDto, Post>();
-            CreateMap<EditPostDto, Post>();
-
+            CreateMap<CreatePostDto, Infrastrure.Entities.Post>();
+            CreateMap<EditPostDto, Infrastrure.Entities.Post>();
+            CreateMap<CreatePostDto, Infrastrure.Entities.Post>();
         }
     }
 }
