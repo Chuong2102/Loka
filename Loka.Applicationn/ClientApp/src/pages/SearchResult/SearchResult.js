@@ -23,45 +23,101 @@ const slides = [
     'https://a0.muscache.com/im/pictures/6048ad98-6bde-4c5a-bafa-92f33ad952af.jpg?im_w=720',
 ];
 
+const Pricing = [
+    { minPrice: 0, maxPrice: 0 },
+    { minPrice: 500000, maxPrice: 1000000 },
+    { minPrice: 1000000, maxPrice: 2000000 },
+    { minPrice: 3000000, maxPrice: 500000 },
+];
+
+// const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
+const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
+
 function SearchResult() {
     const [isHovered, setIsHovered] = useState(false);
     const [posts, setPosts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true); // Track if there are more posts to load
 
-    const { keyword } = useParams();
-    // const location = useLocation();
-    // const queryParams = new URLSearchParams(location.search);
+    const [resultText, setResultText] = useState('');
+    const [latitude, setLatitude] = useState(16.462325713021514);
+    const [longitude, setLongitude] = useState(107.61745585099027);
 
-    // const price = queryParams.get('price');
-    // const uni = queryParams.get('uni');
-    // const ward = queryParams.get('ward');
+    const { keyword, price, wardID, schoolID } = useParams();
 
-    // console.log(price, uni, ward);
+    // Xử lý để lấy latitude, longitude
     useEffect(() => {
-        const fetchPosts = async () => {
+        if (!resultText.trim() || keyword === 'empty') {
+            return;
+        }
+
+        const fetchApi = async () => {
             try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=${page}`);
-                const data = response.data;
+                const response = await axios.get(`https://rsapi.goong.io/geocode`, {
+                    params: {
+                        address: resultText,
+                        api_key: goongApi_Rob,
+                    },
+                });
 
-                // Update posts state with new data
-                setPosts((prevPosts) => [...prevPosts, ...data]);
-
-                // Check if there are more posts to load
-                if (data.length === 0) {
-                    setHasMore(false);
-                }
+                setLatitude(response.data.results[0].geometry.location.lat);
+                setLongitude(response.data.results[0].geometry.location.lng);
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error(error);
             }
         };
 
-        fetchPosts();
-    }, [page]);
+        fetchApi();
+    }, [keyword]);
 
-    const loadMorePosts = () => {
-        setPage((prevPage) => prevPage + 1);
-    };
+    useEffect(() => {
+        const fetchPosts = async () => {
+            // if (keyword === 'empty') {
+            //     setResultText('');
+            // } else {
+            //     setResultText(keyword);
+            // }
+
+            console.log(
+                keyword,
+                longitude,
+                latitude,
+                Pricing[price].minPrice,
+                Pricing[price].maxPrice,
+                schoolID,
+                wardID,
+            );
+            // try {
+            //     const response = await axios.post('/api-endpoint', {
+            //        keyword, longitude, latitude, Pricing[0].minPrice, Pricing[price].maxPrice, schoolID, wardID
+            //     });
+
+            //     setPosts(response.data);
+            // } catch (e) {
+            //     console.error('Error fetching data:', e);
+            // }
+        };
+        fetchPosts();
+    }, [keyword, price, wardID, schoolID]);
+
+    // useEffect(() => {
+    //     const fetchPosts = async () => {
+    //         try {
+    //             const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=${page}`);
+    //             const data = response.data;
+
+    //             // Update posts state with new data
+    //             setPosts((prevPosts) => [...prevPosts, ...data]);
+
+    //             // Check if there are more posts to load
+    //             if (data.length === 0) {
+    //                 setHasMore(false);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching posts:', error);
+    //         }
+    //     };
+
+    //     fetchPosts();
+    // }, [page]);
 
     useEffect(() => {
         window.scrollTo({
@@ -74,52 +130,37 @@ function SearchResult() {
 
     return (
         <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
-            <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>Kết quả tìm kiếm: {keyword}</h2>
-            <InfiniteScroll
-                dataLength={posts.length} // Indicate the number of items
-                next={loadMorePosts} // Load more items when scrolling
-                hasMore={hasMore} // If there are more items to load
-                loader={<h4 classNames={cx('text-center')}>Loading...</h4>} // Loader component
-            >
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
-                    {posts.map((post, index) => (
-                        <Link to={`/detail/${post.id}`} key={index}>
-                            <div
-                                className={cx(
-                                    'post__item',
-                                    'w-auto',
-                                    'flex',
-                                    'flex-col',
-                                    'justify-between',
-                                    'rounded-xl',
-                                    {
-                                        group: isHovered,
-                                    },
-                                )}
-                                onMouseEnter={() => setIsHovered(true)}
-                                onMouseLeave={() => setIsHovered(false)}
-                            >
-                                <Carousel autoSlide={true}>
-                                    {slides.map((slide, index) => (
-                                        <img
-                                            key={index}
-                                            className={cx('rounded-t-xl', 'object-cover', 'w-full')}
-                                            src={slide}
-                                            alt="slide"
-                                        />
-                                    ))}
-                                </Carousel>
-                                <div className={cx('m-[10px]')}>
-                                    <p className="w-full text-[16px] font-medium ">Đường {post.id}</p>
-                                    <p className="w-full text-[16px]">Phường {post.userId}</p>
-                                    <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                                </div>
+            <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>Kết quả tìm kiếm: {keyword !== "empty" ? keyword : ''}</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
+                {posts.map((post, index) => (
+                    <Link to={`/detail/${post.id}`} key={index}>
+                        <div
+                            className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
+                                group: isHovered,
+                            })}
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
+                            <Carousel autoSlide={true}>
+                                {slides.map((slide, index) => (
+                                    <img
+                                        key={index}
+                                        className={cx('rounded-t-xl', 'object-cover', 'w-full')}
+                                        src={slide}
+                                        alt="slide"
+                                    />
+                                ))}
+                            </Carousel>
+                            <div className={cx('m-[10px]')}>
+                                <p className="w-full text-[16px] font-medium ">Đường {post.id}</p>
+                                <p className="w-full text-[16px]">Phường {post.userId}</p>
+                                <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
                             </div>
-                        </Link>
-                    ))}
-                </div>
-            </InfiniteScroll>
-            
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </div>
     );
 }

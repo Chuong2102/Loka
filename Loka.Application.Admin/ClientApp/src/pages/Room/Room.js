@@ -159,21 +159,15 @@ function Room() {
     };
 
     const handleAreaChange = (e) => {
-        if (!/^\d+$/.test(e.key)) {
-            e.preventDefault();
-        } else {
-            const newArea = e.target.value + e.key;
-            setArea(newArea);
-        }
+        const inputValue = e.target.value;
+        const numericInputValue = inputValue.replace(/[^0-9]/g, '');
+        setArea(numericInputValue);
     };
 
     const handlePriceChange = (e) => {
-        if (!/^\d+$/.test(e.key)) {
-            e.preventDefault();
-        } else {
-            const newPrice = e.target.value + e.key;
-            setPrice(newPrice);
-        }
+        const inputValue = e.target.value;
+        const numericInputValue = inputValue.replace(/[^0-9]/g, '');
+        setPrice(numericInputValue);
     };
 
     const handleImagesChange = (imageFiles) => {
@@ -507,7 +501,7 @@ function Room() {
                             placeholder="Enter Area"
                             autoComplete="off"
                             value={area}
-                            onKeyPress={handleAreaChange}
+                            onChange={handleAreaChange}
                             required
                         />
                     </div>
@@ -532,7 +526,7 @@ function Room() {
                             placeholder="Enter Price"
                             autoComplete="off"
                             value={price}
-                            onKeyPress={handlePriceChange}
+                            onChange={handlePriceChange}
                             required
                         />
                     </div>
