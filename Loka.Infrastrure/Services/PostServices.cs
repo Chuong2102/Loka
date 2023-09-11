@@ -208,23 +208,46 @@ namespace Loka.Infrastructure.Services
         public async Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO)
         {
             List<PostDto> result = new List<PostDto>();
-            List<Post> posts = new List<Post>(); 
+            List<Post> posts = new List<Post>();
 
+            // Case click suggest addressLine
+            //
+            if(roomDTO.Longitude != 0 && roomDTO.Latitude != 0)
+            {
+                
+            }
             // Case click search input button
             //
-            // Case 1: All three condition: price, search and near school
-            if(roomDTO.Latitude == 0 && roomDTO.Longitude == 0)
+            else
             {
-                posts = await _postRepository.GetAllAsync(
-                    p => p.Room.Address.AddressLine1.Contains(roomDTO.ResultText) 
-                    && p.Room.Price <= roomDTO.MaxPrice && p.Room.Price >= roomDTO.MinPrice);
-
+                // Case 1: All three condition: price, search text and near school
                 //
-                foreach(var post in posts)
+                if (roomDTO.MaxPrice != 0 && roomDTO.MinPrice != 0)
                 {
-                    result.Add(_mapper.Map<PostDto>(post));
+                    posts = await _postRepository.GetAllAsync(
+                        p => p.Room.Address.AddressLine1.Contains(roomDTO.ResultText)
+                        && p.Room.Price <= roomDTO.MaxPrice && p.Room.Price >= roomDTO.MinPrice);
+
+                }
+
+                // Case 2: Price condition
+                //
+                if (roomDTO.Latitude == 0 && roomDTO.Longitude == 0 
+                    && roomDTO.MaxPrice != 0 && roomDTO.MinPrice != 0)
+                {
+                    posts = await _postRepository.GetAllAsync(
+                        p => p.Room.Address.AddressLine1.Contains(roomDTO.ResultText)
+                        && p.Room.Price <= roomDTO.MaxPrice && p.Room.Price >= roomDTO.MinPrice);
+
+                    //
+                    foreach (var post in posts)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
                 }
             }
+
+            
 
             // ELSE
 
