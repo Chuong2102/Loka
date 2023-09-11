@@ -12,7 +12,7 @@ namespace Loka.Infrastructure.Dtos.Rooms
 {
     public class RoomDto
     {
-        public int Id { get; set; }
+        public int RoomID { get; set; }
         public User? User { get; set; }
         public Address? Address { get; set; }
         public LocationDto? Location { get; set; }

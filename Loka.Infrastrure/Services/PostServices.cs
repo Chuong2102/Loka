@@ -9,6 +9,7 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Entities;
 using Loka.Infrastructure.Dtos.Post;
 using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Dtos.Room;
 
 namespace Loka.Infrastructure.Services
 {
@@ -61,7 +62,7 @@ namespace Loka.Infrastructure.Services
         /// <summary>
         /// Lấy hết bài đăng, phòng trả về choa Admin <3
         /// </summary>
-        /// <returns></returns>
+        /// <returns>fsegsrgr</returns>
         public async Task<List<GetPostDTO>> GetAll()
         {
             var rooms = await _dapperContext.Rooms.GetAllAsync();
@@ -170,6 +171,10 @@ namespace Loka.Infrastructure.Services
 
         public async Task<int> Delete(int postID)
         {
+            var room = await _dapperContext.Rooms.GetByPostID(postID);
+
+            await _dapperContext.Photos.DeleteByRoomID(room.RoomID);
+
             return await _dapperContext.Posts.DeleteAsync(new Post
             {
                 PostID = postID
@@ -198,6 +203,46 @@ namespace Loka.Infrastructure.Services
             });
 
             return post;
+        }
+
+        public async Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO)
+        {
+            List<PostDto> result = new List<PostDto>();
+            List<Post> posts = new List<Post>(); 
+
+            // Case click search input button
+            //
+            // Case 1: All three condition: price, search and near school
+            if(roomDTO.Latitude == 0 && roomDTO.Longitude == 0)
+            {
+                posts = await _postRepository.GetAllAsync(
+                    p => p.Room.Address.AddressLine1.Contains(roomDTO.ResultText) 
+                    && p.Room.Price <= roomDTO.MaxPrice && p.Room.Price >= roomDTO.MinPrice);
+
+                //
+                foreach(var post in posts)
+                {
+                    result.Add(_mapper.Map<PostDto>(post));
+                }
+            }
+
+            // ELSE
+
+
+            return result;
+        }
+
+        public async Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice)
+        {
+            var posts = await _postRepository.GetAllAsync(p => p.Room.Price <= maxPrice && p.Room.Price >= minPrice);
+            List<PostDto> result = new List<PostDto>();
+
+            foreach(var post in posts)
+            {
+                result.Add(_mapper.Map<PostDto>(post));
+            }
+
+            return result;
         }
     }
 }
