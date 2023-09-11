@@ -1,9 +1,12 @@
 import Slider from 'react-slick';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import styles from './SuggestedPost.module.scss';
 
+import styles from './SuggestedPost.module.scss';
 import config from '~/config';
 import Carousel from '../Carousel/Carousel';
 import 'slick-carousel/slick/slick.css';
@@ -18,7 +21,47 @@ const slides = [
     'https://a0.muscache.com/im/pictures/6048ad98-6bde-4c5a-bafa-92f33ad952af.jpg?im_w=720',
 ];
 
-function SuggestedPost({ data, ...passProps }) {
+function SuggestedPost({ longitude, latitude, data, ...passProps }) {
+    const [posts, setPosts] = useState([]);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Tét: Dùng cái ở dưới nha <3
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=1}`);
+                const data = response.data;
+                setPosts(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+    // useEffect(() => {
+    //     const fetchSuggestedPosts = async () => {
+    //         console.log(
+    //             longitude,
+    //             latitude,
+    //         );
+
+    //         const payload = {
+    //             longitude: longitude,
+    //             latitude: latitude,
+    //         };
+
+    // try {
+    //     const response = await axios.post('/api-endpoint', payload);
+    //     setPosts(response.data);
+    // } catch (e) {
+    //     console.error('Error fetching data:', e);
+    // }
+    // };
+    //     fetchSuggestedPosts();
+    // }, [longitude, latitude]);
+
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;
         return (
@@ -105,135 +148,56 @@ function SuggestedPost({ data, ...passProps }) {
     };
     return (
         <div>
-            <h2 className={cx('ml-[6px]','mb-[30px]', 'text-[24px]', 'font-medium', 'text-center', 'md:text-left', 'lg:text-left')}>
+            <h2
+                className={cx(
+                    'ml-[6px]',
+                    'mb-[30px]',
+                    'text-[24px]',
+                    'font-medium',
+                    'text-center',
+                    'md:text-left',
+                    'lg:text-left',
+                )}
+            >
                 <span className={cx('border-b-2', 'suggest', 'pb-1')}>Đề xuất</span>
             </h2>
             <Slider {...settings}>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
+                {posts.map((post, index) => (
+                    <Link to={`/detail/${post.id}`} key={index}>
+                        <div
+                            className={cx(
+                                'post__item',
+                                'w-[210px]',
+                                'flex',
+                                'flex-col',
+                                'justify-between',
+                                'rounded-xl',
+                                'ml-[7px]',
+                                {
+                                    group: isHovered,
+                                },
+                            )}
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
+                            <Carousel autoSlide={true}>
+                                {slides.map((slide, index) => (
+                                    <img
+                                        key={index}
+                                        className={cx('rounded-t-xl', 'object-cover', 'w-full')}
+                                        src={slide}
+                                        alt="slide"
+                                    />
+                                ))}
+                            </Carousel>
+                            <div className={cx('m-[10px]')}>
+                                <p className="w-full text-[13px] font-medium">Đường Nguyễn Huệ</p>
+                                <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
+                                <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
+                            </div>
                         </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
-                <Link to={config.routes.detail}>
-                    <div
-                        className={cx(
-                            'post__item',
-                            'w-[210px]',
-                            'flex',
-                            'flex-col',
-                            'justify-between',
-                            'rounded-xl',
-                            'ml-[7px]',
-                            {},
-                        )}
-                    >
-                        <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
-                                <img key={index} className={cx('rounded-t-xl', 'object-contain')} src={slide} alt="slide" />
-                            ))}
-                        </Carousel>
-                        <div className={cx('m-[10px]')}>
-                            <p className="w-full text-[13px] font-medium ">Đường Nguyễn Huệ</p>
-                            <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                            <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
+                ))}
             </Slider>
         </div>
     );

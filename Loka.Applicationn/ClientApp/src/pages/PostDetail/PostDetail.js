@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import classNames from 'classnames/bind';
 import mapboxgl from '@goongmaps/goong-js';
 import '@goongmaps/goong-js/dist/goong-js.css';
+import { useParams } from 'react-router-dom';
 
 import styles from './PostDetail.module.scss';
 import Carousel from './Carousel';
@@ -20,8 +22,27 @@ const slides = [
 mapboxgl.accessToken = 'wnicbAmnNkoMHNYUKWnlFHezV189FjmMwkNJ7hKW';
 
 function PostDetail() {
+    const [post, setPost] = useState({});
     const [latitude, setLatitude] = useState(16.462325713021514);
     const [longitude, setLongitude] = useState(107.61745585099027);
+
+    const { postID } = useParams();
+
+    // Call API lấy POST DETAIL
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`https://api.example.com/posts/${postID}`);
+                setPost(response.data);
+                setLatitude(response.data.latitude);
+                setLongitude(response.data.longitude);
+            } catch (e) {
+                console.error('Error fetching data:', e);
+            }
+        };
+
+        fetchData();
+    }, [postID]);
 
     // Map (begin)
     const mapContainerRef = useRef(null);
@@ -42,12 +63,10 @@ function PostDetail() {
             .setLngLat([longitude, latitude])
             .addTo(mapRef.current);
 
-        // markerRef.current.on('dragend', onDragEnd);
-
         return () => {
             mapRef.current.remove();
         };
-    }, []);
+    }, [latitude, longitude]);
     // Map (end)
 
     useEffect(() => {
@@ -64,14 +83,17 @@ function PostDetail() {
                     <div className={cx('post__item', 'max-w-[700px]', 'flex', 'flex-col', 'rounded-xl')}>
                         <Carousel autoSlide={true}>
                             {slides.map((slide, index) => (
-                                <img key={index} className="rounded-xl object-cover w-full h-[220px] md:h-[470px]" src={slide} alt="slide" />
+                                <img
+                                    key={index}
+                                    className="rounded-xl object-cover w-full h-[220px] md:h-[470px]"
+                                    src={slide}
+                                    alt="slide"
+                                />
                             ))}
                         </Carousel>
                         <div className={cx('mt-[20px]')}>
                             <p className="w-full text-[18px] font-medium my-[10px] leading-20px">Thông tin mô tả:</p>
-                            <p className="w-full text-[16px] leading-20px">
-                                Địa chỉ: Ngõ 168 Nguyễn Xiển, Thanh Xuân, Hà Nội.
-                            </p>
+                            <p className="w-full text-[16px] leading-20px">Địa chỉ: {post.address}.</p>
                             <p className="w-full text-[16px] leading-20px">
                                 Nội thất: Full đồ giống ảnh. Điều hòa, nóng lạnh, giường - tủ quần áo, bàn bếp, tủ lạnh,
                                 máy giặt chung, vệ sinh riêng từng phòng, thang máy (diện tích 25 - 30m²).
@@ -93,9 +115,8 @@ function PostDetail() {
             </div>
 
             <div className="m-auto mt-[80px] w-[222px] md:w-[690px] lg:w-[900px] pb-[20px]">
-                <SuggestedPost />
+                <SuggestedPost longitude={longitude} latitude={latitude} />
             </div>
-    
         </div>
     );
 }

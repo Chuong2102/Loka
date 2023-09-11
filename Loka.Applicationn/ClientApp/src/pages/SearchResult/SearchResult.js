@@ -70,12 +70,6 @@ function SearchResult() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            // if (keyword === 'empty') {
-            //     setResultText('');
-            // } else {
-            //     setResultText(keyword);
-            // }
-
             console.log(
                 keyword,
                 longitude,
@@ -85,11 +79,18 @@ function SearchResult() {
                 schoolID,
                 wardID,
             );
-            // try {
-            //     const response = await axios.post('/api-endpoint', {
-            //        keyword, longitude, latitude, Pricing[0].minPrice, Pricing[price].maxPrice, schoolID, wardID
-            //     });
+            const payload = {
+                keyword: keyword,
+                longitude: longitude,
+                latitude: latitude,
+                minPrice: Pricing[price].minPrice,
+                maxPrice: Pricing[price].maxPrice,
+                schoolID: schoolID,
+                wardID: wardID,
+            };
 
+            // try {
+            //     const response = await axios.post('/api-endpoint', payload);
             //     setPosts(response.data);
             // } catch (e) {
             //     console.error('Error fetching data:', e);
@@ -130,7 +131,9 @@ function SearchResult() {
 
     return (
         <div className={cx('wrapper', 'my-[80px]', 'md:my-[30px]')}>
-            <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>Kết quả tìm kiếm: {keyword !== "empty" ? keyword : ''}</h2>
+            <h2 className={cx('mb-[30px]', 'text-[23px]', 'font-medium')}>
+                Kết quả tìm kiếm: {keyword !== 'empty' ? keyword : ''}
+            </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 {posts.map((post, index) => (
