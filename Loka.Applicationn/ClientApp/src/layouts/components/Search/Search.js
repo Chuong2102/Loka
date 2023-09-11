@@ -22,6 +22,28 @@ const cx = classNames.bind(styles);
 
 // const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
 const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
+// const Filter = [
+//     [
+//         { info: 'Giá', value: 0 },
+//         { info: '1 triệu', value: 1 },
+//         { info: '2 triệu', value: 2 },
+//         { info: '3 - 5 triệu', value: 3 },
+//     ],
+//     [
+//         { info: 'Gần trường ĐH/CĐ', value: 0 },
+//         { info: 'Khoa học', value: 1 },
+//         { info: 'Y Dược', value: 2 },
+//         { info: 'Kinh tế', value: 3 },
+//         { info: 'Nông Lâm', value: 4 },
+//         { info: 'Công nghiệp', value: 5 },
+//     ],
+//     [
+//         { info: 'Phường', value: 0 },
+//         { info: 'Vĩnh Ninh', value: 1 },
+//         { info: 'Phước Vĩnh', value: 2 },
+//         { info: 'Phường Đúc', value: 3 },
+//     ],
+// ];
 
 function Search({ shouldReset, resetComplete }) {
     const navigate = useNavigate();
@@ -34,6 +56,21 @@ function Search({ shouldReset, resetComplete }) {
     const [price, setPrice] = useState(0);
     const [schoolID, setSchoolID] = useState(0);
     const [wardID, setWardID] = useState(0);
+
+    const [filters, setFilters] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('/api-endpoint');
+
+                setFilters(response.data);
+            } catch (error) {
+                console.error('Lỗi khi gọi API: ', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     useEffect(() => {
         if (shouldReset) {
@@ -141,7 +178,6 @@ function Search({ shouldReset, resetComplete }) {
             navigate(
                 `/search/${debouncedValue}/${price ? price : 0}/${wardID ? wardID : 0}/${schoolID ? schoolID : 0}`,
             );
-            
         } else {
             if (price !== 0 || wardID !== 0 || schoolID !== 0) {
                 navigate(
@@ -209,7 +245,7 @@ function Search({ shouldReset, resetComplete }) {
                         <button
                             className={cx('search-btn', 'flex', 'items-center')}
                             onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => debouncedValue ? handleHideResult(debouncedValue) : undefined}
+                            onClick={() => (debouncedValue ? handleHideResult(debouncedValue) : undefined)}
                         >
                             {/* <SearchIcon/> */}
                             <FontAwesomeIcon
@@ -246,18 +282,12 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value={0}>
-                            <em>Giá</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={1}>
-                            1 triệu
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={2}>
-                            2 triệu
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={3}>
-                            3 - 5 triệu
-                        </MenuItem>
+                        {filters[0] &&
+                            filters[0].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 124 }} size="small">
@@ -284,24 +314,12 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value={0}>
-                            <em>Gần trường ĐH/CĐ</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={1}>
-                            Khoa học
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={2}>
-                            Y Dược
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={3}>
-                            Kinh tế
-                        </MenuItem>{' '}
-                        <MenuItem sx={{ fontSize: '12px' }} value={4}>
-                            Nông Lâm
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={5}>
-                            Công nghiệp
-                        </MenuItem>
+                        {filters[1] &&
+                            filters[1].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 116 }} size="small">
@@ -328,18 +346,12 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value={0}>
-                            <em>Phường</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={1}>
-                            Vĩnh Ninh
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={2}>
-                            Phước Vĩnh
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={3}>
-                            Phường Đúc
-                        </MenuItem>
+                        {filters[2] &&
+                            filters[2].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <button className={cx('btn__rotate')} onClick={handleRefreshClick}>

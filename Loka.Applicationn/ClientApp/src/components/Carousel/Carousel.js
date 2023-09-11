@@ -35,7 +35,7 @@ export default function Carousel({ children: slides, autoSlide = false, autoSlid
     return (
         <div className={cx('overflow-hidden', 'relative', 'rounded-t-xl')}>
             <div
-                className={cx('flex', 'transition-transform', 'ease-out', 'duration-500')}
+                className={cx('flex', 'transition-transform', 'ease-out', 'duration-500', 'w-full')}
                 style={{ transform: `translateX(-${curr * 100}%)` }}
             >
                 {slides}

@@ -4,7 +4,7 @@ const routes = {
     // profile: '/:nickname',
     // upload: '/upload',
     search: '/search/:keyword/:price/:wardID/:schoolID',
-    detail: '/detail/:id',
+    detail: '/detail/:postID',
 };
 
 export default routes;
