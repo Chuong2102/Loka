@@ -329,12 +329,11 @@ namespace Loka.Infrastructure.Services
                         roomDTO.MinPrice, roomDTO.MaxPrice);
 
                     // Get by belong WARD
-                    var listGetPostByWard = await _postRepository.GetAllAsync(p => p.Room.Address.Ward.WardID == roomDTO.WardId
-                        && p.Room.Price >= roomDTO.MinPrice && p.Room.Price <= roomDTO.MaxPrice);
+                    var listGetPostByWard = _efContext.Posts.GetAllByWardIDAndPrice(roomDTO.WardId, roomDTO.MinPrice, roomDTO.MaxPrice).Result;
                     
                     // 
-                    posts.AddRange(listGetPostByWard.ToList());
-                    posts.AddRange(listPosGetByTextResult.ToList());
+                    posts.AddRange(listGetPostByWard);
+                    posts.AddRange(listPosGetByTextResult);
 
                     // Get result
                     foreach (var post in posts)
