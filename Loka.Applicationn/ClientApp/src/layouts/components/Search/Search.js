@@ -57,6 +57,22 @@ function Search({ shouldReset, resetComplete }) {
     const [schoolID, setSchoolID] = useState(0);
     const [wardID, setWardID] = useState(0);
 
+    // API Filter
+    // const [filters, setFilters] = useState([]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('/api-endpoint');
+
+    //             setFilters(response.data);
+    //         } catch (error) {
+    //             console.error('Lỗi khi gọi API: ', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+
     useEffect(() => {
         if (shouldReset) {
             setSearchValue('');
