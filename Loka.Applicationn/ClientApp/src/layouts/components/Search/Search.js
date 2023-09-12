@@ -22,28 +22,28 @@ const cx = classNames.bind(styles);
 
 // const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
 const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
-// const Filter = [
-//     [
-//         { info: 'Giá', value: 0 },
-//         { info: '1 triệu', value: 1 },
-//         { info: '2 triệu', value: 2 },
-//         { info: '3 - 5 triệu', value: 3 },
-//     ],
-//     [
-//         { info: 'Gần trường ĐH/CĐ', value: 0 },
-//         { info: 'Khoa học', value: 1 },
-//         { info: 'Y Dược', value: 2 },
-//         { info: 'Kinh tế', value: 3 },
-//         { info: 'Nông Lâm', value: 4 },
-//         { info: 'Công nghiệp', value: 5 },
-//     ],
-//     [
-//         { info: 'Phường', value: 0 },
-//         { info: 'Vĩnh Ninh', value: 1 },
-//         { info: 'Phước Vĩnh', value: 2 },
-//         { info: 'Phường Đúc', value: 3 },
-//     ],
-// ];
+const Filter = [
+    [
+        { info: 'Giá', value: 0 },
+        { info: '1 triệu', value: 1 },
+        { info: '2 triệu', value: 2 },
+        { info: '3 - 5 triệu', value: 3 },
+    ],
+    [
+        { info: 'Gần trường ĐH/CĐ', value: 0 },
+        { info: 'Khoa học', value: 1 },
+        { info: 'Y Dược', value: 2 },
+        { info: 'Kinh tế', value: 3 },
+        { info: 'Nông Lâm', value: 4 },
+        { info: 'Công nghiệp', value: 5 },
+    ],
+    [
+        { info: 'Phường', value: 0 },
+        { info: 'Vĩnh Ninh', value: 1 },
+        { info: 'Phước Vĩnh', value: 2 },
+        { info: 'Phường Đúc', value: 3 },
+    ],
+];
 
 function Search({ shouldReset, resetComplete }) {
     const navigate = useNavigate();
@@ -57,20 +57,21 @@ function Search({ shouldReset, resetComplete }) {
     const [schoolID, setSchoolID] = useState(0);
     const [wardID, setWardID] = useState(0);
 
-    const [filters, setFilters] = useState([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('/api-endpoint');
+    // API Filter
+    // const [filters, setFilters] = useState([]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('/api-endpoint');
 
-                setFilters(response.data);
-            } catch (error) {
-                console.error('Lỗi khi gọi API: ', error);
-            }
-        };
+    //             setFilters(response.data);
+    //         } catch (error) {
+    //             console.error('Lỗi khi gọi API: ', error);
+    //         }
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
     useEffect(() => {
         if (shouldReset) {
@@ -282,8 +283,8 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        {filters[0] &&
-                            filters[0].map((item) => (
+                        {Filter[0] &&
+                            Filter[0].map((item) => (
                                 <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
                                     {item.info}
                                 </MenuItem>
@@ -314,8 +315,8 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        {filters[1] &&
-                            filters[1].map((item) => (
+                        {Filter[1] &&
+                            Filter[1].map((item) => (
                                 <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
                                     {item.info}
                                 </MenuItem>
@@ -346,8 +347,8 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        {filters[2] &&
-                            filters[2].map((item) => (
+                        {Filter[2] &&
+                            Filter[2].map((item) => (
                                 <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
                                     {item.info}
                                 </MenuItem>
