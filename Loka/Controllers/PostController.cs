@@ -62,17 +62,13 @@ namespace Loka.Controllers
             return await _postServices.Update(data);
         }
 
-        [Route("api/SearchRoom/{lng}&{lat}")]
-        [HttpGet]
+        [Route("api/SearchRoom")]
+        [HttpPost]
         public async Task<IActionResult> SearchRoom(SearchRoomDTO data)
         {
             try
             {
-                // Case click button
-                //
-                
-                var point = new Point(data.Longitude, data.Latitude);
-                var response = await _postServices.GetAllByCoordinates(point, 5);
+                var response = await _postServices.GetAllBySearch(data);
 
                 return Ok(response);
             }
@@ -90,7 +86,7 @@ namespace Loka.Controllers
             {
                 var point = new Point(lng, lat);
                 var response = await _postServices.GetAllByCoordinates(point, 5);
-                response = response.Take(5).ToList();
+                response = response.Take(10).ToList();
                 return Ok(response);
             }
             catch (Exception e)

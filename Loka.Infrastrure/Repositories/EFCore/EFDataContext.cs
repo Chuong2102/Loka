@@ -14,14 +14,21 @@ namespace Loka.Infrastructure.Repositories.EFCore
             Wards = new WardRepository(context);
             Rooms = new RoomRepository(context);
             Addresss = new AddressRepository(context);
+            Schools = new SchoolRepository(context);
+            Posts = new PostRepository(context);
+
         }
-        public ILocationRepository Locations {get; private set;}
+        public ILocationRepository Locations { get; private set; }
 
-        public IWardRepository Wards {get ; private set;}
+        public IWardRepository Wards { get; private set; }
 
-        public IRoomRepository Rooms { get; private set;}
+        public IRoomRepository Rooms { get; private set; }
 
         public IAddressRepository Addresss { get; set; }
+
+        public ISchoolRepository Schools { get; set; }
+
+        public IPostRepository Posts { get; set; }
 
         public void Dispose()
         {
