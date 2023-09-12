@@ -7,10 +7,10 @@ namespace Loka.Infrastructure.Dtos.Rooms
     {
         public RoomMapProfile()
         {
-            CreateMap<Room, RoomDto>().ReverseMap();
+            CreateMap<Infrastrure.Entities.Room, RoomDto>().ReverseMap();
             CreateMap<RoomDto, EditRoomDto>();
-            CreateMap<CreateRoomDto, Room>();
-            CreateMap<EditRoomDto, Room>();
+            CreateMap<CreateRoomDto, Infrastrure.Entities.Room>();
+            CreateMap<EditRoomDto, Infrastrure.Entities.Room>();
 
         }
     }

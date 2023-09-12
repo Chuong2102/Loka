@@ -10,6 +10,7 @@ using NetTopologySuite.Geometries;
 using Loka.Infrastructure.Dtos.Rooms;
 using Loka.Infrastructure.Dtos.Posts;
 using Loka.Infrastructure.Dtos.Post;
+using Loka.Infrastructure.Dtos.Room;
 
 namespace Loka.Infrastructure.Services
 {
@@ -20,5 +21,7 @@ namespace Loka.Infrastructure.Services
         Task<int> Add(AddPostDTO post);
         Task<int> Delete(int id);
         Task<GetPostDTO> Update(GetPostDTO postID);
+        Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO);
+        Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice);
     }
 }

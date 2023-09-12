@@ -35,3 +35,4 @@ go
 select * from Posts
 select * from Rooms
 select * from Photos
+select * from Locations

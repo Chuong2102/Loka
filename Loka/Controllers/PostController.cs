@@ -1,5 +1,6 @@
 ﻿using Loka.Infrastructure.Dtos.Post;
 using Loka.Infrastructure.Dtos.Posts;
+using Loka.Infrastructure.Dtos.Room;
 using Loka.Infrastructure.Repositories;
 using Loka.Infrastructure.Repositories.Dapper;
 using Loka.Infrastructure.Repositories.EFCore;
@@ -63,12 +64,16 @@ namespace Loka.Controllers
 
         [Route("api/SearchRoom/{lng}&{lat}")]
         [HttpGet]
-        public async Task<IActionResult> SearchRoom(double lng, double lat)
+        public async Task<IActionResult> SearchRoom(SearchRoomDTO data)
         {
             try
             {
-                var point = new Point(lng, lat);
+                // Case click button
+                //
+                
+                var point = new Point(data.Longitude, data.Latitude);
                 var response = await _postServices.GetAllByCoordinates(point, 5);
+
                 return Ok(response);
             }
             catch (Exception e)

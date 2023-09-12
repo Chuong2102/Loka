@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Loka.Infrastrure.Entities;
+using Loka.Infrastructure.Entities;
 
 namespace Loka.Infrastrure.Context
 {
@@ -26,6 +27,7 @@ namespace Loka.Infrastrure.Context
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Ward> Wards { get; set; }
 
+        public DbSet<School> Schools { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
