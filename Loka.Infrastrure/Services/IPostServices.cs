@@ -18,10 +18,14 @@ namespace Loka.Infrastructure.Services
     {
         Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance);
         Task<List<GetPostDTO>> GetAll();
+        Task<List<GetPostDTO>> GetAllByPage(int limit, int page);
+        Task<List<GetPostDTO>> GetAllByAdmin();
         Task<int> Add(AddPostDTO post);
         Task<int> Delete(int id);
         Task<GetPostDTO> Update(GetPostDTO postID);
-        Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO);
+        Task<List<PostDto>> Search(SearchRoomDTO roomDTO);
+        Task<List<GetPostDTO>> GetAllBySearch(SearchRoomDTO roomDTO);
+        Task<IEnumerable<GetPostDTO>> GetAllByCoordinatesToDTO(Point targetLocation, double maxDistance);
         Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice);
     }
 }

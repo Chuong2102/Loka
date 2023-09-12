@@ -15,24 +15,23 @@ namespace Loka.Infrastructure.Repositories
 
             services.AddTransient<IDataContext, DataContext>();
             services.AddTransient<IEFDataContext, EFDataContext>();
-            services.AddTransient(typeof(IEFRepositoryBase<>), typeof(EFRepositoryBase<>)); ;
+            services.AddTransient(typeof(IEFRepositoryBase<>), typeof(EFRepositoryBase<>));
 
             // Room
             services.AddTransient<Dapper.IRoomRepository, Dapper.RoomRepository>();
-            services.AddTransient<EFCore.IRoomRepository, EFCore.RoomRepository>();
             // Post
             services.AddTransient<Dapper.IPostRepository, Dapper.PostRepository>();
-            services.AddTransient<EFCore.IPostRepository, EFCore.PostRepository>();
             // Location
             services.AddTransient<Dapper.ILocationRepository, Dapper.LocationRepository>();
-            services.AddTransient<EFCore.ILocationRepository, EFCore.LocationRepository>();
             // Photo
             services.AddTransient<Dapper.IPhotoRepository, Dapper.PhotoRepository>();
             // Address
             services.AddTransient<Dapper.IAddressRepository, Dapper.AddressRepository>();
-            services.AddTransient<EFCore.IAddressRepository, EFCore.AddressRepository>();
             // School
             services.AddTransient<EFCore.ISchoolRepository, SchoolRepository>();
+            // Ward 
+            services.AddTransient<Dapper.IWardRepository, Dapper.WardRepository>();
+
 
             // Service
             //

@@ -34,11 +34,19 @@ namespace Loka.Controllers
             Infrastructure.Repositories.Photo.environment = env;
         }
 
+
         [Route("api/GetAllPostAdmin")]
         [HttpGet]
-        public async Task<List<GetPostDTO>> GetPostsAsync()
+        public async Task<List<GetPostDTO>> GetPostsAdminAsync()
         {
-            return await _postServices.GetAll();
+            return await _postServices.GetAllByAdmin();
+        }
+
+        [Route("api/GetAllPost")]
+        [HttpGet]
+        public async Task<List<GetPostDTO>> GetPostsAsync(int limit, int page)
+        {
+            return await _postServices.GetAllByPage(limit, page);
         }
 
         [Route("api/AddPost")]
@@ -64,18 +72,9 @@ namespace Loka.Controllers
 
         [Route("api/SearchRoom")]
         [HttpPost]
-        public async Task<IActionResult> SearchRoom(SearchRoomDTO data)
+        public async Task<List<GetPostDTO>> SearchRoom(SearchRoomDTO data)
         {
-            try
-            {
-                var response = await _postServices.GetAllBySearch(data);
-
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return await _postServices.GetAllBySearch(data);
         }
 
         [Route("api/SuggestRoom/{lng}&{lat}")]

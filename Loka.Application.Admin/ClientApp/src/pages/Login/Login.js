@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './Login.module.scss';
 import images from '~/assests/images';
@@ -9,6 +10,7 @@ import config from '~/config';
 const cx = classNames.bind(styles);
 
 function Login() {
+    const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -16,11 +18,23 @@ function Login() {
             email: data.get('email'),
             password: data.get('password'),
         });
+        navigate(`/home`);
     };
 
     return (
         <div className={cx('bg-gray-50', 'min-h-screen', 'flex', 'items-center', 'justify-center')}>
-            <div className={cx('bg-gray-100', 'flex', 'rounded-2xl', 'shadow-lg', 'p-5', 'items-center', 'w-[800px]', 'h-[500px]')}>
+            <div
+                className={cx(
+                    'bg-gray-100',
+                    'flex',
+                    'rounded-2xl',
+                    'shadow-lg',
+                    'p-5',
+                    'items-center',
+                    'w-[800px]',
+                    'h-[500px]',
+                )}
+            >
                 <div className={cx('md:w-1/2', 'px-8', 'px-16')}>
                     <h2 className={cx('font-bold', 'text-[40px]', 'text-[#f98f41]')}>Login</h2>
 
@@ -33,7 +47,14 @@ function Login() {
                         />
                         <div className={cx('relative')}>
                             <input
-                                className={cx('px-[12px]', 'rounded-xl', 'border', 'w-full', 'py-[14px]', 'text-[16px]')}
+                                className={cx(
+                                    'px-[12px]',
+                                    'rounded-xl',
+                                    'border',
+                                    'w-full',
+                                    'py-[14px]',
+                                    'text-[16px]',
+                                )}
                                 type="password"
                                 name="password"
                                 placeholder="Password"
@@ -49,7 +70,7 @@ function Login() {
                                 'text-[18px]',
                                 'hover:opacity-80',
                                 'hover:shadow-md',
-                            )} 
+                            )}
                         >
                             Login
                         </button>
@@ -99,11 +120,29 @@ function Login() {
                         <p className={cx('text-[16px]')}>Login with Google</p>
                     </button>
 
-                    <div className={cx('mt-[50px]', 'text-[12px]', 'border-b', 'border-[#002D74]', 'py-4', 'text-[#002D74]')}>
+                    <div
+                        className={cx(
+                            'mt-[50px]',
+                            'text-[12px]',
+                            'border-b',
+                            'border-[#002D74]',
+                            'py-4',
+                            'text-[#002D74]',
+                        )}
+                    >
                         <a href="#">Forgot your password?</a>
                     </div>
 
-                    <div className={cx('mt-[12px]', 'text-[12px]', 'flex', 'justify-between', 'items-center', 'text-[#002D74]')}>
+                    <div
+                        className={cx(
+                            'mt-[12px]',
+                            'text-[12px]',
+                            'flex',
+                            'justify-between',
+                            'items-center',
+                            'text-[#002D74]',
+                        )}
+                    >
                         <p>Don't have an account?</p>
                         <button
                             className={cx(
@@ -122,9 +161,7 @@ function Login() {
                 </div>
 
                 <div className={cx('md:block', 'hidden', 'md:w-1/2', 'px-8')}>
-                    <img
-                        className={cx('rounded-2xl')}
-                        src={images.logo_loka} alt="logo_loka" />
+                    <img className={cx('rounded-2xl')} src={images.logo_loka} alt="logo_loka" />
                 </div>
             </div>
         </div>

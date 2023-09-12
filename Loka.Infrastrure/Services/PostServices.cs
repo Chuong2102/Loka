@@ -22,6 +22,9 @@ namespace Loka.Infrastructure.Services
         readonly IEFDataContext _efContext;
         Repositories.Photo photoContext;
 
+        //
+        List<GetPostDTO> posts;
+
         public PostServices(EFRepositoryBase<Post> postRepository, IMapper mapper, IDataContext dapperContext, 
             IEFDataContext efContext)
         {
@@ -32,8 +35,9 @@ namespace Loka.Infrastructure.Services
 
             //
             photoContext = new Repositories.Photo(_dapperContext, _efContext);
+            posts = new List<GetPostDTO>();
         }
-
+      
         public async Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance)
         {
             var posts = await _postRepository.GetAllAsync(x => x.Room.Location);
@@ -61,11 +65,43 @@ namespace Loka.Infrastructure.Services
             return result;
         }
 
+        public async Task<IEnumerable<GetPostDTO>> GetAllByCoordinatesToDTO(Point targetLocation, double maxDistance)
+        {
+            var posts = await _postRepository.GetAllAsync(x => x.Room.Location);
+            var result = new List<GetPostDTO>();
+
+            foreach (var post in posts)
+            {
+                var point = new Point(post.Room.Location.Longitude, post.Room.Location.Latitude);
+                var distanceOp = new DistanceOp(point, targetLocation);
+                var distance = distanceOp.Distance();
+
+                if (distance <= maxDistance)
+                {
+                    var ward = await _dapperContext.Wards.GetByRoomID(post.RoomID);
+
+                    result.Add(new GetPostDTO
+                    {
+                        AddressLine1 = post.Room.Address.AddressLine1,
+                        Description = post.Room.Description,
+                        Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                        PostID = post.PostID,
+                        Price = post.Room.Price,
+                        RoomID = post.RoomID,
+                        Title = post.Title,
+                        WardName = ward.WardName
+                    });
+                }
+            }
+            
+            return result;
+        }
+
         /// <summary>
         /// Lấy hết bài đăng, phòng trả về choa Admin <3
         /// </summary>
         /// <returns>fsegsrgr</returns>
-        public async Task<List<GetPostDTO>> GetAll()
+        public async Task<List<GetPostDTO>> GetAllByAdmin()
         {
             var rooms = await _dapperContext.Rooms.GetAllAsync();
 
@@ -209,9 +245,9 @@ namespace Loka.Infrastructure.Services
 
         // Code bi ngu nen se refact lai sau :<
         //
-        public async Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO)
+        public async Task<List<GetPostDTO>> GetAllBySearch(SearchRoomDTO roomDTO)
         {
-            List<PostDto> result = new List<PostDto>();
+            List<GetPostDTO> result = new List<GetPostDTO>();
             List<Post> posts = new List<Post>();
 
             // Case click suggest in the input 
@@ -230,27 +266,48 @@ namespace Loka.Infrastructure.Services
                     {
                         if (distance <= 5)
                         {
-                            result.Add(_mapper.Map<PostDto>(post));
+                            // Address
+                            var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                            // Ward name
+                            var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                            result.Add(new GetPostDTO
+                            {
+                                AddressLine1 = post.Room.Address.AddressLine1,
+                                Description = post.Room.Description,
+                                Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                                PostID = post.PostID,
+                                Price = post.Room.Price,
+                                RoomID = post.RoomID,
+                                Title = post.Title,
+                                WardName = ward.WardName
+                            });
                         }
                     }
                     else
                     if (distance <= 5 && post.Room.Price <= roomDTO.MaxPrice && post.Room.Price >= roomDTO.MinPrice)
                     {
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
 
                 }
 
                 //
-
-
-                result.Sort((PostDto p1, PostDto p2) =>
-                {
-                    if (p1.PostedDate == null && p2.PostedDate == null) return 0;
-                    else if (p1.PostedDate == null) return -1;
-                    else if (p2.PostedDate == null) return 1;
-                    else return p2.PostedDate.CompareTo(p1.PostedDate);
-                });
 
                 return result;
             }
@@ -275,7 +332,7 @@ namespace Loka.Infrastructure.Services
 
                     // This list is PostDTO
                     // Get near School
-                    var listPostGetByNearSchool = await GetAllByCoordinates(
+                    var listPostGetByNearSchool = await GetAllByCoordinatesToDTO(
                         new Point(school.Location.Longitude, school.Location.Latitude), 5);
 
                     // Get result
@@ -285,7 +342,22 @@ namespace Loka.Infrastructure.Services
 
                     // Map to PostDTO
                     foreach(var post in posts){
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
                     // 
                     result.AddRange(listPostGetByNearSchool.ToList());
@@ -306,7 +378,7 @@ namespace Loka.Infrastructure.Services
 
                     // This list is PostDTO
                     // Get near School
-                    var listPostGetByNearSchool = await GetAllByCoordinates(
+                    var listPostGetByNearSchool = await GetAllByCoordinatesToDTO(
                         new Point(school.Location.Longitude, school.Location.Latitude), 5);
 
                     // Get postDTO list
@@ -314,7 +386,22 @@ namespace Loka.Infrastructure.Services
 
                     foreach (var post in posts)
                     {
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
 
                     result.AddRange(listPostGetByNearSchool.ToList());
@@ -338,8 +425,25 @@ namespace Loka.Infrastructure.Services
                     // Get result
                     foreach (var post in posts)
                     {
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
+
+                    return result;
 
                 }
                 else
@@ -354,18 +458,126 @@ namespace Loka.Infrastructure.Services
                     // Get result
                     foreach (var post in posts)
                     {
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
 
                 }
-                // Case 5: Get by text result
+                else
+                // Case 5: In Ward
+                if(roomDTO.WardId != 0)
+                {
+                    // Get by Text Result
+                    var listPostGetByTextResult = await _efContext.Posts.GetAllByAddress(roomDTO.ResultText);
+
+                    // Get by belong WARD
+                    var listGetPostByWard = _efContext.Posts.GetAllByWardIDAndPrice(roomDTO.WardId, roomDTO.MinPrice, roomDTO.MaxPrice).Result;
+
+                    // 
+                    posts.AddRange(listGetPostByWard);
+                    posts.AddRange(listPostGetByTextResult);
+
+                    // Get result
+                    foreach (var post in posts)
+                    {
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
+                    }
+
+                    return result;
+                }
+                // Case 6: Near School
+                else
+                if(roomDTO.SchoolId != 0)
+                {
+                    // Get by Text Result
+                    var listPostGetByTextResult = await _efContext.Posts.GetAllByAddress(roomDTO.ResultText);
+
+                    // Get school
+                    School school = await _efContext.Schools.GetBySchoolID(roomDTO.SchoolId);
+
+                    // Get near School
+                    var listPostGetByNearSchool = await GetAllByCoordinatesToDTO(
+                        new Point(school.Location.Longitude, school.Location.Latitude), 5);
+
+                    posts.AddRange(listPostGetByTextResult);
+
+                    // Get result
+                    foreach (var post in posts)
+                    {
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
+                    }
+                    result.AddRange(listPostGetByNearSchool);
+
+                    return result;
+
+                }
+                // Case 7: Get by text result
                 else
                 {
                     var listPost = await _efContext.Posts.GetAllByAddress(roomDTO.ResultText);
                     // Get result
                     foreach (var post in listPost)
                     {
-                        result.Add(_mapper.Map<PostDto>(post));
+                        // Address
+                        var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+                        // Ward name
+                        var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                        result.Add(new GetPostDTO
+                        {
+                            AddressLine1 = post.Room.Address.AddressLine1,
+                            Description = post.Room.Description,
+                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            PostID = post.PostID,
+                            Price = post.Room.Price,
+                            RoomID = post.RoomID,
+                            Title = post.Title,
+                            WardName = ward.WardName
+                        });
                     }
                 }
             }
@@ -384,6 +596,78 @@ namespace Loka.Infrastructure.Services
             }
 
             return result;
+        }
+
+        public async Task<List<GetPostDTO>> GetAll()
+        {
+            var rooms = await _dapperContext.Rooms.GetAllAsync();
+
+            // Get postDto
+            var result = new List<GetPostDTO>();
+
+            foreach (var room in rooms)
+            {
+                var post = _dapperContext.Posts.GetByRoomID(room.RoomID);
+                // Get Title
+                var title = post.Title;
+                var postID = post.PostID;
+
+                // Get ImagesURL
+                var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(room.RoomID);
+                // 
+
+                // AddressLine1
+                var address = _dapperContext.Addressses.GetByRoomID(room.RoomID);
+
+                // Ward name
+                var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                if (address == null || post == null)
+                    break;
+
+                // Get PostDTO
+                result.Add(new GetPostDTO
+                {
+                    Title = title,
+                    Images = pathImgs,
+                    Description = room.Description,
+                    PostID = postID,
+                    AddressLine1 = address.AddressLine1,
+                    RoomID = room.RoomID,
+                    WardName = ward.WardName,
+                    Price = room.Price
+                });
+
+            }
+            posts.Clear();
+            posts.AddRange(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lay het post theo trang (USER PAGE)
+        /// </summary>
+        /// <param name="limit">So bai</param>
+        /// <param name="page">Trang</param>
+        /// <returns></returns>
+        public async Task<List<GetPostDTO>> GetAllByPage(int limit, int page)
+        {
+            await GetAll();
+
+            List<GetPostDTO> result = new List<GetPostDTO>();
+
+            if(page == 1)
+                result = posts.Take(limit).ToList();
+            else
+                result = posts.Skip((page - 1) * limit).Take(limit).ToList();
+
+            return result;
+        }
+
+        Task<List<PostDto>> IPostServices.Search(SearchRoomDTO roomDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }

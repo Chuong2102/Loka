@@ -7,5 +7,6 @@
         IAddressRepository Addressses { get; }
         ILocationRepository Locations { get; }
         IPhotoRepository Photos { get; }
+        IWardRepository Wards { get; }
     }
 }

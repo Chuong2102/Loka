@@ -176,7 +176,9 @@ namespace Loka.Infrastructure.Repositories
                     Path = filePath,
                     Title = folderName,
                     Description = folderName,
-                    Room = room
+                    Room = room,
+                    Base64String = s,
+                    CreatedTime = DateTime.Now
                 });
 
                 i++;
