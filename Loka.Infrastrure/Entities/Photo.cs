@@ -11,6 +11,7 @@ namespace Loka.Infrastrure.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime? CreatedTime { get; set; }
+        public string? Base64String { get; set; }
 
     }
 }

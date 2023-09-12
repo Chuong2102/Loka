@@ -54,6 +54,24 @@ namespace Loka.Infrastructure.Repositories.Dapper
             throw new NotImplementedException();
         }
 
+        public async Task<List<string>> GetAllBase64ByRommID(int roomID)
+        {
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select Base64String from Photos where RoomID = " + roomID.ToString();
+
+            var photos = await connection.QueryAsync<Infrastrure.Entities.Photo>(sql);
+
+            List<string> paths = new List<string>();
+            foreach (var photo in photos)
+            {
+                paths.Add(photo.Path);
+            }
+
+            return paths;
+        }
+
         public async Task<List<Infrastrure.Entities.Photo>> GetAllByRoomID(int roomID)
         {
             using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));

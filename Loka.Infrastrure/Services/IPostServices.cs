@@ -23,7 +23,9 @@ namespace Loka.Infrastructure.Services
         Task<int> Add(AddPostDTO post);
         Task<int> Delete(int id);
         Task<GetPostDTO> Update(GetPostDTO postID);
-        Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO);
+        Task<List<PostDto>> Search(SearchRoomDTO roomDTO);
+        Task<List<GetPostDTO>> GetAllBySearch(SearchRoomDTO roomDTO);
+        Task<IEnumerable<GetPostDTO>> GetAllByCoordinatesToDTO(Point targetLocation, double maxDistance);
         Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice);
     }
 }

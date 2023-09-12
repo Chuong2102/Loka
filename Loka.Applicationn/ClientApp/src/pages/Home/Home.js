@@ -107,7 +107,7 @@ function Home() {
                                         <img
                                             key={index}
                                             className={cx('rounded-t-xl', 'object-cover', 'w-full')}
-                                            src={slide}
+                                            src={`http://localhost:3000/${slide}`}
                                             alt="slide"
                                         />
                                     ))}
