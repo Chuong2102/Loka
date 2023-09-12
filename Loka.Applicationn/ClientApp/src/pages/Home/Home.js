@@ -26,6 +26,7 @@ const slides = [
 function Home() {
     const [isHovered, setIsHovered] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [files, setFiles] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true); // Track if there are more posts to load
 
