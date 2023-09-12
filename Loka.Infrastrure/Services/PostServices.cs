@@ -22,6 +22,9 @@ namespace Loka.Infrastructure.Services
         readonly IEFDataContext _efContext;
         Repositories.Photo photoContext;
 
+        //
+        List<GetPostDTO> posts;
+
         public PostServices(EFRepositoryBase<Post> postRepository, IMapper mapper, IDataContext dapperContext, 
             IEFDataContext efContext)
         {
@@ -32,8 +35,9 @@ namespace Loka.Infrastructure.Services
 
             //
             photoContext = new Repositories.Photo(_dapperContext, _efContext);
+            posts = new List<GetPostDTO>();
         }
-
+      
         public async Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance)
         {
             var posts = await _postRepository.GetAllAsync(x => x.Room.Location);
@@ -65,7 +69,7 @@ namespace Loka.Infrastructure.Services
         /// Lấy hết bài đăng, phòng trả về choa Admin <3
         /// </summary>
         /// <returns>fsegsrgr</returns>
-        public async Task<List<GetPostDTO>> GetAll()
+        public async Task<List<GetPostDTO>> GetAllByAdmin()
         {
             var rooms = await _dapperContext.Rooms.GetAllAsync();
 
@@ -382,6 +386,73 @@ namespace Loka.Infrastructure.Services
             {
                 result.Add(_mapper.Map<PostDto>(post));
             }
+
+            return result;
+        }
+
+        public async Task<List<GetPostDTO>> GetAll()
+        {
+            var rooms = await _dapperContext.Rooms.GetAllAsync();
+
+            // Get postDto
+            var result = new List<GetPostDTO>();
+
+            foreach (var room in rooms)
+            {
+                var post = _dapperContext.Posts.GetByRoomID(room.RoomID);
+                // Get Title
+                var title = post.Title;
+                var postID = post.PostID;
+
+                // Get ImagesURL
+                var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(room.RoomID);
+                // 
+
+                // AddressLine1
+                var address = _dapperContext.Addressses.GetByRoomID(room.RoomID);
+
+                // Ward name
+                var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                if (address == null || post == null)
+                    break;
+
+                // Get PostDTO
+                result.Add(new GetPostDTO
+                {
+                    Title = title,
+                    Images = pathImgs,
+                    Description = room.Description,
+                    PostID = postID,
+                    AddressLine1 = address.AddressLine1,
+                    RoomID = room.RoomID,
+                    WardName = ward.WardName,
+                    Price = room.Price
+                });
+
+            }
+            posts.Clear();
+            posts.AddRange(result);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lay het post theo trang (USER PAGE)
+        /// </summary>
+        /// <param name="limit">So bai</param>
+        /// <param name="page">Trang</param>
+        /// <returns></returns>
+        public async Task<List<GetPostDTO>> GetAllByPage(int limit, int page)
+        {
+            await GetAll();
+
+            List<GetPostDTO> result = new List<GetPostDTO>();
+
+            if(page == 1)
+                result = posts.Take(limit).ToList();
+            else
+                result = posts.Skip((page - 1) * limit).Take(limit).ToList();
 
             return result;
         }

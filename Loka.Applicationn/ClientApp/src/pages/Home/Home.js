@@ -32,9 +32,11 @@ function Home() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=16&_page=${page}`);
+                const response = await axios.get(`https://localhost:7245/api/GetAllPost?limit=16&page=${page}`);
                 const data = response.data;
 
+                console.log(data);
+                
                 // Update posts state with new data
                 setPosts((prevPosts) => [...prevPosts, ...data]);
 
@@ -101,7 +103,7 @@ function Home() {
                                 onMouseLeave={() => setIsHovered(false)}
                             >
                                 <Carousel autoSlide={true}>
-                                    {slides.map((slide, index) => (
+                                    {post.images.map((slide, index) => (
                                         <img
                                             key={index}
                                             className={cx('rounded-t-xl', 'object-cover', 'w-full')}
@@ -111,9 +113,9 @@ function Home() {
                                     ))}
                                 </Carousel>
                                 <div className={cx('m-[10px]')}>
-                                    <p className="w-full text-[16px] font-medium ">Đường {post.id}</p>
-                                    <p className="w-full text-[16px]">Phường {post.userId}</p>
-                                    <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
+                                    <p className="w-full text-[16px] font-medium ">Đường {post.addressLine1}</p>
+                                    <p className="w-full text-[16px]">Phường {post.wardName}</p>
+                                    <p className="w-full text-[16px]">{post.price} / tháng</p>
                                 </div>
                             </div>
                         </Link>

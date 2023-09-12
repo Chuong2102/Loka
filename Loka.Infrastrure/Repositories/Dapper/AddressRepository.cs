@@ -66,15 +66,21 @@ namespace Loka.Infrastructure.Repositories.Dapper
 
         public Address GetByRoomID(int roomID)
         {
-            if (roomID == null)
-                return null;
-
             using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
             connection.Open();
 
-            string sql = @"select * from Addresses where RoomID = " + roomID.ToString();
+            string sql = @"select AddressID, AddressLine1, RoomID, a.WardID, WardName
+                            from Addresses as a
+                            INNER join Wards as w on w.WardID = a.WardID
+                            where RoomID = " + roomID.ToString();
 
-            var address = connection.QuerySingle<Address>(sql);
+            var address = connection.Query<Address, Ward, Address>(sql, (address, ward) =>
+            {
+                address.Ward = ward;
+                return address;
+            },
+            splitOn: "WardID"
+            ).FirstOrDefault();
 
             return address;
 

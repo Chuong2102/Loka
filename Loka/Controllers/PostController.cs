@@ -34,11 +34,19 @@ namespace Loka.Controllers
             Infrastructure.Repositories.Photo.environment = env;
         }
 
+
         [Route("api/GetAllPostAdmin")]
         [HttpGet]
-        public async Task<List<GetPostDTO>> GetPostsAsync()
+        public async Task<List<GetPostDTO>> GetPostsAdminAsync()
         {
-            return await _postServices.GetAll();
+            return await _postServices.GetAllByAdmin();
+        }
+
+        [Route("api/GetAllPost")]
+        [HttpGet]
+        public async Task<List<GetPostDTO>> GetPostsAsync(int limit, int page)
+        {
+            return await _postServices.GetAllByPage(limit, page);
         }
 
         [Route("api/AddPost")]
