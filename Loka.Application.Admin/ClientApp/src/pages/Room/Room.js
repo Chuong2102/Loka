@@ -160,14 +160,18 @@ function Room() {
 
     const handleAreaChange = (e) => {
         const inputValue = e.target.value;
-        const numericInput = inputValue.replace(/[^0-9]/g, '');
-        setArea(numericInput);
+
+        const numericInputValue = inputValue.replace(/[^0-9]/g, '');
+        setArea(numericInputValue);
+
     };
 
     const handlePriceChange = (e) => {
         const inputValue = e.target.value;
-        const numericInput = inputValue.replace(/[^0-9]/g, '');
-        setPrice(numericInput);
+
+        const numericInputValue = inputValue.replace(/[^0-9]/g, '');
+        setPrice(numericInputValue);
+
     };
 
     const handleImagesChange = (imageFiles) => {
@@ -501,7 +505,7 @@ function Room() {
                             placeholder="Enter Area"
                             autoComplete="off"
                             value={area}
-                            onKeyPress={handleAreaChange}
+                            onChange={handleAreaChange}
                             required
                         />
                     </div>
@@ -526,7 +530,7 @@ function Room() {
                             placeholder="Enter Price"
                             autoComplete="off"
                             value={price}
-                            onKeyPress={handlePriceChange}
+                            onChange={handlePriceChange}
                             required
                         />
                     </div>

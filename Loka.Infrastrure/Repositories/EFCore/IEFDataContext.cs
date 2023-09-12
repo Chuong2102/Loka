@@ -6,5 +6,7 @@
         IWardRepository Wards { get; }
         IRoomRepository Rooms { get; }
         IAddressRepository Addresss { get; }
+        ISchoolRepository Schools { get; }
+        IPostRepository Posts { get; }
     }
 }

@@ -6,8 +6,8 @@ namespace Loka.Infrastructure.Dtos.Posts
 {
     public class PostDto
     {
-        public int Id { get; set; }
-        public int RoomId { get; set; }
+        public int PostID { get; set; }
+        public int RoomID { get; set; }
         public RoomDto? Room { get; set; }
         public string Title { get; set; }
         public DateTime PostedDate { get; set; }

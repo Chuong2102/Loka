@@ -9,6 +9,8 @@ using Loka.Infrastructure.Contracts;
 using Loka.Infrastrure.Entities;
 using Loka.Infrastructure.Dtos.Post;
 using Loka.Infrastructure.Repositories.EFCore;
+using Loka.Infrastructure.Dtos.Room;
+using Loka.Infrastructure.Entities;
 
 namespace Loka.Infrastructure.Services
 {
@@ -20,7 +22,8 @@ namespace Loka.Infrastructure.Services
         readonly IEFDataContext _efContext;
         Repositories.Photo photoContext;
 
-        public PostServices(EFRepositoryBase<Post> postRepository, IMapper mapper, IDataContext dapperContext, IEFDataContext efContext)
+        public PostServices(EFRepositoryBase<Post> postRepository, IMapper mapper, IDataContext dapperContext, 
+            IEFDataContext efContext)
         {
             _postRepository = postRepository;
             _mapper = mapper;
@@ -61,7 +64,7 @@ namespace Loka.Infrastructure.Services
         /// <summary>
         /// Lấy hết bài đăng, phòng trả về choa Admin <3
         /// </summary>
-        /// <returns></returns>
+        /// <returns>fsegsrgr</returns>
         public async Task<List<GetPostDTO>> GetAll()
         {
             var rooms = await _dapperContext.Rooms.GetAllAsync();
@@ -170,6 +173,10 @@ namespace Loka.Infrastructure.Services
 
         public async Task<int> Delete(int postID)
         {
+            var room = await _dapperContext.Rooms.GetByPostID(postID);
+
+            await _dapperContext.Photos.DeleteByRoomID(room.RoomID);
+
             return await _dapperContext.Posts.DeleteAsync(new Post
             {
                 PostID = postID
@@ -198,6 +205,185 @@ namespace Loka.Infrastructure.Services
             });
 
             return post;
+        }
+
+        // Code bi ngu nen se refact lai sau :<
+        //
+        public async Task<List<PostDto>> GetAllBySearch(SearchRoomDTO roomDTO)
+        {
+            List<PostDto> result = new List<PostDto>();
+            List<Post> posts = new List<Post>();
+
+            // Case click suggest in the input 
+            //
+            if(roomDTO.Longitude != 0 && roomDTO.Latitude != 0)
+            {
+                posts = await _postRepository.GetAllAsync(x => x.Room.Location);
+
+                foreach (var post in posts)
+                {
+                    var point = new Point(post.Room.Location.Longitude, post.Room.Location.Latitude);
+                    var distanceOp = new DistanceOp(point, new Point(roomDTO.Longitude, roomDTO.Latitude));
+                    var distance = distanceOp.Distance();
+
+                    if(roomDTO.MaxPrice == 0 && roomDTO.MinPrice == 0)
+                    {
+                        if (distance <= 5)
+                        {
+                            result.Add(_mapper.Map<PostDto>(post));
+                        }
+                    }
+                    else
+                    if (distance <= 5 && post.Room.Price <= roomDTO.MaxPrice && post.Room.Price >= roomDTO.MinPrice)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+
+                }
+
+                //
+
+
+                result.Sort((PostDto p1, PostDto p2) =>
+                {
+                    if (p1.PostedDate == null && p2.PostedDate == null) return 0;
+                    else if (p1.PostedDate == null) return -1;
+                    else if (p2.PostedDate == null) return 1;
+                    else return p2.PostedDate.CompareTo(p1.PostedDate);
+                });
+
+                return result;
+            }
+            // Case click search input button
+            //
+            else
+            {
+                // Case 1: All three condition: price, search text and near school
+                //
+                if (roomDTO.MaxPrice != 0 && roomDTO.SchoolId != 0 && roomDTO.WardId != 0)
+                {
+                    // Get by TEXT RESULT of Input button and by PRICE
+                    //
+                    var listPosGetByTextResult = _efContext.Posts.GetAllPostsByAddressAndPrice(roomDTO.ResultText, 
+                        roomDTO.MinPrice, roomDTO.MaxPrice);
+
+                    // Get by belong WARD
+                    var listGetPostByWard = await _postRepository.GetAllAsync(p => p.Room.Address.Ward.WardID == roomDTO.WardId 
+                        && p.Room.Price >= roomDTO.MinPrice && p.Room.Price <= roomDTO.MaxPrice);
+
+                    School school = await _efContext.Schools.GetBySchoolID(roomDTO.SchoolId);
+
+                    // This list is PostDTO
+                    // Get near School
+                    var listPostGetByNearSchool = await GetAllByCoordinates(
+                        new Point(school.Location.Longitude, school.Location.Latitude), 5);
+
+                    // Get result
+                    //
+                    posts.AddRange(listPosGetByTextResult);
+                    posts.AddRange(listGetPostByWard);
+
+                    // Map to PostDTO
+                    foreach(var post in posts){
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+                    // 
+                    result.AddRange(listPostGetByNearSchool.ToList());
+
+                    return result;
+                }
+                else
+                // Case 2: Price and school condition
+                //
+                if (roomDTO.MaxPrice != 0 && roomDTO.SchoolId != 0)
+                {
+                    // Get by Text Result
+                    var listPostGetByTextResult =  _efContext.Posts.GetAllPostsByAddressAndPrice(roomDTO.ResultText,
+                        roomDTO.MinPrice, roomDTO.MaxPrice);
+
+                    // Get school
+                    School school = await _efContext.Schools.GetBySchoolID(roomDTO.SchoolId);
+
+                    // This list is PostDTO
+                    // Get near School
+                    var listPostGetByNearSchool = await GetAllByCoordinates(
+                        new Point(school.Location.Longitude, school.Location.Latitude), 5);
+
+                    // Get postDTO list
+                    posts.AddRange(listPostGetByTextResult);
+
+                    foreach (var post in posts)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+
+                    result.AddRange(listPostGetByNearSchool.ToList());
+                }
+                else
+                // Case 3: Price and Ward condition
+                if(roomDTO.MaxPrice != 0 && roomDTO.WardId != 0)
+                {
+                    // Get by TEXT RESULT of Input button and by PRICE
+                    //
+                    var listPosGetByTextResult = _efContext.Posts.GetAllPostsByAddressAndPrice(roomDTO.ResultText,
+                        roomDTO.MinPrice, roomDTO.MaxPrice);
+
+                    // Get by belong WARD
+                    var listGetPostByWard = _efContext.Posts.GetAllByWardIDAndPrice(roomDTO.WardId, roomDTO.MinPrice, roomDTO.MaxPrice).Result;
+                    
+                    // 
+                    posts.AddRange(listGetPostByWard);
+                    posts.AddRange(listPosGetByTextResult);
+
+                    // Get result
+                    foreach (var post in posts)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+
+                }
+                else
+                // Case 4: Get by Price
+                if(roomDTO.MaxPrice != 0)
+                {
+                    var listPostGetByPrice = _efContext.Posts.GetAllPostsByAddressAndPrice(roomDTO.ResultText,
+                        roomDTO.MinPrice, roomDTO.MaxPrice);
+
+                    posts.AddRange(listPostGetByPrice.ToList());
+
+                    // Get result
+                    foreach (var post in posts)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+
+                }
+                // Case 5: Get by text result
+                else
+                {
+                    var listPost = await _efContext.Posts.GetAllByAddress(roomDTO.ResultText);
+                    // Get result
+                    foreach (var post in listPost)
+                    {
+                        result.Add(_mapper.Map<PostDto>(post));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice)
+        {
+            var posts = await _postRepository.GetAllAsync(p => p.Room.Price <= maxPrice && p.Room.Price >= minPrice);
+            List<PostDto> result = new List<PostDto>();
+
+            foreach(var post in posts)
+            {
+                result.Add(_mapper.Map<PostDto>(post));
+            }
+
+            return result;
         }
     }
 }

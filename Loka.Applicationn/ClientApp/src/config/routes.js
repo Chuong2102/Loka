@@ -3,8 +3,8 @@ const routes = {
     // favourite: '/favourite',
     // profile: '/:nickname',
     // upload: '/upload',
-    search: '/search/:keyword',
-    detail: '/detail/:id',
+    search: '/search/:keyword/:price/:wardID/:schoolID',
+    detail: '/detail/:postID',
 };
 
 export default routes;

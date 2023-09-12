@@ -110,5 +110,17 @@ namespace Loka.Infrastructure.Repositories.Dapper
                 return await connection.ExecuteAsync(RoomQuery.Proc_UpdateRoom, para, commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<Room> GetByPostID(int postID)
+        {
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Rooms where PostID = " + postID.ToString();
+
+            var room = await connection.QuerySingleAsync<Room>(sql);
+
+            return room;
+        }
     }
 }

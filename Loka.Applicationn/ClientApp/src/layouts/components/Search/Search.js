@@ -22,6 +22,28 @@ const cx = classNames.bind(styles);
 
 // const goongApi_Main = 'pzeMS34X2XDwDPQt4a71xed6q2qFZINhBYXlsJo6';
 const goongApi_Rob = 'oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB';
+const Filter = [
+    [
+        { info: 'Giá', value: 0 },
+        { info: '1 triệu', value: 1 },
+        { info: '2 triệu', value: 2 },
+        { info: '3 - 5 triệu', value: 3 },
+    ],
+    [
+        { info: 'Gần trường ĐH/CĐ', value: 0 },
+        { info: 'Khoa học', value: 1 },
+        { info: 'Y Dược', value: 2 },
+        { info: 'Kinh tế', value: 3 },
+        { info: 'Nông Lâm', value: 4 },
+        { info: 'Công nghiệp', value: 5 },
+    ],
+    [
+        { info: 'Phường', value: 0 },
+        { info: 'Vĩnh Ninh', value: 1 },
+        { info: 'Phước Vĩnh', value: 2 },
+        { info: 'Phường Đúc', value: 3 },
+    ],
+];
 
 function Search({ shouldReset, resetComplete }) {
     const navigate = useNavigate();
@@ -31,16 +53,32 @@ function Search({ shouldReset, resetComplete }) {
     const [showResult, setShowReslut] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const [price, setPrice] = useState('');
-    const [uni, setUni] = useState('');
-    const [ward, setWard] = useState('');
+    const [price, setPrice] = useState(0);
+    const [schoolID, setSchoolID] = useState(0);
+    const [wardID, setWardID] = useState(0);
+
+    // API Filter
+    // const [filters, setFilters] = useState([]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get('/api-endpoint');
+
+    //             setFilters(response.data);
+    //         } catch (error) {
+    //             console.error('Lỗi khi gọi API: ', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
 
     useEffect(() => {
         if (shouldReset) {
             setSearchValue('');
             setPrice('');
-            setUni('');
-            setWard('');
+            setSchoolID('');
+            setWardID('');
 
             resetComplete();
         }
@@ -50,16 +88,16 @@ function Search({ shouldReset, resetComplete }) {
         setPrice(e.target.value);
     };
     const handleChangeUni = (e) => {
-        setUni(e.target.value);
+        setSchoolID(e.target.value);
     };
     const handleChangeWard = (e) => {
-        setWard(e.target.value);
+        setWardID(e.target.value);
     };
 
     const handleRefreshClick = () => {
         setPrice('');
-        setUni('');
-        setWard('');
+        setSchoolID('');
+        setWardID('');
     };
 
     const debouncedValue = useDebounce(searchValue, 500);
@@ -121,9 +159,10 @@ function Search({ shouldReset, resetComplete }) {
         inputRef.current.focus();
     };
 
-    const handleHideResult = () => {
+    const handleHideResult = (description) => {
         setShowReslut(false);
-        setSearchValue(debouncedValue);
+        setSearchValue(description);
+        // setSearchValue(debouncedValue);
     };
 
     const handleChange = (e) => {
@@ -133,21 +172,30 @@ function Search({ shouldReset, resetComplete }) {
         }
     };
 
-    // const handleKeyPress = (e) => {
-    //     if (e.key === 'Enter' && debouncedValue) {
-    //         e.preventDefault();
-    //         handleHideResult();
-    //         navigate(`/search/${debouncedValue}`);
-    //     }
-    // };
-
+    // Hàm xử lý khi nhấn nút "Tìm kiếm"
     const handleSearchClick = (e) => {
         e.preventDefault();
-        // const queryParams = new URLSearchParams();
-        // if (price) queryParams.append('price', price);
-        // if (uni) queryParams.append('uni', uni);
-        // if (ward) queryParams.append('ward', ward);
-        navigate(`/search/${debouncedValue}`);       
+        if (debouncedValue.length !== 0) {
+            navigate(
+                `/search/${debouncedValue}/${price ? price : 0}/${wardID ? wardID : 0}/${schoolID ? schoolID : 0}`,
+            );
+        } else {
+            if (price !== 0 || wardID !== 0 || schoolID !== 0) {
+                navigate(
+                    `/search/${debouncedValue ? debouncedValue : 'empty'}/${price ? price : 0}/${wardID ? wardID : 0}/${
+                        schoolID ? schoolID : 0
+                    }`,
+                );
+            }
+        }
+    };
+
+    // Hàm xử lý khi nhấn Enter
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && searchValue.trim()) {
+            e.preventDefault();
+            handleSearchClick(e);
+        }
     };
 
     return (
@@ -167,7 +215,7 @@ function Search({ shouldReset, resetComplete }) {
                                     key={index}
                                     data={result}
                                     onClick={() => {
-                                        handleHideResult();
+                                        handleHideResult(result.description);
                                     }}
                                 />
                             ))}
@@ -184,7 +232,7 @@ function Search({ shouldReset, resetComplete }) {
                         spellCheck={false}
                         onChange={handleChange}
                         onFocus={() => setShowReslut(true)}
-                        // onKeyPress={handleKeyPress}
+                        onKeyPress={handleKeyPress}
                     />
                     {!!searchValue && !loading && (
                         <button className={cx('clear')} onClick={handleClear}>
@@ -194,25 +242,28 @@ function Search({ shouldReset, resetComplete }) {
                     {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
 
                     {/* <Link to={debouncedValue ? `/search/${debouncedValue}` : '#'}> */}
-                    <Link to="#" onClick={handleSearchClick}>
+                    <Link onClick={handleSearchClick}>
                         <button
                             className={cx('search-btn', 'flex', 'items-center')}
                             onMouseDown={(e) => e.preventDefault()}
-                            onClick={debouncedValue ? handleHideResult : undefined}
+                            onClick={() => (debouncedValue ? handleHideResult(debouncedValue) : undefined)}
                         >
                             {/* <SearchIcon/> */}
-                            <FontAwesomeIcon className={cx('search__icon', 'md:block', 'hidden')} icon={faMagnifyingGlass} />
+                            <FontAwesomeIcon
+                                className={cx('search__icon', 'md:block', 'hidden')}
+                                icon={faMagnifyingGlass}
+                            />
                             <div className={cx('text-[16px]', 'md:ml-[4px]', 'font-medium')}>Tìm kiếm</div>
                         </button>
                     </Link>
                 </div>
             </HeadlessTippy>
-            <div className={cx('justify-between', 'md:flex' ,'lg:flex', 'hidden')}>
+            <div className={cx('justify-between', 'md:flex', 'lg:flex', 'hidden')}>
                 <FormControl sx={{ m: 1, minWidth: 94 }} size="small">
                     <Select
                         labelId="demo-select-small-label"
                         id="demo-select-small"
-                        value={price}
+                        value={price ? price : '0'}
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         onChange={handleChangePrice}
@@ -232,25 +283,19 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value="">
-                            <em>Giá</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={10}>
-                            1 triệu
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={20}>
-                            2 triệu
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={30}>
-                            3 - 5 triệu
-                        </MenuItem>
+                        {Filter[0] &&
+                            Filter[0].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 124 }} size="small">
                     <Select
                         labelId="demo-select-small-label"
                         id="demo-select-small"
-                        value={uni}
+                        value={schoolID ? schoolID : 0}
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         onChange={handleChangeUni}
@@ -270,31 +315,19 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value="">
-                            <em>Gần trường ĐH/CĐ</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={10}>
-                            Khoa học
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={20}>
-                            Y Dược
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={30}>
-                            Kinh tế
-                        </MenuItem>{' '}
-                        <MenuItem sx={{ fontSize: '12px' }} value={40}>
-                            Nông Lâm
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={50}>
-                            Công nghiệp
-                        </MenuItem>
+                        {Filter[1] &&
+                            Filter[1].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 116 }} size="small">
                     <Select
                         labelId="demo-select-small-label"
                         id="demo-select-small"
-                        value={ward}
+                        value={wardID ? wardID : 0}
                         displayEmpty
                         inputProps={{ 'aria-label': 'Without label' }}
                         onChange={handleChangeWard}
@@ -314,18 +347,12 @@ function Search({ shouldReset, resetComplete }) {
                             },
                         }}
                     >
-                        <MenuItem sx={{ fontSize: '12px' }} value="">
-                            <em>Phường</em>
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={10}>
-                            Vĩnh Ninh
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={20}>
-                            Phước Vĩnh
-                        </MenuItem>
-                        <MenuItem sx={{ fontSize: '12px' }} value={30}>
-                            Phường Đúc
-                        </MenuItem>
+                        {Filter[2] &&
+                            Filter[2].map((item) => (
+                                <MenuItem key={item.value} sx={{ fontSize: '12px' }} value={item.value}>
+                                    {item.info}
+                                </MenuItem>
+                            ))}
                     </Select>
                 </FormControl>
                 <button className={cx('btn__rotate')} onClick={handleRefreshClick}>

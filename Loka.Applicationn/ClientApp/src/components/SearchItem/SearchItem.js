@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 function SearchItem({ data, ...passProps }) {
     return (
-        <Link to={`/search/${data.description}`} className={cx('wrapper')} {...passProps}>
+        <Link to={`/search/${data.description}/0/0/0`} className={cx('wrapper')} onClick={() => passProps.onClick(data.description)}>
             <SearchIcon className={cx('search-icon')}/>
             <div className={cx('info')}>
                 <span className={cx('username')}>{data.description}</span>

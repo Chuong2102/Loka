@@ -50,7 +50,7 @@ function Post() {
         };
 
         fetchPosts();
-    }, []);
+    }, [posts]);
 
     const handleAdd = async (e) => {
         e.preventDefault();
@@ -71,9 +71,8 @@ function Post() {
             const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
             const addedPost = response.data;
             setPosts([...posts, addedPost]);
-
-            resetForm();
             setImages([]);
+            resetForm();
             handleSnackbarMessage('Thêm thành công!', 'success');
         } catch (error) {
             console.error('Error adding post:', error);
