@@ -160,14 +160,18 @@ function Room() {
 
     const handleAreaChange = (e) => {
         const inputValue = e.target.value;
+
         const numericInputValue = inputValue.replace(/[^0-9]/g, '');
         setArea(numericInputValue);
+
     };
 
     const handlePriceChange = (e) => {
         const inputValue = e.target.value;
+
         const numericInputValue = inputValue.replace(/[^0-9]/g, '');
         setPrice(numericInputValue);
+
     };
 
     const handleImagesChange = (imageFiles) => {
