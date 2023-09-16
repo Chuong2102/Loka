@@ -2,17 +2,17 @@ if(exists(select * from sys.objects where name = 'proc_DeletePost'))
 drop proc proc_DeletePost
 go
 create proc proc_DeletePost 
-	@PosID int
+	@PostID int
 as
 begin
 	-- Check ID
 	-- 
-	if(not exists(select * from Posts as p where p.PostID = @PosID))
+	if(not exists(select * from Posts as p where p.PostID = @PostID))
 	begin
 		return;
 	end;
 
-	delete from Posts where PostID = @PosID
+	delete from Posts where PostID = @PostID
 
 end
 go

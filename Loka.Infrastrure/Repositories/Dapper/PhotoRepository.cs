@@ -29,6 +29,7 @@ namespace Loka.Infrastructure.Repositories.Dapper
             para.Add("@Title", entity.Title);
             para.Add("@Path", entity.Path);
             para.Add("@RoomID", entity.Room.RoomID);
+            para.Add("@Base64String", entity.Base64String);
 
 
             return await connection.ExecuteAsync(PhotoQuery.proc_AddPhoto, para, commandType: CommandType.StoredProcedure);
