@@ -6,7 +6,6 @@ drop proc proc_AddRoom
 go
 create proc proc_AddRoom 
 	@UserID int,
-	@Name nvarchar(max),
 	@Description nvarchar(max),
 	@Price float,
 	@Area float,
@@ -14,7 +13,7 @@ create proc proc_AddRoom
 as
 begin
 	-- 
-	insert into Rooms(UserID, Name, Description, Price, Area) values (@UserID, @Name, @Description, @Price, @Area)
+	insert into Rooms(UserID, Name, Description, Price, Area) values (@UserID, @Description, @Description, @Price, @Area)
 
 	set @RoomID = @@IDENTITY
 end

@@ -22,13 +22,9 @@ namespace Loka.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        readonly IDataContext dapperContext;
-        readonly IEFDataContext efDataContext;
         private IPostServices _postServices;
-        public PostController(IWebHostEnvironment env, IDataContext dataContext, IEFDataContext context, IPostServices postServices)
+        public PostController(IWebHostEnvironment env, IPostServices postServices)
         {
-            dapperContext = dataContext;
-            efDataContext = context;
             _postServices = postServices;
 
             Infrastructure.Repositories.Photo.environment = env;
@@ -49,6 +45,13 @@ namespace Loka.Controllers
             return await _postServices.GetAllByPage(limit, page);
         }
 
+        [Route("api/Detail")]
+        [HttpGet]
+        public async Task<GetPostDTO> Detail(int id)
+        {
+            return await _postServices.Detail(id);
+        }
+
         [Route("api/AddPost")]
         [HttpPost]
         public async Task<int> CreatePostAsync([FromBody] AddPostDTO data)
@@ -57,10 +60,10 @@ namespace Loka.Controllers
         }
 
         [Route("api/DeletePostByID")]
-        [HttpPost]
-        public async Task<int> DeletePostByID([FromBody] int PostID)
+        [HttpDelete]
+        public async Task<int> DeletePostByID(int id)
         {
-            return await _postServices.Delete(PostID);
+            return await _postServices.Delete(id);
         }
 
         [Route("api/UpdatePost")]
@@ -81,17 +84,9 @@ namespace Loka.Controllers
         [HttpGet]
         public async Task<IActionResult> SuggestRoom(double lng, double lat)
         {
-            try
-            {
-                var point = new Point(lng, lat);
-                var response = await _postServices.GetAllByCoordinates(point, 5);
-                response = response.Take(10).ToList();
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            var posts = await _postServices.Suggest(lng, lat);
+
+            return Ok(posts);
         }
     }
 }

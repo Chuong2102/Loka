@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import config from '~/config';
 import Carousel from '~/components/Carousel/Carousel';
 import Button from '~/components/Button';
+import { colors } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -33,7 +34,7 @@ function Home() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`https://localhost:7245/api/GetAllPost?limit=16&page=${page}`);
+                const response = await axios.get(`https://localhost:7245/api/GetAllPost?limit=8&page=${page}`);
                 const data = response.data;
 
                 console.log(data);
@@ -87,7 +88,7 @@ function Home() {
             >
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                     {posts.map((post, index) => (
-                        <Link to={`/detail/${post.id}`} key={index}>
+                        <Link to={`/detail/${post.roomID}`} key={index}>
                             <div
                                 className={cx(
                                     'post__item',
@@ -108,15 +109,17 @@ function Home() {
                                         <img
                                             key={index}
                                             className={cx('rounded-t-xl', 'object-cover', 'w-full')}
-                                            src={`http://localhost:3000/${slide}`}
+                                            src= {slide}
                                             alt="slide"
                                         />
                                     ))}
                                 </Carousel>
                                 <div className={cx('m-[10px]')}>
-                                    <p className="w-full text-[16px] font-medium ">Đường {post.addressLine1}</p>
-                                    <p className="w-full text-[16px]">Phường {post.wardName}</p>
-                                    <p className="w-full text-[16px]">{post.price} / tháng</p>
+                                    <p className="w-full text-[16px] font-medium " style={{margin: "5px 5px 10px 0px"}}> {post.title}</p>
+                                    
+                                    <p className="w-full text-[15px]">Đường {post.addressLine1}</p>
+                                    <p className="w-full text-[15px]">Phường {post.wardName}</p>
+                                    <p className="w-full text-[18px] font-medium" style={{color: "orange"}} >{post.price} / tháng</p>
                                 </div>
                             </div>
                         </Link>

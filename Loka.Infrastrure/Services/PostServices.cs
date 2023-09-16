@@ -11,6 +11,7 @@ using Loka.Infrastructure.Dtos.Post;
 using Loka.Infrastructure.Repositories.EFCore;
 using Loka.Infrastructure.Dtos.Room;
 using Loka.Infrastructure.Entities;
+using Microsoft.VisualBasic;
 
 namespace Loka.Infrastructure.Services
 {
@@ -78,18 +79,30 @@ namespace Loka.Infrastructure.Services
 
                 if (distance <= maxDistance)
                 {
-                    var ward = await _dapperContext.Wards.GetByRoomID(post.RoomID);
+                    // Address
+                    var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
+
+                    var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                    // Location
+                    var lati = _efContext.Locations.GetLatByRoomID(post.RoomID);
+                    var longi = _efContext.Locations.GetLongiByRoomID(post.RoomID);
+                    // Get ImagesURL
+                    var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                    // 
+                    var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                     result.Add(new GetPostDTO
                     {
-                        AddressLine1 = post.Room.Address.AddressLine1,
+                        AddressLine1 = address.AddressLine1,
                         Description = post.Room.Description,
-                        Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                        Images = base64Paths,
                         PostID = post.PostID,
                         Price = post.Room.Price,
                         RoomID = post.RoomID,
                         Title = post.Title,
-                        WardName = ward.WardName
+                        WardName = ward.WardName,
+                        Latitude = lati,
+                        Longitude = longi
                     });
                 }
             }
@@ -116,10 +129,10 @@ namespace Loka.Infrastructure.Services
                 var postID = post.PostID;
 
                 // Get ImagesURL
-                var pathImgs = _dapperContext.Photos.GetAllPathByRommID(room.RoomID);
+                var pathImgs = await _dapperContext.Photos.GetAllBase64ByRommID(room.RoomID);
                 // 
                 // Convert to Base64
-                List<string> base64URL = photoContext.ImageToBase64(pathImgs.Result);
+                List<string> base64URL = photoContext.ImageToBase64(pathImgs);
 
                 // AddressLine1
                 var address = _dapperContext.Addressses.GetByRoomID(room.RoomID).AddressLine1;
@@ -209,15 +222,17 @@ namespace Loka.Infrastructure.Services
 
         public async Task<int> Delete(int postID)
         {
-            var room = await _dapperContext.Rooms.GetByPostID(postID);
+            var post = await _dapperContext.Posts.GetByID(postID);
 
-            await _dapperContext.Photos.DeleteByRoomID(room.RoomID);
+            await _dapperContext.Photos.DeleteByRoomID(post.RoomID);
 
-            return await _dapperContext.Posts.DeleteAsync(new Post
+            await _dapperContext.Posts.DeleteAsync(new Post
             {
                 PostID = postID
 
             });
+
+            return await _dapperContext.Rooms.DeleteAsync(new Room { RoomID = post.RoomID });
         }
 
         public async Task<GetPostDTO> Update(GetPostDTO post)
@@ -256,6 +271,7 @@ namespace Loka.Infrastructure.Services
             {
                 posts = await _postRepository.GetAllAsync(x => x.Room.Location);
 
+
                 foreach (var post in posts)
                 {
                     var point = new Point(post.Room.Location.Longitude, post.Room.Location.Latitude);
@@ -270,12 +286,16 @@ namespace Loka.Infrastructure.Services
                             var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                             // Ward name
                             var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                            // Get ImagesURL
+                            var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                            // 
+                            var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                             result.Add(new GetPostDTO
                             {
-                                AddressLine1 = post.Room.Address.AddressLine1,
+                                AddressLine1 = address.AddressLine1,
                                 Description = post.Room.Description,
-                                Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                                Images = base64Paths,
                                 PostID = post.PostID,
                                 Price = post.Room.Price,
                                 RoomID = post.RoomID,
@@ -291,12 +311,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -346,12 +370,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -390,12 +418,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -429,12 +461,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -462,12 +498,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -498,12 +538,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -537,12 +581,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -566,12 +614,16 @@ namespace Loka.Infrastructure.Services
                         var address = _dapperContext.Addressses.GetByRoomID(post.Room.RoomID);
                         // Ward name
                         var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+                        // Get ImagesURL
+                        var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(post.RoomID);
+                        // 
+                        var base64Paths = photoContext.ImageToBase64(pathImgs);
 
                         result.Add(new GetPostDTO
                         {
-                            AddressLine1 = post.Room.Address.AddressLine1,
+                            AddressLine1 = address.AddressLine1,
                             Description = post.Room.Description,
-                            Images = await _dapperContext.Photos.GetAllBase64ByRommID(post.RoomID),
+                            Images = base64Paths,
                             PostID = post.PostID,
                             Price = post.Room.Price,
                             RoomID = post.RoomID,
@@ -615,12 +667,16 @@ namespace Loka.Infrastructure.Services
                 // Get ImagesURL
                 var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(room.RoomID);
                 // 
-
+                var base64Paths = photoContext.ImageToBase64(pathImgs);
                 // AddressLine1
                 var address = _dapperContext.Addressses.GetByRoomID(room.RoomID);
 
                 // Ward name
                 var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+                // Location
+                var lati = _efContext.Locations.GetLatByRoomID(room.RoomID);
+                var longi = _efContext.Locations.GetLongiByRoomID(room.RoomID);
 
                 if (address == null || post == null)
                     break;
@@ -629,13 +685,15 @@ namespace Loka.Infrastructure.Services
                 result.Add(new GetPostDTO
                 {
                     Title = title,
-                    Images = pathImgs,
+                    Images = base64Paths,
                     Description = room.Description,
                     PostID = postID,
                     AddressLine1 = address.AddressLine1,
                     RoomID = room.RoomID,
                     WardName = ward.WardName,
-                    Price = room.Price
+                    Price = room.Price,
+                    Longitude = longi,
+                    Latitude = lati
                 });
 
             }
@@ -668,6 +726,62 @@ namespace Loka.Infrastructure.Services
         Task<List<PostDto>> IPostServices.Search(SearchRoomDTO roomDTO)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<GetPostDTO> Detail(int id)
+        {
+            GetPostDTO result = new GetPostDTO();
+
+            var room = await _dapperContext.Rooms.GetByID(id);
+
+            var post = _dapperContext.Posts.GetByRoomID(room.RoomID);
+            // Get Title
+            var title = post.Title;
+            var postID = post.PostID;
+
+            // Get ImagesURL
+            var pathImgs = await _dapperContext.Photos.GetAllPathByRommID(room.RoomID);
+            // 
+            var base64Paths = photoContext.ImageToBase64(pathImgs);
+            // AddressLine1
+            var address = _dapperContext.Addressses.GetByRoomID(room.RoomID);
+
+            // Ward name
+            var ward = await _dapperContext.Wards.GetByID(address.Ward.WardID);
+
+            //
+            var lati = _efContext.Locations.GetLatByRoomID(room.RoomID);
+            var longi = _efContext.Locations.GetLongiByRoomID(room.RoomID);
+
+            // Get PostDTO
+            result = new GetPostDTO
+            {
+                Title = title,
+                Images = base64Paths,
+                Description = room.Description,
+                PostID = postID,
+                AddressLine1 = address.AddressLine1,
+                RoomID = room.RoomID,
+                WardName = ward.WardName,
+                Price = room.Price,
+                Latitude = lati,
+                Longitude = longi
+            };
+
+            return result;
+        }
+
+        public async Task<List<GetPostDTO>> Suggest(double longitude, double latitude)
+        {
+            var postsByLocation = await GetAllByCoordinatesToDTO(new Point(longitude, latitude), 5);
+            var postsByAll = await GetAll();
+
+            List<GetPostDTO> listPost = new List<GetPostDTO>();
+            listPost.AddRange(postsByLocation.ToList());
+            listPost.AddRange(postsByAll.ToList());
+
+
+            return listPost;
         }
     }
 }
