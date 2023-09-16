@@ -39,11 +39,9 @@ function Post() {
             try {
                 const response = await axios.get('https://localhost:7245/api/GetAllPostAdmin');
                 const data = response.data;
-
+                console.log(data);
                 setPosts(data);
                 //
-                console.log(data);
-                console.log(posts);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -128,7 +126,7 @@ function Post() {
         if (confirmation) {
             // console.log(postId);
             try {
-                await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+                await axios.delete(`https://localhost:7245/api/DeletePostByID/?id=${postId}`);
                 const updatedPosts = posts.filter((post) => post.id !== postId);
                 setPosts(updatedPosts);
 
@@ -391,7 +389,7 @@ function Post() {
                                     </Button>
                                     <Button
                                         className={cx('bg-red-500', 'hover:opacity-80', 'text-white')}
-                                        onClick={(e) => handleDelete(e, post.postId)}
+                                        onClick={(e) => handleDelete(e, post.postID)}
                                     >
                                         Xóa
                                     </Button>

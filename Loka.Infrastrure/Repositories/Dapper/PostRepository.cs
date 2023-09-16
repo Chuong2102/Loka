@@ -48,9 +48,16 @@ namespace Loka.Infrastructure.Repositories.Dapper
             }
         }
 
-        public Task<Post> GetByID(int id)
+        public async Task<Post> GetByID(int id)
         {
-            throw new NotImplementedException();
+            using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            connection.Open();
+
+            string sql = @"select * from Posts where PostID = " + id.ToString();
+
+            var post = await connection.QuerySingleAsync<Post>(sql);
+
+            return post;
         }
 
         async Task<int> IRepositoryBase<Post>.DeleteAsync(Post entity)

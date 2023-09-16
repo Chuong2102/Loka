@@ -27,5 +27,7 @@ namespace Loka.Infrastructure.Services
         Task<List<GetPostDTO>> GetAllBySearch(SearchRoomDTO roomDTO);
         Task<IEnumerable<GetPostDTO>> GetAllByCoordinatesToDTO(Point targetLocation, double maxDistance);
         Task<List<PostDto>> GetByPrice(int maxPrice, int minPrice);
+        Task<GetPostDTO> Detail(int id);
+        Task<List<GetPostDTO>> Suggest(double longitude, double latitude);
     }
 }

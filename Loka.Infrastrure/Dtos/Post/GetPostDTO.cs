@@ -10,6 +10,8 @@
         public List<string>? Images { get; set; }
         public string? WardName { get; set; }
         public double Price { get;set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
     }
 }

@@ -13,10 +13,7 @@ import FacebookMsg from '~/components/FacebookMsg/FacebookMsg';
 const cx = classNames.bind(styles);
 
 const slides = [
-    'https://a0.muscache.com/im/pictures/0f1b8236-d4b4-408c-8cdb-b0314cc8c807.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/3818710f-ffb7-4875-b469-1060bd40e1d8.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/ec0c512f-03ce-47f7-a059-b27270aa3e29.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/6048ad98-6bde-4c5a-bafa-92f33ad952af.jpg?im_w=720',
+    'https://forum.ngocrongonline.com/app/view/forum/15825212698171.jpg',
 ];
 
 mapboxgl.accessToken = 'wnicbAmnNkoMHNYUKWnlFHezV189FjmMwkNJ7hKW';
@@ -25,6 +22,7 @@ function PostDetail() {
     const [post, setPost] = useState({});
     const [latitude, setLatitude] = useState(16.462325713021514);
     const [longitude, setLongitude] = useState(107.61745585099027);
+    const [photos, setPhotos] = useState(slides);
 
     const { postID } = useParams();
 
@@ -32,10 +30,13 @@ function PostDetail() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://api.example.com/posts/${postID}`);
+                const response = await axios.get(`https://localhost:7245/api/Detail?id=${postID}`);
                 setPost(response.data);
                 setLatitude(response.data.latitude);
                 setLongitude(response.data.longitude);
+                setPhotos(response.data.images);
+
+                console.log(response.data);
             } catch (e) {
                 console.error('Error fetching data:', e);
             }
@@ -43,6 +44,7 @@ function PostDetail() {
 
         fetchData();
     }, [postID]);
+
 
     // Map (begin)
     const mapContainerRef = useRef(null);
@@ -82,7 +84,7 @@ function PostDetail() {
                 <div className={cx('flex', 'items-center', 'justify-center')}>
                     <div className={cx('post__item', 'max-w-[700px]', 'flex', 'flex-col', 'rounded-xl')}>
                         <Carousel autoSlide={true}>
-                            {slides.map((slide, index) => (
+                            {photos.map((slide, index) => (
                                 <img
                                     key={index}
                                     className="rounded-xl object-cover w-full h-[220px] md:h-[470px]"
@@ -92,8 +94,8 @@ function PostDetail() {
                             ))}
                         </Carousel>
                         <div className={cx('mt-[20px]')}>
-                            <p className="w-full text-[18px] font-medium my-[10px] leading-20px">Thông tin mô tả:</p>
-                            <p className="w-full text-[16px] leading-20px">Địa chỉ: {post.address}.</p>
+                            <p className="w-full text-[18px] font-medium my-[10px] leading-20px">Thông tin mô tả: {post.description}</p>
+                            <p className="w-full text-[16px] leading-20px" style={{margin: "0px 0px 10px 0px"}}>Địa chỉ: {post.addressLine1}.</p>
                             <p className="w-full text-[16px] leading-20px">
                                 Nội thất: Full đồ giống ảnh. Điều hòa, nóng lạnh, giường - tủ quần áo, bàn bếp, tủ lạnh,
                                 máy giặt chung, vệ sinh riêng từng phòng, thang máy (diện tích 25 - 30m²).
@@ -103,7 +105,7 @@ function PostDetail() {
                             </p>
                             <p className="w-full text-[18px] font-medium my-[10px] leading-20px">Đặc điểm:</p>
                             <p className="w-full text-[16px] leading-20px">Diện tích: 10m²</p>
-                            <p className="w-full text-[16px] leading-20px">Mức giá: 4,9 triệu/tháng</p>
+                            <p className="w-full text-[16px] leading-20px">Giá: {post.price}</p>
 
                             <p className="w-full text-[18px] font-medium my-[20px] leading-20px">Xem trên bản đồ</p>
                             {/* Map ---*/}

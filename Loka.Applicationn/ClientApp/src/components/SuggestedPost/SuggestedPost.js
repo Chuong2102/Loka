@@ -25,7 +25,7 @@ function SuggestedPost({ longitude, latitude, data, ...passProps }) {
     const [posts, setPosts] = useState([]);
     const [isHovered, setIsHovered] = useState(false);
 
-    // Tét: Dùng cái ở dưới nha <3
+    // Tét: Dùng cái ở dưới nha <3 <3 luv
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -53,7 +53,7 @@ function SuggestedPost({ longitude, latitude, data, ...passProps }) {
     //         };
 
     // try {
-    //     const response = await axios.post('/api-endpoint', payload);
+    //     const response = await axios.post(`https://localhost:7245/api/SuggestRoom/${longitude}&${latitude}`);
     //     setPosts(response.data);
     // } catch (e) {
     //     console.error('Error fetching data:', e);
@@ -163,7 +163,7 @@ function SuggestedPost({ longitude, latitude, data, ...passProps }) {
             </h2>
             <Slider {...settings}>
                 {posts.map((post, index) => (
-                    <Link to={`/detail/${post.id}`} key={index}>
+                    <Link to={`/detail/${post.roomID}`} key={index}>
                         <div
                             className={cx(
                                 'post__item',
@@ -191,9 +191,9 @@ function SuggestedPost({ longitude, latitude, data, ...passProps }) {
                                 ))}
                             </Carousel>
                             <div className={cx('m-[10px]')}>
-                                <p className="w-full text-[13px] font-medium">Đường Nguyễn Huệ</p>
-                                <p className="w-full text-[13px]">Phường Vĩnh Ninh</p>
-                                <p className="w-full text-[13px]">₫1.000.000 / tháng</p>
+                                <p className="w-full text-[13px] font-medium">Đường{post.addressLine1}</p>
+                                <p className="w-full text-[13px]">Phường {post.wardName}</p>
+                                <p className="w-full text-[13px]">{post.price} / tháng</p>
                             </div>
                         </div>
                     </Link>

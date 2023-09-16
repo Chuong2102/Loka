@@ -34,14 +34,13 @@ const Filter = [
         { info: 'Khoa học', value: 1 },
         { info: 'Y Dược', value: 2 },
         { info: 'Kinh tế', value: 3 },
-        { info: 'Nông Lâm', value: 4 },
-        { info: 'Công nghiệp', value: 5 },
+        { info: 'Nông Lâm', value: 4 }
     ],
     [
         { info: 'Phường', value: 0 },
-        { info: 'Vĩnh Ninh', value: 1 },
-        { info: 'Phước Vĩnh', value: 2 },
-        { info: 'Phường Đúc', value: 3 },
+        { info: 'An Đông', value: 1 },
+        { info: 'Vĩnh Ninh', value: 2 },
+        { info: 'An Cựu', value: 3 },
     ],
 ];
 

@@ -17,10 +17,7 @@ import styles from './SearchResult.module.scss';
 const cx = classNames.bind(styles);
 
 const slides = [
-    'https://a0.muscache.com/im/pictures/0f1b8236-d4b4-408c-8cdb-b0314cc8c807.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/3818710f-ffb7-4875-b469-1060bd40e1d8.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/ec0c512f-03ce-47f7-a059-b27270aa3e29.jpg?im_w=720',
-    'https://a0.muscache.com/im/pictures/6048ad98-6bde-4c5a-bafa-92f33ad952af.jpg?im_w=720',
+    'https://forum.ngocrongonline.com/app/view/forum/15825212698171.jpg'
 ];
 
 const Pricing = [
@@ -70,34 +67,26 @@ function SearchResult() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            console.log(
-                keyword,
-                longitude,
-                latitude,
-                Pricing[price].minPrice,
-                Pricing[price].maxPrice,
-                schoolID,
-                wardID,
-            );
             const payload = {
-                keyword: keyword,
+                resultText: keyword,
                 longitude: longitude,
                 latitude: latitude,
                 minPrice: Pricing[price].minPrice,
                 maxPrice: Pricing[price].maxPrice,
-                schoolID: schoolID,
-                wardID: wardID,
+                schoolId: parseFloat(schoolID),
+                wardID: parseFloat(wardID),
             };
+            //console.log(payload);
 
-            // try {
-            //     const response = await axios.post('/api-endpoint', payload);
-            //     setPosts(response.data);
-            // } catch (e) {
-            //     console.error('Error fetching data:', e);
-            // }
+            try {
+                const response = await axios.post('https://localhost:7245/api/SearchRoom/', payload);
+                setPosts(response.data);
+            } catch (e) {
+                console.error('Error fetching data:', e);
+            }
         };
         fetchPosts();
-    }, [keyword, price, wardID, schoolID]);
+    });
 
     // useEffect(() => {
     //     const fetchPosts = async () => {
@@ -137,7 +126,7 @@ function SearchResult() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-14 gap-y-16">
                 {posts.map((post, index) => (
-                    <Link to={`/detail/${post.id}`} key={index}>
+                    <Link to={`/detail/${post.roomID}`} key={index}>
                         <div
                             className={cx('post__item', 'w-auto', 'flex', 'flex-col', 'justify-between', 'rounded-xl', {
                                 group: isHovered,
@@ -146,7 +135,7 @@ function SearchResult() {
                             onMouseLeave={() => setIsHovered(false)}
                         >
                             <Carousel autoSlide={true}>
-                                {slides.map((slide, index) => (
+                                {post.images.map((slide, index) => (
                                     <img
                                         key={index}
                                         className={cx('rounded-t-xl', 'object-cover', 'w-full')}
@@ -156,10 +145,12 @@ function SearchResult() {
                                 ))}
                             </Carousel>
                             <div className={cx('m-[10px]')}>
-                                <p className="w-full text-[16px] font-medium ">Đường {post.id}</p>
-                                <p className="w-full text-[16px]">Phường {post.userId}</p>
-                                <p className="w-full text-[16px]">₫1.000.000 / tháng</p>
-                            </div>
+                                    <p className="w-full text-[16px] font-medium " style={{margin: "5px 5px 10px 0px"}}> {post.title}</p>
+                                    
+                                    <p className="w-full text-[15px]">Đường {post.addressLine1}</p>
+                                    <p className="w-full text-[15px]">Phường {post.wardName}</p>
+                                    <p className="w-full text-[18px] font-medium" style={{color: "orange"}} >{post.price} / tháng</p>
+                                </div>
                         </div>
                     </Link>
                 ))}

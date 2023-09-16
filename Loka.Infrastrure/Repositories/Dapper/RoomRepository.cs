@@ -35,8 +35,8 @@ namespace Loka.Infrastructure.Repositories.Dapper
                 para.Add("@UserID", 3);
                 //para.Add("@Name", entity.Name);
                 para.Add("@Description", entity.Description);
-                //para.Add("@Price", entity.Price);
-                //para.Add("@Area", entity.Area);
+                para.Add("@Price", entity.Price);
+                para.Add("@Area", entity.Area);
                 // Output para
                 para.Add("@RoomID", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
