@@ -15,10 +15,3 @@ begin
 	delete from Posts where PostID = @PostID
 
 end
-go
-----
-select * from Posts
-select * from Rooms
-select * from Photos
-select * from Locations
-select * from Addresses

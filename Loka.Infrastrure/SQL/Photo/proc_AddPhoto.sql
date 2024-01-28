@@ -11,7 +11,6 @@ create proc proc_AddPhoto
 	@RoomID int
 as
 begin
-	-- Let fuckking inserttt
 	insert into Photos(RoomID, Description, Title, CreatedTime, Path, Base64String)
 	values (@RoomID, @Description, @Title, getdate(), @Path, @Base64String)
 end
