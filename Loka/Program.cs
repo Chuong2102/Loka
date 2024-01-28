@@ -14,16 +14,16 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Fix CORS
 builder.Services.AddControllersWithViews();
 
-//var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(name: MyAllowSpecificOrigins,
-//        policy =>
-//        {
-//            policy.WithOrigins("https://localhost:3000");
-//        });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:3000");
+        });
+});
 builder.Services.AddCors();
 
 //builder.Services.AddControllers();
