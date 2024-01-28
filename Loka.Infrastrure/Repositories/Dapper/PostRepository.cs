@@ -37,6 +37,10 @@ namespace Loka.Infrastructure.Repositories.Dapper
             return await connection.ExecuteAsync(PostQuery.Proc_AddPost, para, commandType: CommandType.StoredProcedure);
         }
 
+        /// <summary>
+        /// Get all Post
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Post>> GetAllAsync()
         {
             using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
@@ -48,6 +52,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
             }
         }
 
+        /// <summary>
+        /// Get Post by PostID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Post> GetByID(int id)
         {
             using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));
@@ -60,6 +69,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
             return post;
         }
 
+        /// <summary>
+        /// Delete post by PostID
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         async Task<int> IRepositoryBase<Post>.DeleteAsync(Post entity)
         {
             using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
@@ -74,6 +88,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
             }
         }
 
+        /// <summary>
+        /// Update Post
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         async Task<int> IRepositoryBase<Post>.UpdateAsync(Post entity)
         {
             using (IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString)))
@@ -102,6 +121,11 @@ namespace Loka.Infrastructure.Repositories.Dapper
             return post.Title;
         }
 
+        /// <summary>
+        /// Get Post by RoomID
+        /// </summary>
+        /// <param name="roomID"></param>
+        /// <returns></returns>
         public Post GetByRoomID(int roomID)
         {
             using IDbConnection connection = new SqlConnection(configuration.GetConnectionString(connectionString));

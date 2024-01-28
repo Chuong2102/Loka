@@ -94,7 +94,7 @@ function Post() {
             addressLine1: addressLine1
         };
 
-        // console.log(updatedPost);
+        console.log("update post: " + updatedPost);
         
         // Call API Update posts
         try {
