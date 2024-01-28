@@ -26,41 +26,41 @@ function SuggestedPost({ longitude, latitude, data, ...passProps }) {
     const [isHovered, setIsHovered] = useState(false);
 
     // Tét: Dùng cái ở dưới nha <3 <3 luv
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=1}`);
-                const data = response.data;
-                setPosts(data);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-            }
-        };
+    //useEffect(() => {
+    //    const fetchPosts = async () => {
+    //        try {
+    //            const response = await axios.get(`https://jsonplaceholder.typicode.com/albums?_limit=8&_page=1}`);
+    //            const data = response.data;
+    //            setPosts(data);
+    //        } catch (error) {
+    //            console.error('Error fetching posts:', error);
+    //        }
+    //    };
 
-        fetchPosts();
-    }, []);
+    //    fetchPosts();
+    //}, []);
 
-    // useEffect(() => {
-    //     const fetchSuggestedPosts = async () => {
-    //         console.log(
-    //             longitude,
-    //             latitude,
-    //         );
+     useEffect(() => {
+         const fetchSuggestedPosts = async () => {
+             console.log(
+                 longitude,
+                 latitude,
+             );
 
-    //         const payload = {
-    //             longitude: longitude,
-    //             latitude: latitude,
-    //         };
+             const payload = {
+                 longitude: longitude,
+                 latitude: latitude,
+             };
 
-    // try {
-    //     const response = await axios.post(`https://localhost:7245/api/SuggestRoom/${longitude}&${latitude}`);
-    //     setPosts(response.data);
-    // } catch (e) {
-    //     console.error('Error fetching data:', e);
-    // }
-    // };
-    //     fetchSuggestedPosts();
-    // }, [longitude, latitude]);
+     try {
+         const response = await axios.post(`https://localhost:7245/api/SuggestRoom/${longitude}&${latitude}`);
+         setPosts(response.data);
+     } catch (e) {
+         console.error('Error fetching data:', e);
+     }
+     };
+         fetchSuggestedPosts();
+     }, [longitude, latitude]);
 
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;
