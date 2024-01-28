@@ -14,6 +14,9 @@ using Loka.Infrastructure.Dtos.Room;
 
 namespace Loka.Infrastructure.Services
 {
+    /// <summary>
+    /// Service cho Post
+    /// </summary>
     public interface IPostServices
     {
         Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance);

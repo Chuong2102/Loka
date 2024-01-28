@@ -39,6 +39,12 @@ namespace Loka.Infrastructure.Services
             posts = new List<GetPostDTO>();
         }
       
+        /// <summary>
+        /// Get all Post in radius
+        /// </summary>
+        /// <param name="targetLocation"></param>
+        /// <param name="maxDistance"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<PostDto>> GetAllByCoordinates(Point targetLocation, double maxDistance)
         {
             var posts = await _postRepository.GetAllAsync(x => x.Room.Location);
@@ -66,6 +72,12 @@ namespace Loka.Infrastructure.Services
             return result;
         }
 
+        /// <summary>
+        /// Get all Post in radius by DTO
+        /// </summary>
+        /// <param name="targetLocation"></param>
+        /// <param name="maxDistance"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<GetPostDTO>> GetAllByCoordinatesToDTO(Point targetLocation, double maxDistance)
         {
             var posts = await _postRepository.GetAllAsync(x => x.Room.Location);
@@ -258,8 +270,11 @@ namespace Loka.Infrastructure.Services
             return post;
         }
 
-        // Code bi ngu nen se refact lai sau :<
-        //
+        /// <summary>
+        /// Search Post
+        /// </summary>
+        /// <param name="roomDTO"></param>
+        /// <returns></returns>
         public async Task<List<GetPostDTO>> GetAllBySearch(SearchRoomDTO roomDTO)
         {
             List<GetPostDTO> result = new List<GetPostDTO>();

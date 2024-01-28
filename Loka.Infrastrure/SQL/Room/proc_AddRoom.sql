@@ -1,6 +1,3 @@
-select * from Users
-select * from Roles
-
 if(exists(select * from sys.objects where name = 'proc_AddRoom'))
 drop proc proc_AddRoom
 go
